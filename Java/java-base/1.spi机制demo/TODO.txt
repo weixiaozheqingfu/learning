@@ -1,0 +1,4 @@
+1.各项目使用springboot项目改造。
+2.bean全部使用spring管理。
+3.在这种情况下，再熟悉一遍spi机制。
+4.了解spring.factories。
