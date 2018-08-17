@@ -22,11 +22,11 @@
             <artifactId>spi-impl2</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.glitter.spi</groupId>
-            <artifactId>spi-impl</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.glitter.spi</groupId>-->
+            <!--<artifactId>spi-impl</artifactId>-->
+            <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
