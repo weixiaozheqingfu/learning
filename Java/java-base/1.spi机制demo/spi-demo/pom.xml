@@ -31,6 +31,7 @@
 
     <build>
         <plugins>
+            <!-- 使用maven-war-plugin插件打war包,比默认的打包在配置上更灵活,例如此处配置打war时缺少web.xml不报错,可以正常打war包 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -38,6 +39,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+            <!-- 使用maven-resources-plugin对打包时的资源文件进行控制,比默认的<resource>...</resource>配置方式控制更便捷灵活 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -45,6 +47,7 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
+            <!-- maven默认使用该插件指定源码使用jar包版本和编译类文件时使用的jar包版本是1.5,这里可以通过配置的方式指定自己需要的版本和其他一些属性 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
