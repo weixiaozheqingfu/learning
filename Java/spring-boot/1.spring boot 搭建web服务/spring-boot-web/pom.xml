@@ -12,7 +12,7 @@
     <groupId>com.glitter.springboot</groupId>
     <artifactId>spring-boot-web</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>spring-boot-web</name>
     <description>spring-boot-web示例</description>
@@ -28,6 +28,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
         <!-- 热部署,监听classpath路径下文件发生变化时,即时加载变化文件,即实现热部署 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -39,12 +43,22 @@
 
     <build>
         <plugins>
+            <!-- maven默认使用该插件指定源码使用jar包版本和编译类文件时使用的jar包版本是1.5,这里可以通过配置的方式指定自己需要的版本和其他一些属性 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
             <!-- 该作用之一,如果项目最后打为jar包,则该jar包可以直接以java -jar的方式运行 -->
             <!-- 因为该插件的作用,打包时,会将jar包依赖的jar包都打进去,不需要时不用指定该插件 -->
             <!--<plugin>-->
-                <!--<groupId>org.springframework.boot</groupId>-->
-                <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
-                <!--<version>2.0.0.RELEASE</version>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--<version>2.0.0.RELEASE</version>-->
             <!--</plugin>-->
         </plugins>
     </build>
