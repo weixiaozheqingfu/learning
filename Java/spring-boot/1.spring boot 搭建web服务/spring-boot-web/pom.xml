@@ -32,7 +32,7 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-        <!-- 热部署,监听classpath路径下文件发生变化时,即时加载变化文件,即实现热部署 -->
+        <!-- 热部署,监听classpath路径下文件发生变化时,即时加载变化文件,即实现热部署,真实使用,还是ctrl+s会比较靠谱的触发。 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
