@@ -22,6 +22,8 @@ public class CustomServletContainerInitializer implements ServletContainerInitia
 
         FilterRegistration.Dynamic filter = servletContext.addFilter(HelloWorldFilter.class.getSimpleName(), HelloWorldFilter.class);
 
+//      servletContext.addListener(...);
+
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.allOf(DispatcherType.class);
         dispatcherTypes.add(DispatcherType.REQUEST);
         dispatcherTypes.add(DispatcherType.FORWARD);
