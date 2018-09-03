@@ -19,7 +19,7 @@ public class SpringBootStartApplication extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        // 注意这里要指向原先用main方法执行的Application启动类
+        // 注意这里要指向原先用main方法执行的Application启动类,这样可以读取到Application类中的注解等元信息,至于其中的main方法,则不会进行调用.
         return builder.sources(Application.class);
     }
 
