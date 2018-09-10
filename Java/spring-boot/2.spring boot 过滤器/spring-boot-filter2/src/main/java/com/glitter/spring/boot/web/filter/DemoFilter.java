@@ -1,17 +1,11 @@
 package com.glitter.spring.boot.web.filter;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/** 使用@WebFilter注解,如果有多个过滤器,是通过类名的名称来控制doFilter的执行顺序的,如 */
-@WebFilter(filterName = "demoFilter", urlPatterns = "/*", initParams = {
-@WebInitParam(name = "loginUI", value = "/loginUI"),
-@WebInitParam(name = "loginProcess", value = "home/login"),
-@WebInitParam(name = "encoding", value = "utf-8")})
+
 public class DemoFilter implements Filter{
 
     private FilterConfig filterConfig;
