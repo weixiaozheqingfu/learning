@@ -21,39 +21,19 @@ public class DemoFilter implements Filter{
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         System.out.println("DemoFilter doFilter......................");
+        String initParam = filterConfig.getInitParameter("initParam");
+        System.out.println("DemoFilter doFilter initParam "+ initParam +"......................");
 
         // 获取request,response
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-
-        // 获取配置参数
-        String loginUI = filterConfig.getInitParameter("loginUI");
-        String loginProcess = filterConfig.getInitParameter("loginProcess");
-        String encoding = filterConfig.getInitParameter("encoding");
-
-        // 设置请求的字符集(post请求方式有效)
-        request.setCharacterEncoding(encoding);
-
-        // 不带http://域名:端口的地址
-        String uri = request.getRequestURI();
-        if (uri.contains(loginUI) || uri.contains(loginProcess)) {
-            // 请求的登录，放行
-            filterChain.doFilter(request, response);
-        } else {
-            if (request.getSession().getAttribute("user") == null) {
-                // 重定向到登录页面
-                response.sendRedirect(request.getContextPath() + loginUI);
-            } else {
-                // 已经登录，放行
-                filterChain.doFilter(request, response);
-            }
-        }
+        filterChain.doFilter(request, response);
+        return;
     }
 
     @Override
     public void destroy() {
         System.out.println("DemoFilter destroy......................");
-
         this.filterConfig = null;
     }
 

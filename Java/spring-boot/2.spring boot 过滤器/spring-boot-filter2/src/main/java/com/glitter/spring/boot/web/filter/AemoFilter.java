@@ -1,22 +1,11 @@
 package com.glitter.spring.boot.web.filter;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * 使用@WebFilter注解的方式配置过滤器,如果有多个过滤器,是通过类名的名称来控制执行顺序的,如AemoFilter的doFilter方法总是比DemoFilter的doFilter方法先执行
- * 但是容器初始化过滤器时的执行顺序无法控制,即init方法的执行先后顺序无法控制。
- *
- * 对于doFilter方法的顺序,可以使类名采用F0DemoFilter,F1AemoFilter的方式来控制加载顺序,但毕竟感觉还是不太好,建议项目中只有一个过滤器的时候使用这种注解的方式。
- */
-@WebFilter(filterName = "aemoFilter", urlPatterns = "/*", initParams = {
-@WebInitParam(name = "loginUI", value = "/loginUI"),
-@WebInitParam(name = "loginProcess", value = "home/login"),
-@WebInitParam(name = "encoding", value = "utf-8")})
+
 public class AemoFilter implements Filter{
 
     private FilterConfig filterConfig;
@@ -32,15 +21,19 @@ public class AemoFilter implements Filter{
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         System.out.println("AemoFilter doFilter......................");
+        String initParam = filterConfig.getInitParameter("initParam");
+        System.out.println("AemoFilter doFilter initParam "+ initParam +"......................");
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         filterChain.doFilter(request, response);
+        return;
     }
 
     @Override
     public void destroy() {
         System.out.println("AemoFilter destroy......................");
+        this.filterConfig = null;
     }
 
 }
