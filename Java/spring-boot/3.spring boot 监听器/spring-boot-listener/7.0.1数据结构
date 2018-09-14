@@ -1,0 +1,48 @@
+数据结构如下：{
+	"code": "0",
+	"data": {
+		"indexNaap": "http://www.syswin.com",
+		"tapp": [{
+			"appResource": [{
+				"icon": "http://scloud.toon.mobi/f/flvdAjts8h7+QqjskLwZk-yFOYDUtWRojlrC0oxkIjwfG.jpg",
+				"name": "应用库",
+				"publicKeyUrl": "http://tdevelop.systoon.com/applib/app/getPublishKey",
+				"url": "http://xxx.xxx"
+			}],
+			"preLoadApps": [{
+				"appId": 11,
+				"appUrl": "http://t100torg.systoon.com/openplatform/oauth/authorize?appId=11&redirectUri=http%3A%2F%2Fwww.baidu.com&responseType=code&scope=user_info&state=2222&token=aO2zi5FBkUj8RzBFmUAFmOjCp8c8VA_tMWuWtbNo_5k",
+				"desc": "sasa",
+				"icon": "http://fast.scloud.systoon.com/f/gij6oBpd8cbrSPuJPcfo3uDjn1-9Ov32WWW72fVSbHUfF.png",
+				"name": "应用8"
+			}],
+			"userId": "9"
+		}],
+		"tcard": [{
+			"avatar": "http://xxx.com/zhangsanfeng.png",
+			"cardId": 4152713886247507,
+			"cardType": 3,
+			"title": "张三丰",
+			"tmail": "",
+			"userId": "9",
+			"vcardUrl": "http://tcard.systoon.com/tcard-file/cardfiles/4152713886247507.tcard"
+		}],
+		"tcontacts": [{
+			"orgId": 8,
+			"tcontactName": "理想家园",
+			"url": "org.systoon.com",
+			"userId": "9",
+			"userToken": ""
+		}],
+		"tmail": [{
+			"tmail": "zhangsanfeng@tmail.systoon.com",
+			"userId": "9"
+		}],
+		"torg": [{
+			"orgCode": "052810",
+			"orgId": 8,
+			"orgName": "理想家园"
+		}]
+	},
+	"message": "成功"
+}
