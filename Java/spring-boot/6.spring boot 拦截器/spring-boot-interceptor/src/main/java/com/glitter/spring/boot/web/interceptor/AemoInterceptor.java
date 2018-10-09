@@ -1,11 +1,15 @@
 package com.glitter.spring.boot.web.interceptor;
 
+import com.alibaba.fastjson.JSONObject;
+import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.util.TemplateUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class AemoInterceptor implements HandlerInterceptor {
 
@@ -14,6 +18,15 @@ public class AemoInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
+        if(1==1){
+            throw new BusinessException("-1", "用户未登录");
+        }
+        if(1==1){
+            // 被任意一个拦截器的preHandle方法return false,则后续的所有方法或后续的拦截器都不会再执行
+            // 当然如果只是简单的return false,则请求方不会有任何响应,通常在return false 之前会给客户端一个相应。
+            this.response(request,response,"-1","系统异常");
+            return false;
+        }
         System.out.println("AemoInterceptor preHandle...............................................");
         return true;
     }
@@ -38,5 +51,52 @@ public class AemoInterceptor implements HandlerInterceptor {
         System.out.println("AemoInterceptor afterCompletion request path..............................................." + request.getRequestURI());
         System.out.println("AemoInterceptor afterCompletion exception..............................................." + TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
     }
+
+
+
+
+
+
+
+    /**
+     * 是否是ajax请求
+     *
+     * @param request
+     * @return
+     */
+    private boolean isAjaxRequest(HttpServletRequest request) {
+        String accept = request.getHeader("accept");
+        String xRequestedWith = request.getHeader("X-Requested-With");
+
+        boolean flag1 = accept != null && accept.indexOf("application/json") != -1;
+        boolean flag2 = xRequestedWith != null && xRequestedWith.indexOf("XMLHttpRequest") != -1;
+        boolean isAjax = flag1 || flag2;
+        return isAjax;
+    }
+
+    /**
+     * 返回响应数据
+     *
+     * 测试的话可以是postman模拟ajax,只要在postman的header头中加入X-Requested-With属性,值为XMLHttpRequest即可.
+     *
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param code
+     * @param msg
+     * @return
+     * @throws IOException
+     */
+    private void response(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, String code, String msg) throws IOException {
+        if (isAjaxRequest(httpServletRequest)) {
+            httpServletRequest.setCharacterEncoding("UTF-8");
+            httpServletResponse.setContentType("text/html;charset=utf-8");
+            ResponseResult result = new ResponseResult(code, msg);
+            httpServletResponse.getWriter().write(JSONObject.toJSONString(result));
+            return;
+        }
+        String url = "http://www.baidu.com";
+        httpServletResponse.sendRedirect(url);
+    }
+
 
 }
