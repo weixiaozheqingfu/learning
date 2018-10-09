@@ -15,19 +15,19 @@ public class CorsInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
         System.out.println("AemoInterceptor preHandle...............................................");
 
-        String origin = request.getHeader("Origin");
-        System.out.println("request.getHeader(\"Origin\"):"+origin);
-
-
-        response.setHeader("Access-Control-Allow-Origin", origin);
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("ABC", "123");
-
-        if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
-            response.addHeader("Access-Control-Allow-Methods", "POST,GET,TRACE,OPTIONS");
-            response.addHeader("Access-Control-Allow-Headers", "Content-Type,Origin,Accept");
-            response.addHeader("Access-Control-Max-Age", "120");
-        }
+//        String origin = request.getHeader("Origin");
+//        System.out.println("request.getHeader(\"Origin\"):"+origin);
+//
+//
+//        response.setHeader("Access-Control-Allow-Origin", origin);
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+//        response.setHeader("ABC", "123");
+//
+//        if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
+//            response.addHeader("Access-Control-Allow-Methods", "POST,GET,TRACE,OPTIONS");
+//            response.addHeader("Access-Control-Allow-Headers", "Content-Type,Origin,Accept");
+//            response.addHeader("Access-Control-Max-Age", "120");
+//        }
 
         return true;
     }
