@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
         logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
         System.out.println(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
         return new ResponseResult(e.getCode(), e.getMessage(), null);
+//        throw e;
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.web.interceptor;
 
+import com.glitter.spring.boot.util.TemplateUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,6 +32,8 @@ public class DemoInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object obj, Exception e) throws Exception {
         System.out.println("DemoInterceptor afterCompletion...............................................");
+        System.out.println("DemoInterceptor afterCompletion request path..............................................." + request.getRequestURI());
+        System.out.println("DemoInterceptor afterCompletion exception..............................................." + TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
     }
 
 
