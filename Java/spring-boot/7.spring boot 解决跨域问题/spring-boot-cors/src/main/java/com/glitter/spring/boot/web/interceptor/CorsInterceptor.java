@@ -16,10 +16,13 @@ public class CorsInterceptor implements HandlerInterceptor {
         System.out.println("AemoInterceptor preHandle...............................................");
 
         String origin = request.getHeader("Origin");
+        System.out.println("request.getHeader(\"Origin\"):"+origin);
+
 
         response.setHeader("Access-Control-Allow-Origin", origin);
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("P3P", "CP=CAO PSA OUR");
+        response.setHeader("ABC", "123");
+
         if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
             response.addHeader("Access-Control-Allow-Methods", "POST,GET,TRACE,OPTIONS");
             response.addHeader("Access-Control-Allow-Headers", "Content-Type,Origin,Accept");

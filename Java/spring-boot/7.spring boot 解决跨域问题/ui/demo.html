@@ -13,17 +13,16 @@
                data: "id=-1",
                async: false,
 			   success: function(data){
-					alert(data);
-                    // $("#myDiv").html('<h2>'+data+'</h2>');
+					// alert(data.data.name);
+                    $("#myDiv").html('<h2>'+data.data.name+':'+data.data.age+'</h2>');
                }
             });
-            // $("#myDiv").html('<h2>'+html+'</h2>');
          });
     });
 </script>    
 </head>
     <body>
-        <div id="myDiv"><h2>通过 AJAX 改变文本</h2></div>
-        <button id="testAjax" type="button">Ajax改变内容</button>
+        <div id="myDiv"><h2>看这里</h2></div>
+        <button id="testAjax" type="button">跨域获取数据</button>
     </body>
 </html>
