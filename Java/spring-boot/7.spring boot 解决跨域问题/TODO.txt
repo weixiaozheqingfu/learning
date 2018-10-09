@@ -1,1 +1,15 @@
-说明nginx解决跨域问题的原理 并 实践。
+1.说明nginx解决跨域问题的原理 并 实践。
+
+
+2.跨域问题可以不自觉定义拦截器，可以实现WebMvcConfigurer类的addCorsMappings接口方法即可。
+
+
+  @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+//                .allowedOrigins("http://*.systoon.com")
+                .allowedOrigins("*")
+                .allowedMethods("PUT", "DELETE", "POST", "GET", "OPTIONS")
+                .allowedHeaders("x-requested-with", "content-type", "accept", "origin")
+                .allowCredentials(true).maxAge(3600);
+    }
