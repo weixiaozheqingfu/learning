@@ -18,6 +18,10 @@ public class AemoInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
+        System.out.println("AemoInterceptor preHandle...............................................");
+        // 被任意一个拦截器的preHandle方法抛出异常,则后续的所有方法或后续的拦截器都不会再执行,抛出的异常会被全局异常捕获
+        // 此时如果全局异常选择正常返回,则请求方可以正常收到返回信息,如果全局异常处理选择继续抛出异常,
+        // 则被spring默认异常处理机制捕获并打印出该异常,同时spring会请求/error的页面,同样会经过该拦截器,由于这个过程没有异常,此时到该方法e=null,然后/error的错误信息会返回给用户。
         if(1==1){
             throw new BusinessException("-1", "用户未登录");
         }
@@ -27,7 +31,6 @@ public class AemoInterceptor implements HandlerInterceptor {
             this.response(request,response,"-1","系统异常");
             return false;
         }
-        System.out.println("AemoInterceptor preHandle...............................................");
         return true;
     }
 

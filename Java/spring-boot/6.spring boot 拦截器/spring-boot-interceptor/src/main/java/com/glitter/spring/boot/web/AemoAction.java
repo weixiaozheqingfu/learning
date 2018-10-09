@@ -26,20 +26,4 @@ public class AemoAction {
         return ResponseResult.success(userInfo);
     }
 
-    @RequestMapping(value = "/getUserInfo2", method = RequestMethod.POST)
-    public ResponseResult<UserInfo> getUserInfo2(@RequestBody Long id){
-        if(id<0){
-            throw new BusinessException("100101", "id值非法");
-        }
-        if(id==0){
-            throw new NullPointerException();
-        }
-        System.out.println(id);
-        UserInfo userInfo = new UserInfo();
-        userInfo.setName("张三丰2");
-        userInfo.setAge(100);
-        System.out.println(JSONObject.toJSONString(userInfo));
-        return ResponseResult.success(userInfo);
-    }
-
 }
