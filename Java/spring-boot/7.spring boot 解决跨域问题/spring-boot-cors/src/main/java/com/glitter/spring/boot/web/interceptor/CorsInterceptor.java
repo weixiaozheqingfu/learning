@@ -10,6 +10,8 @@ public class CorsInterceptor implements HandlerInterceptor {
 
     /**
      * 进入controller层之前拦截请求
+     *
+     * 另外一种解决跨域问题的方法是覆盖WebMvcConfigurer接口的addCorsMappings方法.
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
@@ -23,6 +25,8 @@ public class CorsInterceptor implements HandlerInterceptor {
 //        response.setHeader("Access-Control-Allow-Credentials", "true");
 //        response.setHeader("ABC", "123");
 //
+//        System.out.println("request.getHeader(\"Access-Control-Request-Method\"):" + request.getHeader("Access-Control-Request-Method"));
+//        System.out.println("request.getMethod():" + request.getMethod());
 //        if (request.getHeader("Access-Control-Request-Method") != null && "OPTIONS".equals(request.getMethod())) {
 //            response.addHeader("Access-Control-Allow-Methods", "POST,GET,TRACE,OPTIONS");
 //            response.addHeader("Access-Control-Allow-Headers", "Content-Type,Origin,Accept");

@@ -4,26 +4,25 @@
 <script type="text/javascript" src="jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
     $(function(){
-        // °´Å¥µ¥»÷Ê±Ö´ĞĞ
+        // æŒ‰é’®å•å‡»æ—¶æ‰§è¡Œ
         $("#testAjax").click(function(){
-            // Ajaxµ÷ÓÃ´¦Àí
+            // Ajaxè°ƒç”¨å¤„ç†
             $.ajax({
                type: "GET",
                url: "http://localhost:8080/demo/getUserInfo",
                data: "id=-1",
                async: false,
 			   success: function(data){
-					alert(data);
-                    // $("#myDiv").html('<h2>'+data+'</h2>');
+					// alert(data.data.name);
+                    $("#myDiv").html('<h2>'+data.data.name+':'+data.data.age+'</h2>');
                }
             });
-            // $("#myDiv").html('<h2>'+html+'</h2>');
          });
     });
 </script>    
 </head>
     <body>
-        <div id="myDiv"><h2>Í¨¹ı AJAX ¸Ä±äÎÄ±¾</h2></div>
-        <button id="testAjax" type="button">Ajax¸Ä±äÄÚÈİ</button>
+        <div id="myDiv"><h2>çœ‹è¿™é‡Œ</h2></div>
+        <button id="testAjax" type="button">è·¨åŸŸè·å–æ•°æ®</button>
     </body>
 </html>
