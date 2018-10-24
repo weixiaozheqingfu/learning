@@ -37,7 +37,7 @@ public class DemoAspect {
     /**
      * 定义拦截规则：拦截com.glitter.spring.boot.web.controller包下面的所有类中,有@RequestMapping注解的方法。
      */
-    @Pointcut("execution(public * com.glitter.spring.boot.web.controller..(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    @Pointcut("execution(public * com.glitter.spring.boot.web.controller..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void demoAspectPointcut(){}
 
     /**
@@ -48,8 +48,8 @@ public class DemoAspect {
     @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         try {
-
-
+            this.setMethodCallInfoContext(joinPoint);
+            System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
             System.out.print("before.....................................................................");
         } catch (Exception e) {
             e.printStackTrace();
@@ -95,24 +95,27 @@ public class DemoAspect {
         MethodCallInfo methodCallInfo = new MethodCallInfo();
         methodCallInfo.setClassName(this.getClassName(joinPoint));
         methodCallInfo.setMethodName(this.getMethodName(joinPoint));
-        methodCallInfo.setParamNames(this.getMethodSignature(joinPoint).getParameterNames());
-        methodCallInfo.setParamValues(joinPoint.getArgs());
+        methodCallInfo.setParamNames(this.getParamNames(joinPoint));
+        methodCallInfo.setParamValues(this.getParamValues(joinPoint));
+        methodCallInfo.setParamMap(this.getParamMap(joinPoint));
+        MethodCallInfoContext.set(methodCallInfo);
         MethodCallInfoContext.set(methodCallInfo);
     }
 
-    private Object[] getArgs(JoinPoint joinPoint){
-        Object[] args = joinPoint.getArgs();
-        return args;
+    private String[] getParamNames(JoinPoint joinPoint){
+        return this.getMethodSignature(joinPoint).getParameterNames();
+    }
+
+    private Object[] getParamValues(JoinPoint joinPoint){
+        return joinPoint.getArgs();
     }
 
     private MethodSignature getMethodSignature(JoinPoint joinPoint){
-        MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-        return methodSignature;
+        return (MethodSignature) joinPoint.getSignature();
     }
 
     private Method getMethod(JoinPoint joinPoint){
-        Method method = this.getMethodSignature(joinPoint).getMethod();
-        return method;
+        return this.getMethodSignature(joinPoint).getMethod();
     }
 
     private String getMethodName(JoinPoint joinPoint){
@@ -126,16 +129,14 @@ public class DemoAspect {
         return className;
     }
 
-    private Logger getLogger(JoinPoint joinPoint){
-        Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
-        return logger;
-    }
-
     private Map<String, Object> getParamMap(JoinPoint joinPoint) {
         // TODO 需要反复验证这两个的长度是否相等
         Object[] paramValues = joinPoint.getArgs();
         String[] paramNames = this.getMethodSignature(joinPoint).getParameterNames();
 
+        System.out.println("paramValues.length:"+paramValues.length);
+        System.out.println("paramNames.length:"+paramNames.length);
+        System.out.println("长度是否相等:" + (paramValues.length == paramNames.length));
 
         for(int i=0;i<paramNames.length;i++) {
             System.out.println(paramNames[i] + "," + paramValues[i]);
@@ -150,6 +151,11 @@ public class DemoAspect {
             }
         }
         return argsMap;
+    }
+
+    private Logger getLogger(JoinPoint joinPoint){
+        Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
+        return logger;
     }
 
 }
