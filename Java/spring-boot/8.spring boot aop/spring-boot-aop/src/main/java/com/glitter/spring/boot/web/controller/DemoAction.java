@@ -5,6 +5,8 @@ import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +34,7 @@ public class DemoAction {
     }
 
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
-    public ResponseResult<UserInfo> getUserInfo(@RequestParam Long id) {
-        System.out.println(id);
+    public ResponseResult<UserInfo> getUserInfo() {
         UserInfo userInfo = new UserInfo();
         userInfo.setName("张三丰");
         userInfo.setAge(100);
@@ -56,5 +57,16 @@ public class DemoAction {
         System.out.println(JSONObject.toJSONString(userInfos));
         return ResponseResult.success(userInfos);
     }
+
+    @RequestMapping(value = "/getUserInfo2", method = RequestMethod.GET)
+    public ResponseResult<UserInfo> getUserInfo2(HttpServletRequest request, HttpServletResponse response) {
+        return ResponseResult.success(null);
+    }
+
+    @RequestMapping(value = "/getUserInfos2", method = RequestMethod.GET)
+    public ResponseResult<List<UserInfo>> getUserInfos2(HttpServletRequest request, HttpServletResponse response,@RequestParam Long id,@RequestParam String name) {
+        return ResponseResult.success(null);
+    }
+
 
 }

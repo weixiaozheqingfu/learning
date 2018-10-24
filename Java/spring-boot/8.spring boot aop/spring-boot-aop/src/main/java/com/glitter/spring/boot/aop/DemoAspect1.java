@@ -1,6 +1,8 @@
 package com.glitter.spring.boot.aop;
 
+import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.context.MethodCallInfoContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -33,6 +35,8 @@ public class DemoAspect1 {
 
     @Before("webLogAspectPointcut()")
     public void deBefore(JoinPoint joinPoint) throws Throwable {
+        System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
+
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -67,7 +71,9 @@ public class DemoAspect1 {
      * @return JsonResult（被拦截方法的执行结果，或需要登录的错误提示。）
      */
     @Around("webLogAspectPointcut()")
-    public Object Interceptor(ProceedingJoinPoint pjp){
+    public Object around(ProceedingJoinPoint pjp){
+        System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
+
         long beginTime = System.currentTimeMillis();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         //获取被拦截的方法

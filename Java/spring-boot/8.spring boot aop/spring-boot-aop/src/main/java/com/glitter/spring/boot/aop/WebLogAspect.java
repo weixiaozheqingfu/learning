@@ -1,6 +1,8 @@
 package com.glitter.spring.boot.aop;
 
+import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.context.MethodCallInfoContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -12,8 +14,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -29,11 +29,13 @@ public class WebLogAspect {
     /**
      * 定义拦截规则：拦截com.glitter.spring.boot.web.controller包下面的所有类中,有@RequestMapping注解的方法。
      */
-    // @Pointcut("execution(public * com.glitter.spring.boot.web.controller.*.*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
-    public void webLogAspectPointcut(){}
+    @Pointcut("execution(public * com.glitter.spring.boot.web.controller.*.*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    public void webLog(){}
 
     @Before("webLog()")
-    public void deBefore(JoinPoint joinPoint) throws Throwable {
+    public void before(JoinPoint joinPoint) throws Throwable {
+        System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
+
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
@@ -45,16 +47,6 @@ public class WebLogAspect {
         logger.info("HTTP_HEAD Type : " + request.getHeader("Content-Type"));
         logger.info("IP : " + request.getRemoteAddr());
         logger.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-
-        if ("application/json".equals(request.getHeader("Content-Type"))) {
-            //记录application/json时的传参，SpringMVC中使用@RequestBody接收的值
-            logger.info(getRequestPayload(request));
-        } else {
-            //记录请求的键值对
-            for (String key : request.getParameterMap().keySet()) {
-                logger.info(key + "----" + request.getParameter(key));
-            }
-        }
 
     }
 
@@ -74,22 +66,9 @@ public class WebLogAspect {
     //后置最终通知,final增强，不管是抛出异常或者正常退出都会执行
     @After("webLog()")
     public void after(JoinPoint jp){
-//        logger.info("方法最后执行.....");
+        logger.info("方法最后执行.....");
     }
 
-    private String getRequestPayload(HttpServletRequest req) {
-        StringBuilder sb = new StringBuilder();
-        try(BufferedReader reader = req.getReader()) {
-            char[]buff = new char[1024];
-            int len;
-            while((len = reader.read(buff)) != -1) {
-                sb.append(buff,0, len);
-            }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
-    }
 
 
 
@@ -98,8 +77,10 @@ public class WebLogAspect {
      * @param pjp
      * @return JsonResult（被拦截方法的执行结果，或需要登录的错误提示。）
      */
-    @Around("webLogAspectPointcut()")
-    public Object Interceptor(ProceedingJoinPoint pjp){
+    @Around("webLog()")
+    public Object around(ProceedingJoinPoint pjp){
+        System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
+
         long beginTime = System.currentTimeMillis();
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         //获取被拦截的方法

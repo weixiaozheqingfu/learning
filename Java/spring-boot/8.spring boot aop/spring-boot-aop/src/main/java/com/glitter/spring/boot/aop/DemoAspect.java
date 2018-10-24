@@ -10,8 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -32,7 +36,6 @@ import java.util.Map;
 @Aspect
 @Component
 public class DemoAspect {
-    private static final Logger logger = LoggerFactory.getLogger(DemoAspect.class);
 
     /**
      * 定义拦截规则：拦截com.glitter.spring.boot.web.controller包下面的所有类中,有@RequestMapping注解的方法。
@@ -50,7 +53,7 @@ public class DemoAspect {
         try {
             this.setMethodCallInfoContext(joinPoint);
             System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
-            System.out.print("before.....................................................................");
+            System.out.println("before.....................................................................");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,10 +65,10 @@ public class DemoAspect {
      * @param ret
      * @throws Throwable
      */
-    @AfterReturning(returning = "ret", pointcut = "demoAspectPointcut()")
+    @AfterReturning( pointcut = "demoAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         try {
-            logger.info("afterReturning...................................................................ret:{}",JSONObject.toJSONString(ret));
+            System.out.println("afterReturning.............................................................ret:"+JSONObject.toJSONString(ret));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,41 +76,30 @@ public class DemoAspect {
 
     /**
      * 目标方法抛出异常时执行
-     * @param jp
+     * @param joinPoint
      * @param ex
      */
-    @AfterThrowing(throwing = "ex", pointcut = "demoAspectPointcut()")
-    public void afterThrowing(JoinPoint jp, Exception ex){
-        logger.info("afterReturning...................................................................ex:{}",JSONObject.toJSONString(ex));
+    @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
+    public void afterThrowing(JoinPoint joinPoint, Exception ex){
+        System.out.println("afterReturning.................................................................ex:"+JSONObject.toJSONString(ex));
     }
 
     /**
      * 目标方法调用后,不管目标方法是抛出异常或者正常执行完毕返回数据最后都会执行该通知方法,该通知为后置最终通知,final增强
-     * @param jp
+     * @param joinPoint
      */
     @After("demoAspectPointcut()")
-    public void after(JoinPoint jp){
-        logger.info("afterReturning...................................................................");
+    public void after(JoinPoint joinPoint){
+        System.out.println("afterReturning.................................................................");
     }
-
 
     private void setMethodCallInfoContext(JoinPoint joinPoint){
         MethodCallInfo methodCallInfo = new MethodCallInfo();
         methodCallInfo.setClassName(this.getClassName(joinPoint));
         methodCallInfo.setMethodName(this.getMethodName(joinPoint));
-        methodCallInfo.setParamNames(this.getParamNames(joinPoint));
-        methodCallInfo.setParamValues(this.getParamValues(joinPoint));
         methodCallInfo.setParamMap(this.getParamMap(joinPoint));
         MethodCallInfoContext.set(methodCallInfo);
         MethodCallInfoContext.set(methodCallInfo);
-    }
-
-    private String[] getParamNames(JoinPoint joinPoint){
-        return this.getMethodSignature(joinPoint).getParameterNames();
-    }
-
-    private Object[] getParamValues(JoinPoint joinPoint){
-        return joinPoint.getArgs();
     }
 
     private MethodSignature getMethodSignature(JoinPoint joinPoint){
@@ -119,7 +111,8 @@ public class DemoAspect {
     }
 
     private String getMethodName(JoinPoint joinPoint){
-        // String methodName1 = joinPoint.getSignature().getName(); 这种方式也可以
+        // 这种方式也可以
+        // String methodName1 = joinPoint.getSignature().getName();
         String methodName = this.getMethod(joinPoint).getName();
         return methodName;
     }
@@ -130,27 +123,29 @@ public class DemoAspect {
     }
 
     private Map<String, Object> getParamMap(JoinPoint joinPoint) {
-        // TODO 需要反复验证这两个的长度是否相等
-        Object[] paramValues = joinPoint.getArgs();
+        Map<String, Object> result = null;
         String[] paramNames = this.getMethodSignature(joinPoint).getParameterNames();
-
-        System.out.println("paramValues.length:"+paramValues.length);
-        System.out.println("paramNames.length:"+paramNames.length);
-        System.out.println("长度是否相等:" + (paramValues.length == paramNames.length));
-
-        for(int i=0;i<paramNames.length;i++) {
-            System.out.println(paramNames[i] + "," + paramValues[i]);
+        Object[] paramValues = joinPoint.getArgs();
+        if(null == paramNames && null == paramValues){
+            return result;
         }
-
-        Map<String,Object> argsMap = new HashMap<>();
-        Object[] args = joinPoint.getArgs();
-        if (args != null && args.length != 0){
-            for (int i=0;i<args.length;i++) {
-                Object o = args[i];
-                argsMap.put(String.valueOf(i), o);
-            }
+        if(0 == paramNames.length && 0 == paramValues.length){
+            return result;
         }
-        return argsMap;
+        if(paramNames.length != paramValues.length){
+            result = new LinkedHashMap<>();
+            result.put("-1","输入参数异常");
+            return result;
+        }
+        result = new LinkedHashMap<>();
+        for (int i = 0; i < paramValues.length; i++) {
+            if(paramValues[i] instanceof ServletRequest) { continue; }
+            if(paramValues[i] instanceof HttpServletRequest) { continue; }
+            if(paramValues[i] instanceof ServletResponse) { continue; }
+            if(paramValues[i] instanceof HttpServletResponse) { continue; }
+            result.put(paramNames[i], paramValues[i]);
+        }
+        return result;
     }
 
     private Logger getLogger(JoinPoint joinPoint){

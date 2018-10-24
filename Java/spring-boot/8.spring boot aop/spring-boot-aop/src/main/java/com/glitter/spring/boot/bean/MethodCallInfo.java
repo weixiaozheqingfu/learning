@@ -8,11 +8,10 @@ public class MethodCallInfo {
 
     private String methodName;
 
-    private Object[] paramValues;
-
-    private String[] paramNames;
-
     private Map<String,Object> paramMap;
+
+    // TODO header和其他request参数,例如请求路径,ip等信息可以另外写一个类继承该类
+    // private String header;
 
 
     public String getClassName() {
@@ -29,22 +28,6 @@ public class MethodCallInfo {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
-    }
-
-    public Object[] getParamValues() {
-        return paramValues;
-    }
-
-    public void setParamValues(Object[] paramValues) {
-        this.paramValues = paramValues;
-    }
-
-    public String[] getParamNames() {
-        return paramNames;
-    }
-
-    public void setParamNames(String[] paramNames) {
-        this.paramNames = paramNames;
     }
 
     public Map<String, Object> getParamMap() {
