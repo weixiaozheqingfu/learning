@@ -2,7 +2,7 @@ package com.glitter.spring.boot.bean;
 
 import java.util.Map;
 
-public class MethodCallInfo {
+public class RequestLogInfo {
 
     private String ip;
 
@@ -14,13 +14,14 @@ public class MethodCallInfo {
 
     private String uri;
 
-    private Map<String,String> headerMap;
-
     private String className;
 
     private String methodName;
 
     private Map<String,Object> paramMap;
+
+    /** 区别于ResponseLogInfo的属性 */
+    private Map<String,String> headerMap;
 
 
     public String getIp() {
@@ -63,14 +64,6 @@ public class MethodCallInfo {
         this.uri = uri;
     }
 
-    public Map<String, String> getHeaderMap() {
-        return headerMap;
-    }
-
-    public void setHeaderMap(Map<String, String> headerMap) {
-        this.headerMap = headerMap;
-    }
-
     public String getClassName() {
         return className;
     }
@@ -93,6 +86,14 @@ public class MethodCallInfo {
 
     public void setParamMap(Map<String, Object> paramMap) {
         this.paramMap = paramMap;
+    }
+
+    public Map<String, String> getHeaderMap() {
+        return headerMap;
+    }
+
+    public void setHeaderMap(Map<String, String> headerMap) {
+        this.headerMap = headerMap;
     }
 
 }

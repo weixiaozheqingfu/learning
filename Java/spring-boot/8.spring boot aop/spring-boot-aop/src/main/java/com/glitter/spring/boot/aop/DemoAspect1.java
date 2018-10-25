@@ -2,7 +2,7 @@ package com.glitter.spring.boot.aop;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.common.ResponseResult;
-import com.glitter.spring.boot.context.MethodCallInfoContext;
+import com.glitter.spring.boot.context.RequestLogInfoContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -31,7 +31,7 @@ public class DemoAspect1 {
 
     @Before("webLogAspectPointcut()")
     public void deBefore(JoinPoint joinPoint) throws Throwable {
-        System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
+        System.out.println(JSONObject.toJSONString(RequestLogInfoContext.get()));
 
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();

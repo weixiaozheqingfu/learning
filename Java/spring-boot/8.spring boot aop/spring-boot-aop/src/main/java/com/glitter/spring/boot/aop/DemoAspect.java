@@ -1,8 +1,10 @@
 package com.glitter.spring.boot.aop;
 
 import com.alibaba.fastjson.JSONObject;
-import com.glitter.spring.boot.bean.MethodCallInfo;
-import com.glitter.spring.boot.context.MethodCallInfoContext;
+import com.glitter.spring.boot.bean.RequestLogInfo;
+import com.glitter.spring.boot.bean.ResponseLogInfo;
+import com.glitter.spring.boot.context.RequestLogInfoContext;
+import com.glitter.spring.boot.context.ResponseLogInfoContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -17,6 +19,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -54,9 +57,9 @@ public class DemoAspect {
     @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         try {
-            this.setMethodCallInfoContext(joinPoint);
-            System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
+            this.setRequestLogInfoContext(joinPoint);
             System.out.println("before.....................................................................");
+            System.out.println(JSONObject.toJSONString(RequestLogInfoContext.get()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,25 +97,47 @@ public class DemoAspect {
     @After("demoAspectPointcut()")
     public void after(JoinPoint joinPoint){
         System.out.println("afterReturning.................................................................");
+        System.out.println(JSONObject.toJSONString(ResponseLogInfoContext.get()));
     }
 
-    private void setMethodCallInfoContext(JoinPoint joinPoint){
-        MethodCallInfo methodCallInfo = new MethodCallInfo();
+    private void setRequestLogInfoContext(JoinPoint joinPoint){
+        RequestLogInfo requestLogInfo = new RequestLogInfo();
         HttpServletRequest request = this.getRequest();
         System.out.println("session:"+request.getSession());
-        // TODO
-        request.getCookies();
-        methodCallInfo.setIp(null == request ? null : this.getIp(request));
-        methodCallInfo.setHost(null == request ? null : request.getRemoteHost());
-        methodCallInfo.setPort(null == request ? null : request.getRemotePort());
-        methodCallInfo.setUrl(null == request ? null : request.getRequestURL().toString());
-        methodCallInfo.setUri(null == request ? null : request.getRequestURI());
-        methodCallInfo.setClassName(this.getClassName(joinPoint));
-        methodCallInfo.setMethodName(this.getMethodName(joinPoint));
-        methodCallInfo.setHeaderMap(this.getHeaderMap());
-        methodCallInfo.setParamMap(this.getParamMap(joinPoint));
-        MethodCallInfoContext.set(methodCallInfo);
-        MethodCallInfoContext.set(methodCallInfo);
+        requestLogInfo.setIp(null == request ? null : this.getIp(request));
+        requestLogInfo.setHost(null == request ? null : request.getRemoteHost());
+        requestLogInfo.setPort(null == request ? null : request.getRemotePort());
+        requestLogInfo.setUrl(null == request ? null : request.getRequestURL().toString());
+        requestLogInfo.setUri(null == request ? null : request.getRequestURI());
+        requestLogInfo.setClassName(this.getClassName(joinPoint));
+        requestLogInfo.setMethodName(this.getMethodName(joinPoint));
+        requestLogInfo.setHeaderMap(this.getRequestHeaderMap());
+        requestLogInfo.setParamMap(this.getParamMap(joinPoint));
+        RequestLogInfoContext.set(requestLogInfo);
+    }
+
+    private ResponseLogInfo getResponseLogInfo(JoinPoint joinPoint){
+        ResponseLogInfo responseLogInfo = new ResponseLogInfo();
+
+        RequestLogInfo requestLogInfo = RequestLogInfoContext.get();
+        HttpServletResponse response = this.getResponse();
+
+        requestLogInfo.setIp(null == requestLogInfo ? null : requestLogInfo.getIp());
+        responseLogInfo.setHost(null == requestLogInfo ? null : requestLogInfo.getHost());
+        responseLogInfo.setPort(null == requestLogInfo ? null : requestLogInfo.getPort());
+        responseLogInfo.setUrl(null == requestLogInfo ? null : requestLogInfo.getUrl());
+        responseLogInfo.setUri(null == requestLogInfo ? null : requestLogInfo.getUri());
+        responseLogInfo.setClassName(null == requestLogInfo ? null : requestLogInfo.getUri());
+        responseLogInfo.setMethodName(null == requestLogInfo ? null : requestLogInfo.getUri());
+        responseLogInfo.setParamMap(null == requestLogInfo ? null : requestLogInfo.getParamMap());
+        responseLogInfo.setHeaderMap(this.getResponseHeaderMap());
+        responseLogInfo.setStatus(response.getStatus());
+        responseLogInfo.setClassName(response.getContentType());
+
+        // TODO returnValue  ex  也到放置在ResponseLogInfoContext中  在对应的方法放上值，
+        // 此方法也先从ResponseLogInfoContext中获取ResponseLogInfo对象
+
+        return responseLogInfo;
     }
 
     private MethodSignature getMethodSignature(JoinPoint joinPoint){
@@ -147,7 +172,7 @@ public class DemoAspect {
         return request;
     }
 
-    private Map<String, String> getHeaderMap() {
+    private Map<String, String> getRequestHeaderMap() {
         HttpServletRequest request = this.getRequest();
         Map<String, String> headerMap = new LinkedHashMap<>();
         Enumeration<String> headerNames = request.getHeaderNames();
@@ -157,6 +182,21 @@ public class DemoAspect {
         while (headerNames.hasMoreElements()) {
             String key = headerNames.nextElement();
             String value = request.getHeader(key);
+            headerMap.put(key, value);
+        }
+        return headerMap;
+    }
+
+    private Map<String, String> getResponseHeaderMap() {
+        HttpServletResponse response = this.getResponse();
+        Map<String, String> headerMap = new LinkedHashMap<>();
+        Collection<String> headerNames = response.getHeaderNames();
+        if (null == headerNames || headerNames.size() <=0) {
+            return headerMap;
+        }
+        for (String headerName:headerNames) {
+            String key = headerName;
+            String value = response.getHeader(key);
             headerMap.put(key, value);
         }
         return headerMap;
