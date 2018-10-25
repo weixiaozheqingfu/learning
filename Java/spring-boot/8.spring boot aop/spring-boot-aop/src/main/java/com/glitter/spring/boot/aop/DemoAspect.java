@@ -99,23 +99,17 @@ public class DemoAspect {
     private void setMethodCallInfoContext(JoinPoint joinPoint){
         MethodCallInfo methodCallInfo = new MethodCallInfo();
         HttpServletRequest request = this.getRequest();
-        methodCallInfo.setIp(null == request ? null : request.getRemoteAddr());
+        methodCallInfo.setIp(null == request ? null : this.getIp(request));
         methodCallInfo.setHost(null == request ? null : request.getRemoteHost());
         methodCallInfo.setPort(null == request ? null : request.getRemotePort());
         methodCallInfo.setUrl(null == request ? null : request.getRequestURL().toString());
         methodCallInfo.setUri(null == request ? null : request.getRequestURI());
         methodCallInfo.setClassName(this.getClassName(joinPoint));
         methodCallInfo.setMethodName(this.getMethodName(joinPoint));
+        methodCallInfo.setHeaderMap(this.getHeaderMap());
         methodCallInfo.setParamMap(this.getParamMap(joinPoint));
         MethodCallInfoContext.set(methodCallInfo);
         MethodCallInfoContext.set(methodCallInfo);
-
-        // TODO
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String key = headerNames.nextElement();
-            String value = request.getHeader(key);
-        }
     }
 
     private MethodSignature getMethodSignature(JoinPoint joinPoint){
@@ -144,6 +138,21 @@ public class DemoAspect {
         return request;
     }
 
+    private Map<String, String> getHeaderMap() {
+        HttpServletRequest request = this.getRequest();
+        Map<String, String> headerMap = new LinkedHashMap<>();
+        Enumeration<String> headerNames = request.getHeaderNames();
+        if (null == headerNames) {
+            return headerMap;
+        }
+        while (headerNames.hasMoreElements()) {
+            String key = headerNames.nextElement();
+            String value = request.getHeader(key);
+            headerMap.put(key, value);
+        }
+        return headerMap;
+    }
+
     private Map<String, Object> getParamMap(JoinPoint joinPoint) {
         Map<String, Object> result = null;
         String[] paramNames = this.getMethodSignature(joinPoint).getParameterNames();
@@ -168,6 +177,43 @@ public class DemoAspect {
             result.put(paramNames[i], paramValues[i]);
         }
         return result;
+    }
+
+    private String getIp(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        System.out.println("x-forwarded-for ip: " + ip);
+        if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+            // 多次反向代理后会有多个ip值，第一个ip才是真实ip
+            if( ip.indexOf(",")!=-1 ){
+                ip = ip.split(",")[0];
+            }
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+            System.out.println("Proxy-Client-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+            System.out.println("WL-Proxy-Client-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+            System.out.println("HTTP_CLIENT_IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+            System.out.println("HTTP_X_FORWARDED_FOR ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+            System.out.println("X-Real-IP ip: " + ip);
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+            System.out.println("getRemoteAddr ip: " + ip);
+        }
+        System.out.println("获取客户端ip: " + ip);
+        return ip;
     }
 
     private Logger getLogger(JoinPoint joinPoint){
