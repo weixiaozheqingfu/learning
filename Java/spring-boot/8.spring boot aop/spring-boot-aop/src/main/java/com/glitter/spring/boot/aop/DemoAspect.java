@@ -74,7 +74,7 @@ public class DemoAspect {
     @AfterReturning( pointcut = "demoAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         try {
-            System.out.println("afterReturning.............................................................ret:"+JSONObject.toJSONString(ret));
+            // System.out.println("afterReturning.............................................................ret:"+JSONObject.toJSONString(ret));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,7 +87,7 @@ public class DemoAspect {
      */
     @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex){
-        System.out.println("afterReturning.................................................................ex:"+JSONObject.toJSONString(ex));
+        // System.out.println("afterReturning.................................................................ex:"+JSONObject.toJSONString(ex));
     }
 
     /**
@@ -97,13 +97,13 @@ public class DemoAspect {
     @After("demoAspectPointcut()")
     public void after(JoinPoint joinPoint){
         System.out.println("afterReturning.................................................................");
-        System.out.println(JSONObject.toJSONString(ResponseLogInfoContext.get()));
+        System.out.println(JSONObject.toJSONString(this.getResponseLogInfo()));
     }
 
     private void setRequestLogInfoContext(JoinPoint joinPoint){
         RequestLogInfo requestLogInfo = new RequestLogInfo();
         HttpServletRequest request = this.getRequest();
-        System.out.println("session:"+request.getSession());
+        System.out.println("sessionId:"+request.getSession().getId());
         requestLogInfo.setIp(null == request ? null : this.getIp(request));
         requestLogInfo.setHost(null == request ? null : request.getRemoteHost());
         requestLogInfo.setPort(null == request ? null : request.getRemotePort());
@@ -116,7 +116,7 @@ public class DemoAspect {
         RequestLogInfoContext.set(requestLogInfo);
     }
 
-    private ResponseLogInfo getResponseLogInfo(JoinPoint joinPoint){
+    private ResponseLogInfo getResponseLogInfo(){
         ResponseLogInfo responseLogInfo = new ResponseLogInfo();
 
         RequestLogInfo requestLogInfo = RequestLogInfoContext.get();
@@ -230,7 +230,7 @@ public class DemoAspect {
 
     private String getIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        System.out.println("x-forwarded-for ip: " + ip);
+        // System.out.println("x-forwarded-for ip: " + ip);
         if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             if( ip.indexOf(",")!=-1 ){
@@ -239,29 +239,29 @@ public class DemoAspect {
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
-            System.out.println("Proxy-Client-IP ip: " + ip);
+            // System.out.println("Proxy-Client-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
-            System.out.println("WL-Proxy-Client-IP ip: " + ip);
+            // System.out.println("WL-Proxy-Client-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
-            System.out.println("HTTP_CLIENT_IP ip: " + ip);
+            // System.out.println("HTTP_CLIENT_IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-            System.out.println("HTTP_X_FORWARDED_FOR ip: " + ip);
+            // System.out.println("HTTP_X_FORWARDED_FOR ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Real-IP");
-            System.out.println("X-Real-IP ip: " + ip);
+            // System.out.println("X-Real-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
-            System.out.println("getRemoteAddr ip: " + ip);
+            // System.out.println("getRemoteAddr ip: " + ip);
         }
-        System.out.println("获取客户端ip: " + ip);
+        // System.out.println("获取客户端ip: " + ip);
         return ip;
     }
 
