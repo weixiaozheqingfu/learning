@@ -4,15 +4,72 @@ import java.util.Map;
 
 public class MethodCallInfo {
 
+    private String ip;
+
+    private String host;
+
+    private Integer port;
+
+    private String url;
+
+    private String uri;
+
+    private Map<String,String> headerMap;
+
     private String className;
 
     private String methodName;
 
     private Map<String,Object> paramMap;
 
-    // TODO header和其他request参数,例如请求路径,ip等信息可以另外写一个类继承该类
-    // private String header;
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public Map<String, String> getHeaderMap() {
+        return headerMap;
+    }
+
+    public void setHeaderMap(Map<String, String> headerMap) {
+        this.headerMap = headerMap;
+    }
 
     public String getClassName() {
         return className;

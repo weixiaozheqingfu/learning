@@ -9,12 +9,15 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -95,11 +98,24 @@ public class DemoAspect {
 
     private void setMethodCallInfoContext(JoinPoint joinPoint){
         MethodCallInfo methodCallInfo = new MethodCallInfo();
+        HttpServletRequest request = this.getRequest();
+        methodCallInfo.setIp(null == request ? null : request.getRemoteAddr());
+        methodCallInfo.setHost(null == request ? null : request.getRemoteHost());
+        methodCallInfo.setPort(null == request ? null : request.getRemotePort());
+        methodCallInfo.setUrl(null == request ? null : request.getRequestURL().toString());
+        methodCallInfo.setUri(null == request ? null : request.getRequestURI());
         methodCallInfo.setClassName(this.getClassName(joinPoint));
         methodCallInfo.setMethodName(this.getMethodName(joinPoint));
         methodCallInfo.setParamMap(this.getParamMap(joinPoint));
         MethodCallInfoContext.set(methodCallInfo);
         MethodCallInfoContext.set(methodCallInfo);
+
+        // TODO
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = headerNames.nextElement();
+            String value = request.getHeader(key);
+        }
     }
 
     private MethodSignature getMethodSignature(JoinPoint joinPoint){
@@ -120,6 +136,12 @@ public class DemoAspect {
     private String getClassName(JoinPoint joinPoint){
         String className = joinPoint.getTarget().getClass().getName();
         return className;
+    }
+
+    private HttpServletRequest getRequest(){
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = null == attributes ? null : attributes.getRequest();
+        return request;
     }
 
     private Map<String, Object> getParamMap(JoinPoint joinPoint) {

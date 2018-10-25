@@ -6,7 +6,6 @@ import com.glitter.spring.boot.context.MethodCallInfoContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,9 +13,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * 示例AOP切面
@@ -62,9 +58,6 @@ public class DemoAspect1 {
 //        logger.info("方法最后执行.....");
     }
 
-
-
-
     /**
      * 拦截器具体实现
      * @param pjp
@@ -72,24 +65,7 @@ public class DemoAspect1 {
      */
     @Around("webLogAspectPointcut()")
     public Object around(ProceedingJoinPoint pjp){
-        System.out.println(JSONObject.toJSONString(MethodCallInfoContext.get()));
-
-        long beginTime = System.currentTimeMillis();
-        MethodSignature signature = (MethodSignature) pjp.getSignature();
-        //获取被拦截的方法
-        Method method = signature.getMethod();
-        //获取被拦截的方法名
-        String methodName = method.getName();
-
-        //保存所有请求参数，用于输出到日志中
-        Set<Object> allParams1 = new LinkedHashSet<>();
-
-        logger.info("请求开始，方法：{}", methodName);
-
         Object result = null;
-
-        Object[] args = pjp.getArgs();
-
         try {
             result = pjp.proceed();
         } catch (Throwable e) {
