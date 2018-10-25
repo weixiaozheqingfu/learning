@@ -99,6 +99,9 @@ public class DemoAspect {
     private void setMethodCallInfoContext(JoinPoint joinPoint){
         MethodCallInfo methodCallInfo = new MethodCallInfo();
         HttpServletRequest request = this.getRequest();
+        System.out.println("session:"+request.getSession());
+        // TODO
+        request.getCookies();
         methodCallInfo.setIp(null == request ? null : this.getIp(request));
         methodCallInfo.setHost(null == request ? null : request.getRemoteHost());
         methodCallInfo.setPort(null == request ? null : request.getRemotePort());
@@ -135,6 +138,12 @@ public class DemoAspect {
     private HttpServletRequest getRequest(){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = null == attributes ? null : attributes.getRequest();
+        return request;
+    }
+
+    private HttpServletResponse getResponse(){
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletResponse request = null == attributes ? null : attributes.getResponse();
         return request;
     }
 
