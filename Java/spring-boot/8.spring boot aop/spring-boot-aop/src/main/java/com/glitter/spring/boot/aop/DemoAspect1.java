@@ -30,8 +30,11 @@ import org.springframework.stereotype.Component;
     DemoAspect1.after......................................................................
     DemoAspect1.afterThrowing......................................................................
 
+
+
     上面几种情况其实完全符合aop的执行顺序,并且可以发现如果所有方法都存在的情况下,他们的执行顺序是
     【around调用前】->【before】->【around调用后（有异常看是否捕获决定是否执行）】->【after】->【afterReturning】或【afterThrowing】
+    只要线程调用能进入aop方法,无论哪里抛出异常,after和afterThrowing方法一定会被执行。
 
     而我们的最佳实践是,如果使用了around,就不要使用before和afterReturning了,
     而是使用around,after,afterThrowing组合
@@ -49,7 +52,7 @@ public class DemoAspect1 {
     @Before("webLogAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         System.out.println("DemoAspect1.before......................................................................");
-        if(1==1){
+        if(1==2){
             throw new BusinessException("-1","before异常");
         }
     }
@@ -58,12 +61,12 @@ public class DemoAspect1 {
     public Object around(ProceedingJoinPoint pjp){
         try {
             System.out.println("DemoAspect1.around调用前......................................................................");
-            if(1==1){
+            if(1==2){
                 throw new BusinessException("-1","around调用前异常");
             }
             Object result = pjp.proceed();
             System.out.println("DemoAspect1.around调用后......................................................................");
-            if(1==1){
+            if(1==2){
                 throw new BusinessException("-1","around调用后异常");
             }
             return result;
@@ -87,7 +90,7 @@ public class DemoAspect1 {
     @AfterReturning(returning = "ret", pointcut = "webLogAspectPointcut()")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         System.out.println("DemoAspect1.afterReturning......................................................................");
-        if(1==1){
+        if(1==2){
             throw new BusinessException("-1","afterReturning异常");
         }
     }
