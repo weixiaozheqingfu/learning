@@ -63,8 +63,8 @@ public class DemoAction {
     }
 
     @RequestMapping(value = "/getUserInfo2", method = RequestMethod.GET)
-    public ResponseResult<UserInfo> getUserInfo2(HttpServletRequest request, HttpServletResponse response) {
-        return ResponseResult.success(null);
+    public void getUserInfo2(HttpServletRequest request, HttpServletResponse response) {
+
     }
 
     @RequestMapping(value = "/getUserInfos2", method = RequestMethod.GET)

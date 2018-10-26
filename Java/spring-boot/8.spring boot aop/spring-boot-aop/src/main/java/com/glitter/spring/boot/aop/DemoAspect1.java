@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DemoAspect1 {
     private static final Logger logger = LoggerFactory.getLogger(DemoAspect1.class);
-/*
 
     @Pointcut("execution(public * com.glitter.spring.boot.web.controller.*.*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void webLogAspectPointcut(){}
@@ -30,7 +29,6 @@ public class DemoAspect1 {
     public void doAfterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
     }
 
-
     @AfterThrowing(throwing = "ex", pointcut = "webLogAspectPointcut()")
     public void throwss(JoinPoint jp, Exception ex){
     }
@@ -41,13 +39,11 @@ public class DemoAspect1 {
 
     }
 
-    */
-/**
+    /**
      * 拦截器具体实现
      * @param pjp
      * @return JsonResult（被拦截方法的执行结果，或需要登录的错误提示。）
-     *//*
-
+     */
     @Around("webLogAspectPointcut()")
     public Object around(ProceedingJoinPoint pjp){
         Object result = null;
@@ -55,12 +51,11 @@ public class DemoAspect1 {
             result = pjp.proceed();
         } catch (Throwable e) {
             logger.info("exception: ", e);
+            // 最佳实践:要么此处组织返回结果,然后正常return result;
+            // 要么此处继续往外抛异常,强烈推荐往外抛异常,返回结果由全局异常统一处理,然后决定如何返回,而不是在这里决定如何返回,aop这里不应该干预结果数据。
             // result = new ResponseResult("-1", "发生异常："+e.getMessage());
         }
-
         return result;
     }
-
-*/
 
 }
