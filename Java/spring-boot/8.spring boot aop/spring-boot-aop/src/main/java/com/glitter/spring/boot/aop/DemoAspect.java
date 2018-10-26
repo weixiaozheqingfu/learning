@@ -36,10 +36,19 @@ public class DemoAspect {
      * 目标方法执行之前调用
      * @param joinPoint
      * @throws Throwable
-     */
+      */
     @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
-        System.out.println("before.....................................................................");
+        System.out.println("DemoAspect.before......................................................................");
+    }
+
+    /**
+     * 目标方法调用后,不管目标方法是抛出异常或者正常执行完毕返回数据都会先执行该方法,然后再去执行AfterReturning或者AfterThrowing方法
+     * @param joinPoint
+     */
+    @After("demoAspectPointcut()")
+    public void after(JoinPoint joinPoint){
+        System.out.println("DemoAspect.after.......................................................................");
     }
 
     /**
@@ -50,7 +59,7 @@ public class DemoAspect {
      */
     @AfterReturning( pointcut = "demoAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
-        System.out.println("afterReturning.............................................................ret:"+JSONObject.toJSONString(ret));
+        System.out.println("DemoAspect.afterReturning..............................................................");
     }
 
     /**
@@ -60,16 +69,7 @@ public class DemoAspect {
      */
     @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex){
-        System.out.println("afterReturning.................................................................ex:"+JSONObject.toJSONString(ex));
-    }
-
-    /**
-     * 目标方法调用后,不管目标方法是抛出异常或者正常执行完毕返回数据最后都会执行该通知方法,该通知为后置最终通知,final增强
-     * @param joinPoint
-     */
-    @After("demoAspectPointcut()")
-    public void after(JoinPoint joinPoint){
-        System.out.println("afterReturning.................................................................");
+        System.out.println("DemoAspect.afterThrowing...............................................................");
     }
 
     private Logger getLogger(JoinPoint joinPoint){

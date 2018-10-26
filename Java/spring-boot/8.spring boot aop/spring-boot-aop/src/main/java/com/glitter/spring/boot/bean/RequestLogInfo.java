@@ -20,8 +20,7 @@ public class RequestLogInfo {
 
     private Map<String,Object> paramMap;
 
-    /** 区别于ResponseLogInfo的属性 */
-    private Map<String,String> headerMap;
+    private Map<String,String> requestHeaderMap;
 
 
     public String getIp() {
@@ -88,12 +87,12 @@ public class RequestLogInfo {
         this.paramMap = paramMap;
     }
 
-    public Map<String, String> getHeaderMap() {
-        return headerMap;
+    public Map<String, String> getRequestHeaderMap() {
+        return requestHeaderMap;
     }
 
-    public void setHeaderMap(Map<String, String> headerMap) {
-        this.headerMap = headerMap;
+    public void setRequestHeaderMap(Map<String, String> requestHeaderMap) {
+        this.requestHeaderMap = requestHeaderMap;
     }
 
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DemoAspect1 {
     private static final Logger logger = LoggerFactory.getLogger(DemoAspect1.class);
+/*
 
     @Pointcut("execution(public * com.glitter.spring.boot.web.controller.*.*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void webLogAspectPointcut(){}
@@ -40,11 +41,13 @@ public class DemoAspect1 {
 
     }
 
-    /**
+    */
+/**
      * 拦截器具体实现
      * @param pjp
      * @return JsonResult（被拦截方法的执行结果，或需要登录的错误提示。）
-     */
+     *//*
+
     @Around("webLogAspectPointcut()")
     public Object around(ProceedingJoinPoint pjp){
         Object result = null;
@@ -52,11 +55,12 @@ public class DemoAspect1 {
             result = pjp.proceed();
         } catch (Throwable e) {
             logger.info("exception: ", e);
-            result = new ResponseResult("-1", "发生异常："+e.getMessage());
+            // result = new ResponseResult("-1", "发生异常："+e.getMessage());
         }
 
         return result;
     }
 
+*/
 
 }

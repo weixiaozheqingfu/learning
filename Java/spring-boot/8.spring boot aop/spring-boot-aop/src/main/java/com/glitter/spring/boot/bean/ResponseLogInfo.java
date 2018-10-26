@@ -20,16 +20,17 @@ public class ResponseLogInfo {
 
     private Map<String,Object> paramMap;
 
-    /** 区别于RequestLogInfo的属性 */
-    private Map<String,String> headerMap;
+    private Map<String,String> requestHeaderMap;
+
+    private Map<String,String> responseHeaderMap;
 
     private Integer status;
 
     private String contentType;
 
-    private String returnValue;
+    private Object returnObj;
 
-    private String ex;
+    private Object ex;
 
 
     public String getIp() {
@@ -96,12 +97,20 @@ public class ResponseLogInfo {
         this.paramMap = paramMap;
     }
 
-    public Map<String, String> getHeaderMap() {
-        return headerMap;
+    public Map<String, String> getRequestHeaderMap() {
+        return requestHeaderMap;
     }
 
-    public void setHeaderMap(Map<String, String> headerMap) {
-        this.headerMap = headerMap;
+    public void setRequestHeaderMap(Map<String, String> requestHeaderMap) {
+        this.requestHeaderMap = requestHeaderMap;
+    }
+
+    public Map<String, String> getResponseHeaderMap() {
+        return responseHeaderMap;
+    }
+
+    public void setResponseHeaderMap(Map<String, String> responseHeaderMap) {
+        this.responseHeaderMap = responseHeaderMap;
     }
 
     public Integer getStatus() {
@@ -120,19 +129,19 @@ public class ResponseLogInfo {
         this.contentType = contentType;
     }
 
-    public String getReturnValue() {
-        return returnValue;
+    public Object getReturnObj() {
+        return returnObj;
     }
 
-    public void setReturnValue(String returnValue) {
-        this.returnValue = returnValue;
+    public void setReturnObj(Object returnObj) {
+        this.returnObj = returnObj;
     }
 
-    public String getEx() {
+    public Object getEx() {
         return ex;
     }
 
-    public void setEx(String ex) {
+    public void setEx(Object ex) {
         this.ex = ex;
     }
 

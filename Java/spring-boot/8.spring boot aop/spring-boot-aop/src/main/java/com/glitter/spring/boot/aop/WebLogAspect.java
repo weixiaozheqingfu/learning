@@ -4,11 +4,10 @@ import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.RequestLogInfo;
 import com.glitter.spring.boot.bean.ResponseLogInfo;
 import com.glitter.spring.boot.context.RequestLogInfoContext;
+import com.glitter.spring.boot.context.ResponseLogInfoContext;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -33,9 +32,27 @@ public class WebLogAspect {
     @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         try {
-            this.setRequestLogInfoContext(joinPoint);
-            System.out.println("before.....................................................................");
-            System.out.println(JSONObject.toJSONString(RequestLogInfoContext.get()));
+            System.out.println("WebLogAspect.before...................................................................");
+            RequestLogInfo requestLogInfo = null == RequestLogInfoContext.get() ? new RequestLogInfo() : RequestLogInfoContext.get();
+            this.setRequestLogInfo(requestLogInfo, joinPoint);
+            if(null == ResponseLogInfoContext.get()){
+                RequestLogInfoContext.set(requestLogInfo);
+            }
+            System.out.println("WebLogAspect.before:"+JSONObject.toJSONString(requestLogInfo));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @After("demoAspectPointcut()")
+    public void after(JoinPoint joinPoint){
+        try {
+            System.out.println("WebLogAspect.after....................................................................");
+            ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
+            this.setResponseLogInfo(responseLogInfo);
+            if(null == ResponseLogInfoContext.get()){
+                ResponseLogInfoContext.set(responseLogInfo);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,7 +61,13 @@ public class WebLogAspect {
     @AfterReturning( pointcut = "demoAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         try {
-            // System.out.println("afterReturning.............................................................ret:"+JSONObject.toJSONString(ret));
+            System.out.println("WebLogAspect.afterReturning...........................................................");
+            ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
+            responseLogInfo.setReturnObj(ret);
+            if(null == ResponseLogInfoContext.get()){
+                ResponseLogInfoContext.set(responseLogInfo);
+            }
+            System.out.println("WebLogAspect.afterReturning:"+JSONObject.toJSONString(responseLogInfo));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,18 +75,25 @@ public class WebLogAspect {
 
     @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex){
-        // System.out.println("afterReturning.................................................................ex:"+JSONObject.toJSONString(ex));
+        try {
+            System.out.println("WebLogAspect.afterThrowing............................................................");
+            ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
+            responseLogInfo.setEx(ex);
+            // 如果业务方法或者本aop方法有异常,异常没有做捕获处理,而是继续往外抛,包括到全局异常都没有捕获处理,而是继续往抛,最终会抛到spring boot默认异常处理器,那么response的status值会被改写,通常是500,也可能是其他值。
+            // 所以用户最终看到的响应消息的结果如果是spring boot最后的默认异常处理返回的,其status就是spring boot赋予的。
+            // 当然用户看到最后数据要么是我们经过异常捕获处理后返回的数据,要么是spring boot默认异常处理后返回的数据,如果是后者,用户是可以看到status值的.
+            // 如果是后者,那么对于开发者在日志中看到的responseLogInfo的status值与spring boot 返回前端页面的status值可能是不一样的,这没有关系,了解到这一点就好,免得在这哪怕纠结一会儿也是浪费时间.
+            responseLogInfo.setStatus(500);
+            if(null == ResponseLogInfoContext.get()){
+                ResponseLogInfoContext.set(responseLogInfo);
+            }
+            System.out.println("WebLogAspect.afterThrowing:"+JSONObject.toJSONString(responseLogInfo));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @After("demoAspectPointcut()")
-    public void after(JoinPoint joinPoint){
-        System.out.println("afterReturning.................................................................");
-        System.out.println(JSONObject.toJSONString(this.getResponseLogInfo()));
-    }
-
-
-    private void setRequestLogInfoContext(JoinPoint joinPoint){
-        RequestLogInfo requestLogInfo = new RequestLogInfo();
+    private void setRequestLogInfo(RequestLogInfo requestLogInfo, JoinPoint joinPoint){
         HttpServletRequest request = this.getRequest();
         System.out.println("sessionId:"+request.getSession().getId());
         requestLogInfo.setIp(null == request ? null : this.getIp(request));
@@ -73,33 +103,26 @@ public class WebLogAspect {
         requestLogInfo.setUri(null == request ? null : request.getRequestURI());
         requestLogInfo.setClassName(this.getClassName(joinPoint));
         requestLogInfo.setMethodName(this.getMethodName(joinPoint));
-        requestLogInfo.setHeaderMap(this.getRequestHeaderMap());
+        requestLogInfo.setRequestHeaderMap(this.getRequestHeaderMap());
         requestLogInfo.setParamMap(this.getParamMap(joinPoint));
-        RequestLogInfoContext.set(requestLogInfo);
     }
 
-    private ResponseLogInfo getResponseLogInfo(){
-        ResponseLogInfo responseLogInfo = new ResponseLogInfo();
-
+    private void setResponseLogInfo(ResponseLogInfo responseLogInfo){
         RequestLogInfo requestLogInfo = RequestLogInfoContext.get();
         HttpServletResponse response = this.getResponse();
-
-        requestLogInfo.setIp(null == requestLogInfo ? null : requestLogInfo.getIp());
+        responseLogInfo.setIp(null == requestLogInfo ? null : requestLogInfo.getIp());
         responseLogInfo.setHost(null == requestLogInfo ? null : requestLogInfo.getHost());
         responseLogInfo.setPort(null == requestLogInfo ? null : requestLogInfo.getPort());
         responseLogInfo.setUrl(null == requestLogInfo ? null : requestLogInfo.getUrl());
         responseLogInfo.setUri(null == requestLogInfo ? null : requestLogInfo.getUri());
-        responseLogInfo.setClassName(null == requestLogInfo ? null : requestLogInfo.getUri());
-        responseLogInfo.setMethodName(null == requestLogInfo ? null : requestLogInfo.getUri());
+        responseLogInfo.setClassName(null == requestLogInfo ? null : requestLogInfo.getClassName());
+        responseLogInfo.setMethodName(null == requestLogInfo ? null : requestLogInfo.getMethodName());
         responseLogInfo.setParamMap(null == requestLogInfo ? null : requestLogInfo.getParamMap());
-        responseLogInfo.setHeaderMap(this.getResponseHeaderMap());
+        responseLogInfo.setRequestHeaderMap(null == requestLogInfo ? null : requestLogInfo.getRequestHeaderMap());
+        responseLogInfo.setResponseHeaderMap(this.getResponseHeaderMap());
+        // 如果业务方法或者本aop方法有异常,异常没有做捕获处理,而是继续往外抛,包括到全局异常都没有捕获处理,而是继续往抛,最终会抛到spring boot默认异常处理器,那么response的status值会被改写,通常是500。
         responseLogInfo.setStatus(response.getStatus());
-        responseLogInfo.setClassName(response.getContentType());
-
-        // TODO returnValue  ex  也到放置在ResponseLogInfoContext中  在对应的方法放上值，
-        // 此方法也先从ResponseLogInfoContext中获取ResponseLogInfo对象
-
-        return responseLogInfo;
+        responseLogInfo.setContentType(response.getContentType());
     }
 
     private MethodSignature getMethodSignature(JoinPoint joinPoint){
@@ -225,11 +248,6 @@ public class WebLogAspect {
         }
         // System.out.println("获取客户端ip: " + ip);
         return ip;
-    }
-
-    private Logger getLogger(JoinPoint joinPoint){
-        Logger logger = LoggerFactory.getLogger(joinPoint.getTarget().getClass());
-        return logger;
     }
 
 }
