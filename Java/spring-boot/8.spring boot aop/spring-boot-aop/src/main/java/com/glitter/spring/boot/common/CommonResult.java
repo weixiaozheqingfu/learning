@@ -1,5 +1,7 @@
 package com.glitter.spring.boot.common;
 
+import com.glitter.spring.boot.exception.BusinessException;
+
 /**
  * @author limengjun
  * @param <T>

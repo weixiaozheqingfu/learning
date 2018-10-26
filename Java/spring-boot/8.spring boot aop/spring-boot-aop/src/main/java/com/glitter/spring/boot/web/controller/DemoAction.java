@@ -2,8 +2,8 @@ package com.glitter.spring.boot.web.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.UserInfo;
-import com.glitter.spring.boot.common.BusinessException;
 import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.exception.BusinessException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +64,9 @@ public class DemoAction {
 
     @RequestMapping(value = "/getUserInfo2", method = RequestMethod.GET)
     public void getUserInfo2(HttpServletRequest request, HttpServletResponse response) {
-
+        if(1==1){
+            throw new BusinessException("-1","参数异常");
+        }
     }
 
     @RequestMapping(value = "/getUserInfos2", method = RequestMethod.GET)

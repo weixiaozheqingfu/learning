@@ -1,4 +1,6 @@
-package com.glitter.spring.boot.common;
+package com.glitter.spring.boot.exception;
+
+import com.glitter.spring.boot.common.CodeMessage;
 
 import java.io.Serializable;
 
