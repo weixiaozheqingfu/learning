@@ -86,7 +86,7 @@ public class DemoAspect {
         if(null != ex){
             throw ex;
         }
-        if(1==2){
+        if(1==1){
             throw new BusinessException("-1","afterThrowing异常");
         }
     }

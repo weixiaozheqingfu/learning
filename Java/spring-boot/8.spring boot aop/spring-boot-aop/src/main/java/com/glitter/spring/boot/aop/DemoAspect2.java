@@ -47,9 +47,9 @@ public class DemoAspect2 {
 //    private static final Logger logger = LoggerFactory.getLogger(DemoAspect1.class);
 //
 //    @Pointcut("execution(public * com.glitter.spring.boot.web.controller.*.*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
-//    public void demoAspect1AspectPointcut(){}
+//    public void demoAspect2AspectPointcut(){}
 //
-////    @Before("demoAspect1AspectPointcut()")
+////    @Before("demoAspect2AspectPointcut()")
 ////    public void before(JoinPoint joinPoint) throws Throwable {
 ////        System.out.println("DemoAspect1.before......................................................................");
 ////        if(1==2){
@@ -57,7 +57,7 @@ public class DemoAspect2 {
 ////        }
 ////    }
 //
-//    @Around("demoAspect1AspectPointcut()")
+//    @Around("demoAspect2AspectPointcut()")
 //    public Object around(ProceedingJoinPoint pjp) throws Throwable {
 //        try {
 //            System.out.println("DemoAspect1.around调用前......................................................................");
@@ -79,7 +79,7 @@ public class DemoAspect2 {
 //        }
 //    }
 //
-//    @After("demoAspect1AspectPointcut()")
+//    @After("demoAspect2AspectPointcut()")
 //    public void after(JoinPoint jp){
 //        System.out.println("DemoAspect1.after......................................................................");
 //        if(1==2){
@@ -87,7 +87,7 @@ public class DemoAspect2 {
 //        }
 //    }
 //
-////    @AfterReturning(returning = "ret", pointcut = "demoAspect1AspectPointcut()")
+////    @AfterReturning(returning = "ret", pointcut = "demoAspect2AspectPointcut()")
 ////    public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
 ////        System.out.println("DemoAspect1.afterReturning......................................................................");
 ////        if(1==2){
@@ -95,7 +95,7 @@ public class DemoAspect2 {
 ////        }
 ////    }
 //
-//    @AfterThrowing(throwing = "ex", pointcut = "demoAspect1AspectPointcut()")
+//    @AfterThrowing(throwing = "ex", pointcut = "demoAspect2AspectPointcut()")
 //    public void afterThrowing(JoinPoint jp, Exception ex) throws Exception {
 //        System.out.println("DemoAspect1.afterThrowing......................................................................");
 //        if(null != ex){
