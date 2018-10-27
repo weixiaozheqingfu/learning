@@ -72,7 +72,7 @@ public class DemoAction {
     @RequestMapping(value = "/getUserInfos2", method = RequestMethod.GET)
     public ResponseResult<List<UserInfo>> getUserInfos2(HttpServletRequest request, HttpServletResponse response,@RequestParam Long id,@RequestParam String name) {
         if(id<0){
-            throw new BusinessException("-1", "参数异常");
+            throw new BusinessException("-1", "参数异常了....");
         }
         return ResponseResult.success(null);
     }

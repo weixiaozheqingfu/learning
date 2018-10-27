@@ -21,7 +21,9 @@ import org.springframework.stereotype.Component;
  * 1.每个通知方法有异常就抛出,异常由全局异常进行统一处理.
  * 2.在一个切面类中,要么是before,after,afterReturning,afterThrowing组合使。要么是around,after,afterThrowing组合.
  * 3.只要线程调用链能进入aop方法,无论是一切正常,还是目标方法抛出异常,还是某个通知方法抛出异常,after方法都一定会被执行。afterReturning,afterThrowing看调用链到此方法之前是否有异常执行其一。
- * 4.上面总结都是废话,只要搞清楚调用链顺序,一切都是按规矩出牌的。
+ * 4.如果有多个aop类,且拦截规则有交集,则尽量统一用一种组合,不要aop1用before组合,而aop2用around组合,这样很可能aop1的before方法并不执行。所以我们就研究多个aop时,都使用before组合的情况,其他情况不研究.
+ *
+ * 5.上面总结都是废话,只要搞清楚调用链顺序,一切都是按规矩出牌的。
  *
  */
 @Aspect
@@ -42,7 +44,7 @@ public class DemoAspect {
     @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         System.out.println("DemoAspect.before......................................................................");
-        if(1==1){
+        if(1==2){
             throw new BusinessException("-1","before异常");
         }
     }
@@ -54,7 +56,7 @@ public class DemoAspect {
     @After("demoAspectPointcut()")
     public void after(JoinPoint joinPoint){
         System.out.println("DemoAspect.after.......................................................................");
-        if(1==1){
+        if(1==2){
             throw new BusinessException("-1","after异常");
         }
     }
@@ -68,7 +70,7 @@ public class DemoAspect {
     @AfterReturning( pointcut = "demoAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         System.out.println("DemoAspect.afterReturning..............................................................");
-        if(1==1){
+        if(1==2){
             throw new BusinessException("-1","afterReturning异常");
         }
     }
@@ -79,9 +81,12 @@ public class DemoAspect {
      * @param ex
      */
     @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
-    public void afterThrowing(JoinPoint joinPoint, Exception ex){
+    public void afterThrowing(JoinPoint joinPoint, Exception ex) throws Exception {
         System.out.println("DemoAspect.afterThrowing...............................................................");
-        if(1==1){
+        if(null != ex){
+            throw ex;
+        }
+        if(1==2){
             throw new BusinessException("-1","afterThrowing异常");
         }
     }
