@@ -5,17 +5,17 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
  *
  *  该类与DemoAspect配合用于研究多个AOP的之间的执行顺序,前提是两个AOP文件都使用before组合,且拦截规则存在交集,而请求又是请求交集的情况.
  *
- *  一.核心要搞明白两个AOP文件调用链先调用哪个,这是最关键的,决定了后面的顺序.TODO
+ *  一.核心要搞明白两个AOP文件调用链先调用哪个,这是最关键的,决定了后面的顺序.
+ *  使用注解@Order可以控制调用链调用顺序,order越小越是最先执行，但更重要的是最先执行的最后结束,因为多个AOP文件的调用链其实是一个同心圆。
  *
- *  确实是order越小越是最先执行，但更重要的是最先执行的最后结束。
- *
- *  二.每次都是先进入DemoAspect再进入DemoAspect1的情况,两个AOP的执行情况如下.
+ *  二.假定DemoAspect的order值小于DemoAspect1,每次都是先进入DemoAspect再进入DemoAspect1的情况,两个AOP的执行情况如下.
  *  1.无任何异常情况下的执行调用链顺序
  *  DemoAspect.before......................................................................
     DemoAspect1.before......................................................................
@@ -85,6 +85,7 @@ import org.springframework.stereotype.Component;
  */
 @Aspect
 @Component
+@Order(2)
 public class DemoAspect1 {
 
 
