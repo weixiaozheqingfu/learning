@@ -8,9 +8,9 @@
         <!-- 按月,日来进行归档并压缩,每个文件大小限制50MB,也缩后大约节省空间几十倍 -->
         <!-- <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/$${date:yyyy-MM}/${LOG_PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz</Property> -->
         <!-- 按年,月,日来进行归档并压缩,每个文件大小限制50MB,也缩后大约节省空间几十倍 -->
-        <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${LOG_PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz</Property>
+        <!-- <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${LOG_PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz</Property> -->
         <!-- 按年,月,日来进行归档并压缩,每个文件大小限制50MB,也缩后大约节省空间几十倍 -->
-        <!--<Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${date:yyyy-MM-dd}/${LOG_PROJECT_NAME}.log-%i.gz</Property>-->
+        <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${date:yyyy-MM-dd}/${LOG_PROJECT_NAME}.log-%i.gz</Property>
         <Property name="ROLLING_FILE_MAX_SIZE">50MB</Property>
         <Property name="ROLLING_FILE_MAX_NUM">20000</Property>
         <Property name="LOG_LEVEL_ROOT">ERROR</Property>
@@ -26,9 +26,10 @@
         <RollingFile name="RollingFile" fileName="${ROLLING_FILE_NAME}" filePattern="${ROLLING_FILE_PATTERN}">
             <PatternLayout pattern="${LOG_PATTERN}" />
             <Policies>
-                <!--SizeBasedTriggeringPolicy是基于大小的rollover,这个很容易理解，如果大小大于某个阈值，上面是50MB的时候就会滚动。-->
-                <!--TimeBasedTriggeringPolicy是基于时间的rollover,其中一个参数是interval,表示多久滚动一次。默认是1 hour。modulate=true用来调整时间：比如现在是早上3am，interval是4，那么第一次滚动是在4am，接着是8am，12am...而不是7am-->
-                <!--<TimeBasedTriggeringPolicy/>-->
+                <!-- SizeBasedTriggeringPolicy是基于大小的rollover,这个很容易理解，如果大小大于某个阈值，上面是50MB的时候就会滚动。-->
+                <!-- TimeBasedTriggeringPolicy是基于时间的rollover,基于时间的滚动触发策略,很少用。其中一个参数是interval,表示多久滚动一次。默认是1 hour。 -->
+                <!-- 另一个modulate=true用来调整时间：比如现在是早上3am，interval是4，那么第一次滚动是在4am，接着是8am，12am...而不是7am-->
+                <!-- <TimeBasedTriggeringPolicy/> -->
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>
             <!-- DefaultRolloverStrategy属性如不设置,则默认为最多同一文件夹下7个文件,这里设置了20000,基本相当于不限制个数了。-->
