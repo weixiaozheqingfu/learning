@@ -1,5 +1,5 @@
 <!-- monitorInterval="1800" 指log4j2每隔1800秒（半小时），自动监控该配置文件是否有变化，如果变化，则自动根据文件内容重新配置 -->
-<!-- status是log4j2本身的日志打印级别，与系统中的日志打印级别无关 -->
+<!-- status是log4j2本身的日志打印级别,与系统中的日志打印级别无关.当设置成trace时，你会看到log4j2内部各种详细输出 -->
 <configuration status="INFO" monitorInterval="1800">
 
     <!-- 内部变量定义,做到凡是需要动态调整的参数,只要调整此处即可 -->
@@ -37,7 +37,7 @@
     <!-- 如果配置了logger,则配置的部分按照logger的定义来,即局部覆盖root. -->
     <loggers>
         <root level="${LOG_LEVEL}">
-            <!--<appender-ref ref="Console" />-->
+            <appender-ref ref="Console" />
             <appender-ref ref="RollingFile" />
         </root>
     </loggers>
