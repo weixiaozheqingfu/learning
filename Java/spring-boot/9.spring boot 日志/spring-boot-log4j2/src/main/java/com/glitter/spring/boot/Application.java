@@ -6,9 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-/**
- * adsf
- */
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.glitter.spring.boot"})
 public class Application {
@@ -20,10 +17,12 @@ public class Application {
         SpringApplication.run(Application.class, args);
         System.out.println("main方法结束");
 
-        logger.debug("debug....................................");
-        logger.info("info....................................");
-        logger.warn("warn....................................");
-        logger.error("error....................................");
+        for (int i = 0; i < 100000; i++) {
+            logger.debug("debug....................................");
+            logger.info("info....................................");
+            logger.warn("warn....................................");
+            logger.error("error....................................");
+        }
     }
 
 }
