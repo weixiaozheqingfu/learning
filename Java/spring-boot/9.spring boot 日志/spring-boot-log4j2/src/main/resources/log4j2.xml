@@ -12,7 +12,7 @@
         <Property name="ROLLING_FILE_MAX_NUM">20</Property>
         <Property name="LOG_LEVEL_ROOT">ERROR</Property>
         <Property name="LOG_LEVEL_SPRING">WARN</Property>
-        <Property name="LOG_LEVEL_MYBATIS">INFO</Property>
+        <Property name="LOG_LEVEL_MYBATIS">DEBUG</Property>
         <Property name="LOG_LEVEL_GLITTER">INFO</Property>
     </Properties>
 
@@ -39,22 +39,13 @@
     <!-- 如果没有配置logger,则按照root的定义来。 -->
     <!-- 如果配置了logger,则配置的部分按照logger的定义来,即局部覆盖root. -->
     <loggers>
-        <root level="">
+        <root level="${LOG_LEVEL_ROOT}">
             <appender-ref ref="Console" />
             <appender-ref ref="RollingFile" />
         </root>
-        <!--过滤掉spring和mybatis的一些无用的debug信息-->
-        <logger name="org.springframework" level="WARN">
-            <appender-ref ref="Console" />
-            <appender-ref ref="RollingFile" />
-        </logger>
-        <logger name="org.mybatis" level="INFO">
-            <appender-ref ref="Console" />
-            <appender-ref ref="RollingFile" />
-        </logger>
-        <logger name=" com.glitter.spring.boot" level="INFO">
-            <appender-ref ref="Console" />
-            <appender-ref ref="RollingFile" />
-        </logger>
+        <!--过滤掉spring和mybatis的一些无用的debug信息,默认是继承root的,所以里面的appender-ref都可以省略 -->
+        <logger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
+        <logger name="org.mybatis" level="${LOG_LEVEL_MYBATIS}"/>
+        <logger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
     </loggers>
 </configuration>
