@@ -45,7 +45,7 @@
         </root>
         <!--过滤掉spring和mybatis的一些无用的debug信息,默认是继承root的,所以里面的appender-ref都可以省略 -->
         <logger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
-        <logger name="org.mybatis" level="${LOG_LEVEL_MYBATIS}"/>
+        <logger name="com.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
         <logger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
     </loggers>
 </configuration>
