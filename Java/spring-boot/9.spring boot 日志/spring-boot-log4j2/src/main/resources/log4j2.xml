@@ -10,7 +10,10 @@
         <Property name="LOG_PATTERN">[${LOG_PROJECT_NAME}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-5p => %c.%M(%F:%L) - %m%n</Property>
         <Property name="ROLLING_FILE_MAX_SIZE">50MB</Property>
         <Property name="ROLLING_FILE_MAX_NUM">20</Property>
-        <Property name="LOG_LEVEL">DEBUG</Property>
+        <Property name="LOG_LEVEL_ROOT">ERROR</Property>
+        <Property name="LOG_LEVEL_SPRING">WARN</Property>
+        <Property name="LOG_LEVEL_MYBATIS">INFO</Property>
+        <Property name="LOG_LEVEL_GLITTER">INFO</Property>
     </Properties>
 
     <!-- appenders下面定义日志输出地 及 在输出地的相关属性比如输出格式,滚动策略,删除策略的配置等等 -->
@@ -36,9 +39,22 @@
     <!-- 如果没有配置logger,则按照root的定义来。 -->
     <!-- 如果配置了logger,则配置的部分按照logger的定义来,即局部覆盖root. -->
     <loggers>
-        <root level="${LOG_LEVEL}">
+        <root level="">
             <appender-ref ref="Console" />
             <appender-ref ref="RollingFile" />
         </root>
+        <!--过滤掉spring和mybatis的一些无用的debug信息-->
+        <logger name="org.springframework" level="WARN">
+            <appender-ref ref="Console" />
+            <appender-ref ref="RollingFile" />
+        </logger>
+        <logger name="org.mybatis" level="INFO">
+            <appender-ref ref="Console" />
+            <appender-ref ref="RollingFile" />
+        </logger>
+        <logger name=" com.glitter.spring.boot" level="INFO">
+            <appender-ref ref="Console" />
+            <appender-ref ref="RollingFile" />
+        </logger>
     </loggers>
 </configuration>
