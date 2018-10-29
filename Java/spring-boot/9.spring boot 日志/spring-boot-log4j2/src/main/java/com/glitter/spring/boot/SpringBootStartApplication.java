@@ -7,15 +7,17 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 
 public class SpringBootStartApplication extends SpringBootServletInitializer {
 
-    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+    private static final Logger logger = LoggerFactory.getLogger(SpringBootStartApplication.class);
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 
-        logger.debug("debug....................................");
-        logger.info("info....................................");
-        logger.warn("warn....................................");
-        logger.error("error....................................");
+        for (int i = 0; i < 10000000; i++) {
+            logger.debug("SpringBootStartApplication.debug...................................."+i);
+            logger.info("SpringBootStartApplicationinfo...................................."+i);
+            logger.warn("SpringBootStartApplicationwarn...................................."+i);
+            logger.error("SpringBootStartApplicationerror...................................."+i);
+        }
 
         // 注意这里要指向原先用main方法执行的Application启动类,这样可以读取到Application类中的注解等元信息,至于其中的main方法,则不会进行调用.
         return builder.sources(Application.class);

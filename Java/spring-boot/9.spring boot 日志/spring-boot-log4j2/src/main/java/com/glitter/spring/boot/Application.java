@@ -17,11 +17,13 @@ public class Application {
         SpringApplication.run(Application.class, args);
         System.out.println("main方法结束");
 
-        logger.debug("debug....................................");
-        logger.info("info....................................");
-        logger.warn("warn....................................");
-        logger.error("error....................................");
-
+        for (int i = 0; i < 10000000; i++) {
+            logger.debug("Application.debug...................................."+i);
+            logger.info("Application.info...................................."+i);
+            logger.warn("Application.warn...................................."+i);
+            logger.error("Application.error...................................."+i);
+        }
+        
     }
 
 }

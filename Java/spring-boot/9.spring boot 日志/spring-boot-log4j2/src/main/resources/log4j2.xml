@@ -1,51 +1,40 @@
-<!-- monitorInterval="1800" 指log4j2每隔1800秒（半小时），自动监控该配置文件是否有变化，如果变化，则自动根据文件内容重新配置 -->
-<!-- status是log4j2本身的日志打印级别,与系统中的日志打印级别无关.当设置成trace时，你会看到log4j2内部各种详细输出 -->
 <configuration status="INFO" monitorInterval="1800">
 
-    <!-- 内部变量定义,做到凡是需要动态调整的参数,只要调整此处即可 -->
     <Properties>
         <Property name="LOG_PATH">/home/logs</Property>
         <Property name="LOG_PROJECT_NAME">@project.artifactId@</Property>
-        <Property name="LOG_FILE_FULL_PATH">${LOG_PATH}/${LOG_PROJECT_NAME}.log</Property>
         <Property name="LOG_PATTERN">[${LOG_PROJECT_NAME}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-5p => %c.%M(%F:%L) - %m%n</Property>
+        <Property name="ROLLING_FILE_NAME">${LOG_PATH}/${LOG_PROJECT_NAME}.log</Property>
+        <!-- 按月,天来进行归档并压缩,每个文件大小限制50MB,也缩后大约是300多KB,没有限制每天可以产生的日志文件数,这个也是可以限制的,但觉得按照实际策略,没有必要了 -->
+        <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/$${date:yyyy-MM}/${LOG_PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz</Property>
         <Property name="ROLLING_FILE_MAX_SIZE">50MB</Property>
-        <Property name="ROLLING_FILE_MAX_NUM">20</Property>
         <Property name="LOG_LEVEL_ROOT">ERROR</Property>
         <Property name="LOG_LEVEL_SPRING">WARN</Property>
         <Property name="LOG_LEVEL_MYBATIS">DEBUG</Property>
         <Property name="LOG_LEVEL_GLITTER">INFO</Property>
     </Properties>
 
-    <!-- appenders下面定义日志输出地 及 在输出地的相关属性比如输出格式,滚动策略,删除策略的配置等等 -->
     <appenders>
-        <!-- 添加一个控制台日志追加器 -->
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
-        <!-- 添加一个滚动日志文件追加器,当日志内容达到指定范围后,以某种定义规则打包日志文件 -->
-        <RollingFile name="RollingFile" fileName="${LOG_FILE_FULL_PATH}" filePattern="${LOG_FILE_FULL_PATH}.%i">
+        <RollingFile name="RollingFile" fileName="${ROLLING_FILE_NAME}" filePattern="${ROLLING_FILE_PATTERN}">
             <PatternLayout pattern="${LOG_PATTERN}" />
             <Policies>
-                <!-- 基于大小的触发策略,当日志大小达到50MB时,以上述filePattern定义的格式进行归档 -->
+                <TimeBasedTriggeringPolicy/>
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>
-            <!-- 存档数量不超过20,当日志文件达到20个的时候,会对.log的日志文件进行删除,然后重新开始反复将日志文件写入该文件中,直到${LOG_PATH}目录下的其他任何一个.log.i的文件有删除 -->
-            <!-- 才会继续创建.log.i进行日志归档 -->
-            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
         </RollingFile>
     </appenders>
 
-    <!-- loggers下面可以配置root和logger子节点.root定义了项目的根日志,logger定义了局部日志. -->
-    <!-- 如果没有配置logger,则按照root的定义来。 -->
-    <!-- 如果配置了logger,则配置的部分按照logger的定义来,即局部覆盖root. -->
     <loggers>
         <root level="${LOG_LEVEL_ROOT}">
             <appender-ref ref="Console" />
             <appender-ref ref="RollingFile" />
         </root>
-        <!--过滤掉spring和mybatis的一些无用的debug信息,默认是继承root的,所以里面的appender-ref都可以省略 -->
         <logger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
         <logger name="com.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
         <logger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
     </loggers>
+
 </configuration>
