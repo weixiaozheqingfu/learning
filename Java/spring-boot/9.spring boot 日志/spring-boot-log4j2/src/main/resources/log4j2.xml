@@ -12,6 +12,7 @@
         <!-- 按年,月,日来进行归档并压缩,每个文件大小限制50MB,也缩后大约节省空间几十倍,没有限制每天可以产生的日志文件数,这个也是可以限制的,但觉得按照实际策略,没有必要了 -->
         <!--<Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${date:yyyy-MM-dd}/${LOG_PROJECT_NAME}.log-%i.gz</Property>-->
         <Property name="ROLLING_FILE_MAX_SIZE">50MB</Property>
+        <Property name="ROLLING_FILE_MAX_NUM">20000</Property>
         <Property name="LOG_LEVEL_ROOT">ERROR</Property>
         <Property name="LOG_LEVEL_SPRING">WARN</Property>
         <Property name="LOG_LEVEL_MYBATIS">DEBUG</Property>
@@ -30,6 +31,9 @@
                 <!--<TimeBasedTriggeringPolicy/>-->
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置,则默认为最多同一文件夹下7个文件,这里设置了20000,基本相当于不限制个数了。-->
+            <!-- 这是一个大坑,如果默认最大是7个,那么一旦一个文件夹下的日志文件数超过7个,就会覆盖掉文件夹下的第一个日志文件,整个文件夹下的日志文件都可能会错乱,造成日志丢失和一些异常情况 -->
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
         </RollingFile>
     </appenders>
 
