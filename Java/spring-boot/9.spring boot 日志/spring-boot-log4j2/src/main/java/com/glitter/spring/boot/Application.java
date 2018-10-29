@@ -17,7 +17,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
         System.out.println("main方法结束");
 
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             logger.debug("Application.debug...................................."+i);
             logger.info("Application.info...................................."+i);
             logger.warn("Application.warn...................................."+i);
