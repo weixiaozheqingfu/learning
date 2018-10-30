@@ -17,13 +17,17 @@ public class Application {
         SpringApplication.run(Application.class, args);
         System.out.println("main方法结束");
 
+        Long begin = System.currentTimeMillis();
+        logger.info("开始时间:" + begin);
         for (int i = 0; i < 300000; i++) {
             logger.debug("Application.debug...................................."+i);
             logger.info("Application.info...................................."+i);
             logger.warn("Application.warn...................................."+i);
             logger.error("Application.error...................................."+i);
         }
-        
+        Long end = System.currentTimeMillis();
+        logger.info("结束时间:" + end);
+        logger.info("耗时:" + (end - begin) + "毫秒");
     }
 
 }
