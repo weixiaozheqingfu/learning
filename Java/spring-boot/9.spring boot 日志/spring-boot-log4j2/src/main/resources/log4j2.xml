@@ -3,37 +3,80 @@
     <Properties>
         <Property name="LOG_PATH">/home/logs</Property>
         <Property name="LOG_PROJECT_NAME">@project.artifactId@</Property>
+        <Property name="LOG_FILE_FULL_PATH">${LOG_PATH}/${LOG_PROJECT_NAME}</Property>
         <Property name="LOG_PATTERN">[${LOG_PROJECT_NAME}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-5p => %c.%M(%F:%L) - %m%n</Property>
-        <Property name="ROLLING_FILE_NAME">${LOG_PATH}/${LOG_PROJECT_NAME}.log</Property>
-        <!-- 按月,日来进行归档并压缩,每个文件大小限制50MB,也缩后大约节省空间几十倍 -->
-        <!-- <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/$${date:yyyy-MM}/${LOG_PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz</Property> -->
-        <!-- 按年,月,日来进行归档并压缩,每个文件大小限制50MB,也缩后大约节省空间几十倍 -->
-        <!-- <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${LOG_PROJECT_NAME}-%d{yyyy-MM-dd}-%i.log.gz</Property> -->
-        <!-- 按年,月,日来进行归档并压缩,每个文件大小限制50MB,也缩后大约节省空间几十倍 -->
-        <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${date:yyyy-MM-dd}/${LOG_PROJECT_NAME}.log-%i.gz</Property>
         <Property name="ROLLING_FILE_MAX_SIZE">50MB</Property>
-        <Property name="ROLLING_FILE_MAX_NUM">20000</Property>
+        <Property name="ROLLING_FILE_MAX_NUM">20</Property>
         <Property name="LOG_LEVEL_ROOT">ERROR</Property>
         <Property name="LOG_LEVEL_SPRING">WARN</Property>
         <Property name="LOG_LEVEL_MYBATIS">DEBUG</Property>
         <Property name="LOG_LEVEL_GLITTER">INFO</Property>
     </Properties>
 
+    <!-- appenders中每一个追加器的日志级别由<logger>节点中先指定一个级别,而追加器中的<Filters>是可以对<logger>中指定的级别基础上再做进一步的级别过滤的,而已 -->
     <appenders>
+
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个Console追加器只输出INFO级别以上的日志 -->
         <Console name="Console" target="SYSTEM_OUT">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
             <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
-        <RollingFile name="RollingFile" fileName="${ROLLING_FILE_NAME}" filePattern="${ROLLING_FILE_PATTERN}">
+
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出DEBUG级别的日志 -->
+        <RollingFile name="RollingFileDebug" fileName="${LOG_FILE_FULL_PATH}-debug.log" filePattern="${LOG_FILE_FULL_PATH}-debug-%i.log">
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
             <PatternLayout pattern="${LOG_PATTERN}" />
             <Policies>
-                <!-- SizeBasedTriggeringPolicy是基于大小的rollover,这个很容易理解，如果大小大于某个阈值，上面是50MB的时候就会滚动。-->
-                <!-- TimeBasedTriggeringPolicy是基于时间的rollover,基于时间的滚动触发策略,很少用。其中一个参数是interval,表示多久滚动一次。默认是1 hour。 -->
-                <!-- 另一个modulate=true用来调整时间：比如现在是早上3am，interval是4，那么第一次滚动是在4am，接着是8am，12am...而不是7am-->
-                <!-- <TimeBasedTriggeringPolicy/> -->
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>
-            <!-- DefaultRolloverStrategy属性如不设置,则默认为最多同一文件夹下7个文件,这里设置了20000,基本相当于不限制个数了。-->
-            <!-- 这是一个大坑,如果默认最大是7个,那么一旦一个文件夹下的日志文件数超过7个,就会覆盖掉文件夹下的第一个日志文件,整个文件夹下的日志文件都可能会错乱,造成日志丢失和一些异常情况 -->
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
+        </RollingFile>
+
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出INFO级别的日志 -->
+        <RollingFile name="RollingFileInfo" fileName="${LOG_FILE_FULL_PATH}-info.log" filePattern="${LOG_FILE_FULL_PATH}-info-%i.log">
+            <Filters>
+                <!-- 代码中输出的日志级别是WARN及以上级别的信息不进行匹配,即丢弃(onMatch),代码中输出的日志级别是WARN以下的级别,交由下一个ThresholdFilter处理(onMismatch),可以画一个数学图例,比较直观-->
+                <!-- 换言之,这里过滤的结果是WARN及以上的级别日志都不输出 -->
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <!-- 代码中输出的日志级别是INFO及以上级别的信息允许在这里输出(onMatch),代码中输出的日志级别是INFO以下的级别,即匹配不上INFO级别的,则拒绝在这里输出(onMismatch),可以画一个数学图例,比较直观-->
+                <!-- 换言之,这里过滤的结果只输出INFO及该级别以上的日志 -->
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
+        </RollingFile>
+
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出WARN级别的日志 -->
+        <RollingFile name="RollingFileWarn" fileName="${LOG_FILE_FULL_PATH}-warn.log" filePattern="${LOG_FILE_FULL_PATH}-warn-%i.log">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
+        </RollingFile>
+
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出ERROR级别的日志 -->
+        <RollingFile name="RollingFileError" fileName="${LOG_FILE_FULL_PATH}-error.log" filePattern="${LOG_FILE_FULL_PATH}-error-%i.log">
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+            </Policies>
             <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
         </RollingFile>
     </appenders>
@@ -41,7 +84,10 @@
     <loggers>
         <root level="${LOG_LEVEL_ROOT}">
             <appender-ref ref="Console" />
-            <appender-ref ref="RollingFile" />
+            <appender-ref ref="RollingFileDebug" />
+            <appender-ref ref="RollingFileInfo" />
+            <appender-ref ref="RollingFileWarn" />
+            <appender-ref ref="RollingFileError" />
         </root>
         <logger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
         <logger name="com.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
