@@ -72,7 +72,7 @@
         </RollingFile>
     </appenders>
 
-    <!-- 全异步 耗时10461毫秒 -->
+    <!-- 混合异步 耗时?毫秒 -->
     <loggers>
         <AsyncRoot level="${LOG_LEVEL_ROOT}">
             <appender-ref ref="Console" />
@@ -81,8 +81,8 @@
             <appender-ref ref="RollingFileWarn" />
             <appender-ref ref="RollingFileError" />
         </AsyncRoot>
-        <AsyncLogger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
-        <AsyncLogger name="com.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
+        <Logger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
+        <Logger name="com.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
         <AsyncLogger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
     </loggers>
 
