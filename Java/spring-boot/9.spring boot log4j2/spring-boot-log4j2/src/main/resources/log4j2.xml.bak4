@@ -74,7 +74,7 @@
 
     <!-- 全异步 耗时10461毫秒 -->
     <loggers>
-        <AsyncRoot level="${LOG_LEVEL_ROOT}">
+        <AsyncRoot level="${LOG_LEVEL_ROOT}" includeLocation="true">
             <appender-ref ref="Console" />
             <appender-ref ref="RollingFileDebug" />
             <appender-ref ref="RollingFileInfo" />

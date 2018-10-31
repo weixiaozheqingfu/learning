@@ -72,9 +72,9 @@
         </RollingFile>
     </appenders>
 
-    <!-- 混合异步 耗时?毫秒 -->
+    <!-- 混合异步 耗时11488毫秒 -->
     <loggers>
-        <AsyncRoot level="${LOG_LEVEL_ROOT}">
+        <AsyncRoot level="${LOG_LEVEL_ROOT}" includeLocation="true">
             <appender-ref ref="Console" />
             <appender-ref ref="RollingFileDebug" />
             <appender-ref ref="RollingFileInfo" />
