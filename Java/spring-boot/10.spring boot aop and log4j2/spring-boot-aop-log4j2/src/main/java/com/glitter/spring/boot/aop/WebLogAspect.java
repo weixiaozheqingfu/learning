@@ -36,7 +36,7 @@ public class WebLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution(public * com.glitter.spring.boot.web.controller..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    @Pointcut("execution(public * com.glitter.spring.boot.web..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void demoAspectPointcut(){}
 
     @Before("demoAspectPointcut()")
@@ -110,7 +110,7 @@ public class WebLogAspect {
 
     private void setRequestLogInfo(RequestLogInfo requestLogInfo, JoinPoint joinPoint){
         HttpServletRequest request = this.getRequest();
-        logger.info("sessionId:"+request.getSession().getId());
+        logger.debug("sessionId:"+request.getSession().getId());
         requestLogInfo.setIp(null == request ? null : this.getIp(request));
         requestLogInfo.setHost(null == request ? null : request.getRemoteHost());
         requestLogInfo.setPort(null == request ? null : request.getRemotePort());
@@ -230,7 +230,7 @@ public class WebLogAspect {
 
     private String getIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        logger.info("x-forwarded-for ip: " + ip);
+        logger.debug("x-forwarded-for ip: " + ip);
         if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             if( ip.indexOf(",")!=-1 ){
@@ -239,29 +239,29 @@ public class WebLogAspect {
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
-            logger.info("Proxy-Client-IP ip: " + ip);
+            logger.debug("Proxy-Client-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
-            logger.info("WL-Proxy-Client-IP ip: " + ip);
+            logger.debug("WL-Proxy-Client-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
-            logger.info("HTTP_CLIENT_IP ip: " + ip);
+            logger.debug("HTTP_CLIENT_IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-            logger.info("HTTP_X_FORWARDED_FOR ip: " + ip);
+            logger.debug("HTTP_X_FORWARDED_FOR ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Real-IP");
-            logger.info("X-Real-IP ip: " + ip);
+            logger.debug("X-Real-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
-            logger.info("getRemoteAddr ip: " + ip);
+            logger.debug("getRemoteAddr ip: " + ip);
         }
-        logger.info("获取客户端ip: " + ip);
+        logger.debug("获取客户端ip: " + ip);
         return ip;
     }
 

@@ -14,14 +14,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseResult handleBusinessException(BusinessException e) {
-        System.out.println(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
+        logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
         return new ResponseResult(e.getCode(), e.getMessage(), null);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseResult handleException(Exception e) {
         logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
-        System.out.println(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
         return new ResponseResult("-1", "系统异常", null);
     }
 
