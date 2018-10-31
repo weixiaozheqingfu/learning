@@ -3,11 +3,16 @@ package com.glitter.spring.boot.aop;
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.RequestLogInfo;
 import com.glitter.spring.boot.bean.ResponseLogInfo;
+import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.context.RequestLogInfoContext;
 import com.glitter.spring.boot.context.ResponseLogInfoContext;
+import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.util.TemplateUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,9 +27,14 @@ import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * @author Administrator
+ */
 @Aspect
 @Component
 public class WebLogAspect {
+
+    private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
     @Pointcut("execution(public * com.glitter.spring.boot.web.controller..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void demoAspectPointcut(){}
@@ -32,51 +42,56 @@ public class WebLogAspect {
     @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         try {
-            System.out.println("WebLogAspect.before...................................................................");
+            logger.info("WebLogAspect.before begin....................................................................");
             RequestLogInfo requestLogInfo = null == RequestLogInfoContext.get() ? new RequestLogInfo() : RequestLogInfoContext.get();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
+            logger.info("WebLogAspect.before,请求地址:{}", requestLogInfo.getUri());
             if(null == ResponseLogInfoContext.get()){
                 RequestLogInfoContext.set(requestLogInfo);
             }
-            System.out.println("WebLogAspect.before:"+ JSONObject.toJSONString(requestLogInfo));
+            logger.info("WebLogAspect.before end,输入参数:{}", JSONObject.toJSONString(requestLogInfo));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
+            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
     @After("demoAspectPointcut()")
     public void after(JoinPoint joinPoint){
         try {
-            System.out.println("WebLogAspect.after....................................................................");
+            logger.info("WebLogAspect.after begin....................................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             this.setResponseLogInfo(responseLogInfo);
             if(null == ResponseLogInfoContext.get()){
                 ResponseLogInfoContext.set(responseLogInfo);
             }
+            logger.info("WebLogAspect.after end....................................................................");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
+            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
     @AfterReturning( pointcut = "demoAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         try {
-            System.out.println("WebLogAspect.afterReturning...........................................................");
+            logger.info("WebLogAspect.afterReturning begin...........................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             responseLogInfo.setReturnObj(ret);
             if(null == ResponseLogInfoContext.get()){
                 ResponseLogInfoContext.set(responseLogInfo);
             }
-            System.out.println("WebLogAspect.afterReturning:"+JSONObject.toJSONString(responseLogInfo));
+            logger.info("WebLogAspect.afterReturning end,输出参数:{}", JSONObject.toJSONString(responseLogInfo));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
+            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
     @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex){
         try {
-            System.out.println("WebLogAspect.afterThrowing............................................................");
+            logger.info("WebLogAspect.afterThrowing begin............................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             responseLogInfo.setEx(ex);
             // 如果业务方法或者本aop方法有异常,异常没有做捕获处理,而是继续往外抛,包括到全局异常都没有捕获处理,而是继续往抛,最终会抛到spring boot默认异常处理器,那么response的status值会被改写,通常是500,也可能是其他值。
@@ -87,15 +102,15 @@ public class WebLogAspect {
             if(null == ResponseLogInfoContext.get()){
                 ResponseLogInfoContext.set(responseLogInfo);
             }
-            System.out.println("WebLogAspect.afterThrowing:"+JSONObject.toJSONString(responseLogInfo));
+            logger.info("WebLogAspect.afterThrowing end,业务异常:{}", JSONObject.toJSONString(responseLogInfo));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
         }
     }
 
     private void setRequestLogInfo(RequestLogInfo requestLogInfo, JoinPoint joinPoint){
         HttpServletRequest request = this.getRequest();
-        System.out.println("sessionId:"+request.getSession().getId());
+        logger.info("sessionId:"+request.getSession().getId());
         requestLogInfo.setIp(null == request ? null : this.getIp(request));
         requestLogInfo.setHost(null == request ? null : request.getRemoteHost());
         requestLogInfo.setPort(null == request ? null : request.getRemotePort());
@@ -215,7 +230,7 @@ public class WebLogAspect {
 
     private String getIp(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
-        // System.out.println("x-forwarded-for ip: " + ip);
+        logger.info("x-forwarded-for ip: " + ip);
         if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             if( ip.indexOf(",")!=-1 ){
@@ -224,29 +239,29 @@ public class WebLogAspect {
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
-            // System.out.println("Proxy-Client-IP ip: " + ip);
+            logger.info("Proxy-Client-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
-            // System.out.println("WL-Proxy-Client-IP ip: " + ip);
+            logger.info("WL-Proxy-Client-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_CLIENT_IP");
-            // System.out.println("HTTP_CLIENT_IP ip: " + ip);
+            logger.info("HTTP_CLIENT_IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-            // System.out.println("HTTP_X_FORWARDED_FOR ip: " + ip);
+            logger.info("HTTP_X_FORWARDED_FOR ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Real-IP");
-            // System.out.println("X-Real-IP ip: " + ip);
+            logger.info("X-Real-IP ip: " + ip);
         }
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
-            // System.out.println("getRemoteAddr ip: " + ip);
+            logger.info("getRemoteAddr ip: " + ip);
         }
-        // System.out.println("获取客户端ip: " + ip);
+        logger.info("获取客户端ip: " + ip);
         return ip;
     }
 
