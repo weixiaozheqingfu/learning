@@ -1,6 +1,12 @@
 画时序图。
 
+
+
+
 1.登陆成功后cookie中存放jSessionId值。
+
+
+
 
 2.前端发起请求，如果登陆会话失效，前端将cookie中jSessionId值清空。
 
