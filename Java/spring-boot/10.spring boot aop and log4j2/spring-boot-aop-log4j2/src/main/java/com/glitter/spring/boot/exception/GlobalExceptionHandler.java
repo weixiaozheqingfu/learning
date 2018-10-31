@@ -14,6 +14,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseResult handleBusinessException(BusinessException e) {
+        // 如果有需要的话,这里也可以将参数打印出来RequestLogInfoContext.get()
         logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e));
         return new ResponseResult(e.getCode(), e.getMessage(), null);
     }
