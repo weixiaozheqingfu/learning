@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.glitter.spring.boot"})
-public class Application {
+public class  Application {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
