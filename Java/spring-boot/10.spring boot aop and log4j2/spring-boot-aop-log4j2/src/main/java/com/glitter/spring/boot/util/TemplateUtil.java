@@ -13,7 +13,7 @@ public class TemplateUtil {
     public static String getExceptionLogMsg(String className, String methodName, Exception e) {
         String result = "";
         try {
-            String formatStr = "系统异常日志：{0}.{1}()方法执行异常,异常信息:{2}";
+            String formatStr = "系统异常日志:{0}.{1}()方法执行异常,异常信息:{2}";
             String[] jsonObj = new String[3];
             jsonObj[0] = className;
             jsonObj[1] = methodName;
@@ -34,7 +34,7 @@ public class TemplateUtil {
     @Deprecated
     public static String getExceptionLogMsg(Object[] arguments) {
         try {
-            return MessageFormat.format("系统异常日志：{0}.{1}()方法执行异常,异常信息:{2}", arguments);
+            return MessageFormat.format("系统异常日志:{0}.{1}()方法执行异常,异常信息:{2}", arguments);
         } catch (Exception ex) {
             return "系统异常日志:TemplateUtil类getExceptionLogMsg方法执行异常,异常信息:" + JSONObject.toJSONString(ex);
         }
@@ -64,7 +64,13 @@ public class TemplateUtil {
     public static String getInParams(String className, String methodName, Object... arguments) {
         String result = "";
         try {
-            String formatStr = "系统异常日志：{0}.{1}()方法执行异常,输入参数依次为:";
+            if(null == arguments){
+                result += "系统异常日志:"+className+"."+methodName+"()方法执行异常,输入参数依次为:null";
+                return result;
+            }
+
+            String formatStr = "系统异常日志:{0}.{1}()方法执行异常,输入参数依次为:";
+
             String[] jsonObj = new String[arguments.length + 2];
             jsonObj[0] = className;
             jsonObj[1] = methodName;

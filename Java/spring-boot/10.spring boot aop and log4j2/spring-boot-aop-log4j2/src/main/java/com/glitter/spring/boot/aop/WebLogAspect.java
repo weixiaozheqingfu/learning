@@ -42,6 +42,9 @@ public class WebLogAspect {
     @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         try {
+            // if(1==1){
+            //    throw new BusinessException("-2","before出错了");
+            // }
             logger.info("WebLogAspect.before begin....................................................................");
             RequestLogInfo requestLogInfo = null == RequestLogInfoContext.get() ? new RequestLogInfo() : RequestLogInfoContext.get();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
@@ -51,7 +54,7 @@ public class WebLogAspect {
             }
             logger.info("WebLogAspect.before end,输入参数:{}", JSONObject.toJSONString(requestLogInfo));
         } catch (Exception e) {
-            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
@@ -67,7 +70,7 @@ public class WebLogAspect {
             }
             logger.info("WebLogAspect.after end....................................................................");
         } catch (Exception e) {
-            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
@@ -83,7 +86,7 @@ public class WebLogAspect {
             }
             logger.info("WebLogAspect.afterReturning end,输出参数:{}", JSONObject.toJSONString(responseLogInfo));
         } catch (Exception e) {
-            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
@@ -103,8 +106,14 @@ public class WebLogAspect {
                 ResponseLogInfoContext.set(responseLogInfo);
             }
             logger.info("WebLogAspect.afterThrowing end,业务异常:{}", JSONObject.toJSONString(responseLogInfo));
+            // if(1==1){
+            //    throw new BusinessException("-2","出错了");
+            // }
         } catch (Exception e) {
-            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, joinPoint));
+            // afterThrowing方法自己执行期异常只在此记录即可.
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
+            // afterThrowing方法自己执行期如果有异常不往外抛,要让代码抛出去目标方法的异常,否则,我的抛的异常会覆盖掉目标方法的异常.用户看到的就是afterThrowing方法的异常,afterThrowing方法自己执行期异常只在此记录即可.
+            // throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
