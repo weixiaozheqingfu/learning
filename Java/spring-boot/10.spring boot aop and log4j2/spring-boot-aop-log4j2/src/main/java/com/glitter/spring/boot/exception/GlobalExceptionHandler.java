@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     public ResponseResult handleBusinessException(BusinessException e) {
         try {
             // 如果有需要的话,这里也可以将参数打印出来RequestLogInfoContext.get()
-            logger.error("GlobalExceptionHandler.handleBusinessException 捕获业务异常信息:{}", JSONObject.toJSONString(e));
+            logger.error("handleBusinessException 捕获业务异常信息:{}", JSONObject.toJSONString(e));
             return new ResponseResult(e.getCode(), e.getMessage());
         } catch (Exception ex) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), ex));
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseResult handleException(Exception e) {
         try {
-            logger.error("GlobalExceptionHandler.handleException 捕获运行异常信息:{}", JSONObject.toJSONString(e));
+            logger.error("handleException 捕获运行异常信息:{}", JSONObject.toJSONString(e));
             return new ResponseResult("-1", "系统异常");
         } catch (Exception ex) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), ex));
