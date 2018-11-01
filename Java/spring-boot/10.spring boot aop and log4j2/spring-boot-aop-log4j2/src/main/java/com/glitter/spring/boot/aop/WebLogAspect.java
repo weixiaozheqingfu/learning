@@ -94,7 +94,7 @@ public class WebLogAspect {
     @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex){
         try {
-            logger.info("WebLogAspect.afterThrowing begin............................................................");
+            logger.error("WebLogAspect.afterThrowing begin............................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             responseLogInfo.setEx(ex);
             // 如果业务方法或者本aop方法有异常,异常没有做捕获处理,而是继续往外抛,包括到全局异常都没有捕获处理,而是继续往抛,最终会抛到spring boot默认异常处理器,那么response的status值会被改写,通常是500,也可能是其他值。
