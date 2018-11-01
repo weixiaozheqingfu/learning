@@ -1,8 +1,8 @@
-package com.glitter.spring.boot.bean;
+package com.glitter.spring.boot.bean.log;
 
 import java.util.Map;
 
-public class ResponseLogInfo {
+public class RequestLogInfo {
 
     private String ip;
 
@@ -21,16 +21,6 @@ public class ResponseLogInfo {
     private Map<String,Object> paramMap;
 
     private Map<String,String> requestHeaderMap;
-
-    private Map<String,String> responseHeaderMap;
-
-    private Integer status;
-
-    private String contentType;
-
-    private Object returnObj;
-
-    private Object ex;
 
 
     public String getIp() {
@@ -103,46 +93,6 @@ public class ResponseLogInfo {
 
     public void setRequestHeaderMap(Map<String, String> requestHeaderMap) {
         this.requestHeaderMap = requestHeaderMap;
-    }
-
-    public Map<String, String> getResponseHeaderMap() {
-        return responseHeaderMap;
-    }
-
-    public void setResponseHeaderMap(Map<String, String> responseHeaderMap) {
-        this.responseHeaderMap = responseHeaderMap;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
-
-    public Object getReturnObj() {
-        return returnObj;
-    }
-
-    public void setReturnObj(Object returnObj) {
-        this.returnObj = returnObj;
-    }
-
-    public Object getEx() {
-        return ex;
-    }
-
-    public void setEx(Object ex) {
-        this.ex = ex;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.glitter.spring.boot.bean;
+package com.glitter.spring.boot.bean.log;
 
 import java.util.Map;
 

@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.context;
 
-import com.glitter.spring.boot.bean.RequestLogInfo;
+
+import com.glitter.spring.boot.bean.log.RequestLogInfo;
 
 public class RequestLogInfoContext {
 
