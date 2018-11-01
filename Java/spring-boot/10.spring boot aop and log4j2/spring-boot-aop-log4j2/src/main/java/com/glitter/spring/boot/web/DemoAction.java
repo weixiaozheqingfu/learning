@@ -39,7 +39,6 @@ public class DemoAction {
         UserInfo userInfo = new UserInfo();
         userInfo.setName("张三丰");
         userInfo.setAge(100);
-        System.out.println(JSONObject.toJSONString(userInfo));
         return ResponseResult.success(userInfo);
     }
 
