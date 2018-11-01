@@ -32,14 +32,14 @@ import java.util.Map;
  */
 @Aspect
 @Component
-public class WebLogAspect {
+public class ServiceLogAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServiceLogAspect.class);
 
-    @Pointcut("execution(public * com.glitter.spring.boot.web..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
-    public void webLogAspectPointcut(){}
+    @Pointcut("execution(public * com.glitter.spring.boot.service..*(..)) and @annotation(org.springframework.stereotype.Service)")
+    public void demoAspectPointcut(){}
 
-    @Before("webLogAspectPointcut()")
+    @Before("demoAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         try {
             // if(1==1){
@@ -59,7 +59,7 @@ public class WebLogAspect {
         }
     }
 
-    @After("webLogAspectPointcut()")
+    @After("demoAspectPointcut()")
     public void after(JoinPoint joinPoint){
         try {
             logger.info("after begin....................................................................");
@@ -75,7 +75,7 @@ public class WebLogAspect {
         }
     }
 
-    @AfterReturning( pointcut = "webLogAspectPointcut()", returning = "ret")
+    @AfterReturning( pointcut = "demoAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         try {
             logger.info("afterReturning begin...........................................................");
@@ -91,7 +91,7 @@ public class WebLogAspect {
         }
     }
 
-    @AfterThrowing(pointcut = "webLogAspectPointcut()", throwing = "ex")
+    @AfterThrowing(pointcut = "demoAspectPointcut()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex){
         try {
             logger.error("afterThrowing begin............................................................");
