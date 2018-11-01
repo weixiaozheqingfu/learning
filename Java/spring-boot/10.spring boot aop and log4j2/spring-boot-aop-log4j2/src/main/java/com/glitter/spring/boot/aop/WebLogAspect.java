@@ -105,7 +105,12 @@ public class WebLogAspect {
             if(null == ResponseLogInfoContext.get()){
                 ResponseLogInfoContext.set(responseLogInfo);
             }
-            logger.error("WebLogAspect.afterThrowing end,目标方法执行异常:{}", JSONObject.toJSONString(responseLogInfo));
+            if(ex instanceof BusinessException){
+                logger.error("WebLogAspect.afterThrowing end,目标方法业务异常:{}", JSONObject.toJSONString(responseLogInfo));
+            } else {
+                logger.error("WebLogAspect.afterThrowing end,目标方法运行异常:{}", JSONObject.toJSONString(responseLogInfo));
+            }
+
             // if(1==1){
             //    throw new BusinessException("-2","出错了");
             // }
