@@ -48,7 +48,6 @@ public class DemoAction {
         if(id<0){
             throw new BusinessException("-1", "参数异常");
         }
-        System.out.println(id);
         UserInfo userInfo = new UserInfo();
         userInfo.setName("张三丰");
         userInfo.setAge(100);
@@ -58,7 +57,6 @@ public class DemoAction {
         List<UserInfo> userInfos = new ArrayList<>();
         userInfos.add(userInfo);
         userInfos.add(userInfo1);
-        System.out.println(JSONObject.toJSONString(userInfos));
         return ResponseResult.success(userInfos);
     }
 
