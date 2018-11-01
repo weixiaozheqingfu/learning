@@ -45,14 +45,14 @@ public class WebLogAspect {
             // if(1==1){
             //    throw new BusinessException("-2","before出错了");
             // }
-            logger.info("before begin....................................................................");
+            logger.info("web log before begin....................................................................");
             RequestLogInfo requestLogInfo = null == RequestLogInfoContext.get() ? new RequestLogInfo() : RequestLogInfoContext.get();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
-            logger.info("before,请求地址:{}", requestLogInfo.getUri());
+            logger.info("web log before,请求地址:{}", requestLogInfo.getUri());
             if(null == ResponseLogInfoContext.get()){
                 RequestLogInfoContext.set(requestLogInfo);
             }
-            logger.info("before end,输入参数:{}", JSONObject.toJSONString(requestLogInfo));
+            logger.info("web log before end,输入参数:{}", JSONObject.toJSONString(requestLogInfo));
         } catch (Exception e) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
@@ -62,13 +62,13 @@ public class WebLogAspect {
     @After("webLogAspectPointcut()")
     public void after(JoinPoint joinPoint){
         try {
-            logger.info("after begin....................................................................");
+            logger.info("web log after begin....................................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             this.setResponseLogInfo(responseLogInfo);
             if(null == ResponseLogInfoContext.get()){
                 ResponseLogInfoContext.set(responseLogInfo);
             }
-            logger.info("after end....................................................................");
+            logger.info("web log after end....................................................................");
         } catch (Exception e) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
@@ -78,13 +78,13 @@ public class WebLogAspect {
     @AfterReturning( pointcut = "webLogAspectPointcut()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         try {
-            logger.info("afterReturning begin...........................................................");
+            logger.info("web log afterReturning begin...........................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             responseLogInfo.setReturnObj(ret);
             if(null == ResponseLogInfoContext.get()){
                 ResponseLogInfoContext.set(responseLogInfo);
             }
-            logger.info("afterReturning end,输出参数:{}", JSONObject.toJSONString(responseLogInfo));
+            logger.info("web log afterReturning end,输出参数:{}", JSONObject.toJSONString(responseLogInfo));
         } catch (Exception e) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
@@ -94,7 +94,7 @@ public class WebLogAspect {
     @AfterThrowing(pointcut = "webLogAspectPointcut()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex){
         try {
-            logger.error("afterThrowing begin............................................................");
+            logger.error("web log afterThrowing begin............................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             responseLogInfo.setEx(ex);
             // 如果业务方法或者本aop方法有异常,异常没有做捕获处理,而是继续往外抛,包括到全局异常都没有捕获处理,而是继续往抛,最终会抛到spring boot默认异常处理器,那么response的status值会被改写,通常是500,也可能是其他值。
@@ -106,9 +106,9 @@ public class WebLogAspect {
                 ResponseLogInfoContext.set(responseLogInfo);
             }
             if(ex instanceof BusinessException){
-                logger.error("afterThrowing end,目标方法业务异常:{}", JSONObject.toJSONString(responseLogInfo));
+                logger.error("web log afterThrowing end,目标方法业务异常:{}", JSONObject.toJSONString(responseLogInfo));
             } else {
-                logger.error("afterThrowing end,目标方法运行异常:{}", JSONObject.toJSONString(responseLogInfo));
+                logger.error("web log afterThrowing end,目标方法运行异常:{}", JSONObject.toJSONString(responseLogInfo));
             }
 
             // if(1==1){
