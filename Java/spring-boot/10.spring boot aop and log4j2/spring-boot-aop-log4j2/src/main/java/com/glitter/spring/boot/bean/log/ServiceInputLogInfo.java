@@ -2,11 +2,13 @@ package com.glitter.spring.boot.bean.log;
 
 import java.util.Map;
 
-public class ServiceLogInfo {
+public class ServiceInputLogInfo {
 
     private String className;
 
     private String methodName;
+
+    private String uri;
 
     private Map<String,Object> paramMap;
 
@@ -25,6 +27,14 @@ public class ServiceLogInfo {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public Map<String, Object> getParamMap() {

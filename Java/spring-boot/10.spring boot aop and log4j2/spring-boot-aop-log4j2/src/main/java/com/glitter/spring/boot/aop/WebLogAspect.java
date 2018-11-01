@@ -5,8 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.log.RequestLogInfo;
 import com.glitter.spring.boot.bean.log.ResponseLogInfo;
 import com.glitter.spring.boot.constant.CoreConstants;
-import com.glitter.spring.boot.context.RequestLogInfoContext;
-import com.glitter.spring.boot.context.ResponseLogInfoContext;
+import com.glitter.spring.boot.context.log.RequestLogInfoContext;
+import com.glitter.spring.boot.context.log.ResponseLogInfoContext;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.util.TemplateUtil;
 import org.aspectj.lang.JoinPoint;
@@ -30,7 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @author Administrator
+ * @author limengjun
  */
 @Aspect
 @Component

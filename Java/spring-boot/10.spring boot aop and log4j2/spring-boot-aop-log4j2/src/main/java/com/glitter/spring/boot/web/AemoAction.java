@@ -3,6 +3,8 @@ package com.glitter.spring.boot.web;
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.service.IDemoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -11,6 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/aemo")
 public class AemoAction {
+
+    @Autowired
+    private IDemoService demoService;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseResult add(@RequestBody UserInfo bean){
@@ -31,12 +36,8 @@ public class AemoAction {
     }
 
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
-    public ResponseResult<UserInfo> getUserInfo(@RequestParam Long id){
-        System.out.println(id);
-        UserInfo userInfo = new UserInfo();
-        userInfo.setName("张三丰");
-        userInfo.setAge(101);
-        System.out.println(JSONObject.toJSONString(userInfo));
+    public ResponseResult<UserInfo> getUserInfo(@RequestParam Long id) throws Exception {
+        UserInfo userInfo = demoService.getUserInfo(id);
         return ResponseResult.success(userInfo);
     }
 
