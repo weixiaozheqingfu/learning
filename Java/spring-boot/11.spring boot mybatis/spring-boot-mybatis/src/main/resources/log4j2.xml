@@ -1,0 +1,89 @@
+<configuration status="INFO" monitorInterval="1800">
+
+    <Properties>
+        <Property name="LOG_PATH">/home/logs</Property>
+        <Property name="LOG_PROJECT_NAME">@project.artifactId@</Property>
+        <Property name="LOG_PATTERN">[${LOG_PROJECT_NAME}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-5p => %c.%M(%F:%L) - %m%n</Property>
+        <Property name="ROLLING_FILE_NAME">${LOG_PATH}/${LOG_PROJECT_NAME}</Property>
+        <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${date:yyyy-MM-dd}/${LOG_PROJECT_NAME}</Property>
+        <Property name="ROLLING_FILE_MAX_SIZE">10MB</Property>
+        <Property name="ROLLING_FILE_MAX_NUM">20000</Property>
+        <Property name="LOG_LEVEL_ROOT">ERROR</Property>
+        <Property name="LOG_LEVEL_SPRING">WARN</Property>
+        <Property name="LOG_LEVEL_MYBATIS">DEBUG</Property>
+        <Property name="LOG_LEVEL_GLITTER">DEBUG</Property>
+    </Properties>
+
+    <appenders>
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个Console追加器只输出WARN级别以上的日志 -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出DEBUG级别的日志 -->
+        <RollingFile name="RollingFileDebug" fileName="${ROLLING_FILE_NAME}-debug.log" filePattern="${ROLLING_FILE_PATTERN}-debug-%i.log.gz">
+            <Filters>
+                <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
+        </RollingFile>
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出INFO级别的日志 -->
+        <RollingFile name="RollingFileInfo" fileName="${ROLLING_FILE_NAME}-info.log" filePattern="${ROLLING_FILE_PATTERN}-info-%i.log.gz">
+            <Filters>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
+        </RollingFile>
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出WARN级别的日志 -->
+        <RollingFile name="RollingFileWarn" fileName="${ROLLING_FILE_NAME}-warn.log" filePattern="${ROLLING_FILE_PATTERN}-warn-%i.log.gz">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
+        </RollingFile>
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出ERROR级别的日志 -->
+        <RollingFile name="RollingFileError" fileName="${ROLLING_FILE_NAME}-error.log" filePattern="${ROLLING_FILE_PATTERN}-error-%i.log.gz">
+            <Filters>
+                <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
+            </Policies>
+            <DefaultRolloverStrategy max="${ROLLING_FILE_MAX_NUM}" />
+        </RollingFile>
+    </appenders>
+
+    <!-- 混合异步 -->
+    <loggers>
+        <AsyncRoot level="${LOG_LEVEL_ROOT}" includeLocation="true">
+            <appender-ref ref="Console" />
+            <appender-ref ref="RollingFileDebug" />
+            <appender-ref ref="RollingFileInfo" />
+            <appender-ref ref="RollingFileWarn" />
+            <appender-ref ref="RollingFileError" />
+        </AsyncRoot>
+        <AsyncLogger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
+        <AsyncLogger name="com.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
+        <Logger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
+    </loggers>
+
+</configuration>
