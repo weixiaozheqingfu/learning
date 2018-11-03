@@ -6,7 +6,7 @@ CREATE TABLE user_info (
   phone varchar(20) NOT NULL DEFAULT '' COMMENT '手机', 
   email varchar(50) NOT NULL DEFAULT '' COMMENT '邮箱',
   phone_verified bit(1) NOT NULL DEFAULT 0 COMMENT '手机验证标识(0:未认证 1:已认证)',
-  email_verified bit(1) NOT NULL COMMENT DEFAULT 0'邮箱验证标识(0:未认证 1:已认证)',
+  email_verified bit(1) NOT NULL COMMENT DEFAULT 0 '邮箱验证标识(0:未认证 1:已认证)',
   full_name varchar(50) NOT NULL DEFAULT '' DEFAULT '' COMMENT '姓名', 
   nick_name varchar(50) NOT NULL DEFAULT '' COMMENT '昵称', 
   age tinyint(3) NOT NULL DEFAULT 0 COMMENT '年龄',
