@@ -15,11 +15,11 @@
     </Properties>
 
     <appenders>
-        <!-- 各个ThresholdFilter去交集后的最终结果是,这个Console追加器只输出WARN级别以上的日志 -->
+        <!-- 各个ThresholdFilter去交集后的最终结果是,这个Console追加器只输出DEBUG级别以上的日志 -->
         <Console name="Console" target="SYSTEM_OUT">
             <Filters>
                 <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
-                <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+                <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
             <PatternLayout pattern="${LOG_PATTERN}" />
         </Console>
@@ -82,7 +82,7 @@
             <appender-ref ref="RollingFileError" />
         </AsyncRoot>
         <AsyncLogger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
-        <AsyncLogger name="com.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
+        <AsyncLogger name="org.apache.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
         <Logger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
     </loggers>
 
