@@ -20,6 +20,7 @@ public class Application {
         Long begin = System.currentTimeMillis();
         logger.info("开始时间:" + begin);
         for (int i = 0; i < 1; i++) {
+            logger.trace("Application.trace...................................."+i);
             logger.debug("Application.debug...................................."+i);
             logger.info("Application.info...................................."+i);
             logger.warn("Application.warn...................................."+i);
