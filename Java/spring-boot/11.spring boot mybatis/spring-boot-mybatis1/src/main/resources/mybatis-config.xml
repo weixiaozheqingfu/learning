@@ -14,7 +14,6 @@
 	<plugins>
 		<plugin interceptor="com.glitter.spring.boot.plugin.page.PagePlugin">
 			<property name="dialect" value="mysql" />
-			<property name="pageSqlId" value=".*Page.*" />
 		</plugin>
 	</plugins>
 </configuration>

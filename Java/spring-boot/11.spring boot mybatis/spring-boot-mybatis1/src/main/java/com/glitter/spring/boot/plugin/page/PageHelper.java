@@ -11,4 +11,8 @@ public class PageHelper{
 		PageContext.setPage(page);
 	}
 
+	public static void clearPage() {
+		PageContext.removePage();
+	}
+
 }

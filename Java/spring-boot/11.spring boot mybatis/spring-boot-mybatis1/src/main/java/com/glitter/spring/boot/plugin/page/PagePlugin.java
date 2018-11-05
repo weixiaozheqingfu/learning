@@ -27,9 +27,8 @@ import org.apache.ibatis.session.Configuration;
  * @author limengjun
  * @date 2018年11月05日
  *
- * 本拦截器执行条件有下面两个,任何一个不满足都直接放行：
- * 1.dao层接口方法名必须包含Page关键字
- * 2.方法中在执行查询列表语句之前执行了如下语句:PageHelper.startPage(pageNum, pageSize);
+ * 本拦截器执行条件:
+ * 方法中在执行查询列表语句之前执行了如下语句:PageHelper.startPage(pageNum, pageSize);
  *
  * mybatis 3.4.0之前写法
  * @Intercepts({ @Signature(method = "prepare", type = StatementHandler.class, args = { Connection.class }) })
@@ -41,8 +40,6 @@ public class PagePlugin implements Interceptor {
 
 	private String dialect;
 
-	private String pageSqlId;
-
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
 		RoutingStatementHandler handler = (RoutingStatementHandler) invocation.getTarget();
@@ -50,7 +47,7 @@ public class PagePlugin implements Interceptor {
 		MappedStatement mappedStatement = (MappedStatement) ReflectUtil.getFieldValue(delegate, "mappedStatement");
 
 		Page page = PageContext.getPage();
-		if(null == page || !mappedStatement.getId().matches(pageSqlId)){
+		if(null == page){
 			return invocation.proceed();
 		}
 
@@ -82,7 +79,6 @@ public class PagePlugin implements Interceptor {
 	@Override
 	public void setProperties(Properties properties) {
 		this.dialect = properties.getProperty("dialect");
-		this.pageSqlId = properties.getProperty("pageSqlId");
 	}
 
 	private int getTotalRecords(BoundSql boundSql, MappedStatement mappedStatement, Connection connection) {

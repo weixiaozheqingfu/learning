@@ -283,7 +283,7 @@
         </where>
 	</select>
 
-	<select id="findAllListPage" resultMap="BaseResultMap">
+	<select id="findAllList" resultMap="BaseResultMap">
 	     select <include refid="baseColumns"/> from user_info
 	</select>
 

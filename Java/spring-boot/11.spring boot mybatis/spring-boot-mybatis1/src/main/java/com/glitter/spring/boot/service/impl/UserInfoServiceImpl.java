@@ -3,7 +3,6 @@ package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
-import com.glitter.spring.boot.plugin.page.Page;
 import com.glitter.spring.boot.plugin.page.PageHelper;
 import com.glitter.spring.boot.plugin.page.PageInfo;
 import com.glitter.spring.boot.service.IUserInfoService;
@@ -88,8 +87,11 @@ public class UserInfoServiceImpl implements IUserInfoService{
     @Override
     public PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<UserInfo> list = userInfoDao.findAllListPage();
-        PageInfo<UserInfo> pageInfo = new PageInfo(list);
+        List<UserInfo> userInfos = userInfoDao.findAllList();
+        PageInfo<UserInfo> pageInfo = new PageInfo(userInfos);
+
+        // TODO 测试一个方法中连续分页的情况,或者说再执行其他查询sql会发生什么情况,再试一下github的分页插件是什么情况，如果后面的sql不需要分页，则需要在sql执行前调用PageHelper.clearPage();
+        // 建议PageInfo<UserInfo> pageInfo = new PageInfo(userInfos);中将threadLocal清空。
         return pageInfo;
     }
 
