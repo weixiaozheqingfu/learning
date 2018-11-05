@@ -1,0 +1,12 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_client
+        username: root
+        password: root
+        hikari.maxLifetime: 1765000
+        hikari.maximumPoolSize: 15
+
+mybatis:
+    mapper-locations: classpath:mybatis/*.xml
+    type-aliases-package: com.glitter.spring.boot.bean
