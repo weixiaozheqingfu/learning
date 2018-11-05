@@ -1,7 +1,8 @@
 package com.glitter.spring.boot.service;
 
-import com.github.pagehelper.PageInfo;
 import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.plugin.page.Page;
+import com.glitter.spring.boot.plugin.page.PageInfo;
 
 public interface IUserInfoService {
 
@@ -29,6 +30,8 @@ public interface IUserInfoService {
      * @return
      */
     UserInfo getUserInfoById(Long id);
+
+//    PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize);
 
     PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize);
 

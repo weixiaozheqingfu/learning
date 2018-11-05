@@ -1,13 +1,14 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.plugin.page.Page;
+import com.glitter.spring.boot.plugin.page.PageHelper;
+import com.glitter.spring.boot.plugin.page.PageInfo;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,11 +76,20 @@ public class UserInfoServiceImpl implements IUserInfoService{
         }
     }
 
+
+//    @Override
+//    public PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize) {
+//        PageHelper.startPage(pageNum, pageSize);
+//        List<UserInfo> userInfos = userInfoDao.findAllList();
+//        PageInfo<UserInfo> pageInfo = new PageInfo<>(userInfos);
+//        return pageInfo;
+//    }
+
     @Override
     public PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<UserInfo> userInfos = userInfoDao.findAllList();
-        PageInfo<UserInfo> pageInfo = new PageInfo<>(userInfos);
+        List<UserInfo> list = userInfoDao.findAllListPage();
+        PageInfo<UserInfo> pageInfo = new PageInfo(list);
         return pageInfo;
     }
 

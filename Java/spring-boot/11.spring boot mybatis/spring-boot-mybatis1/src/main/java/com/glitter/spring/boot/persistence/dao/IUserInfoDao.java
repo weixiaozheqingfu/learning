@@ -74,7 +74,7 @@ public interface IUserInfoDao{
      *
      * @return
      */
-    List<UserInfo> findAllList();
+    List<UserInfo> findAllListPage();
 
     /**
      * 按条件查询

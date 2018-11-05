@@ -10,3 +10,4 @@ spring:
 mybatis:
     mapper-locations: classpath:mybatis/*.xml
     type-aliases-package: com.glitter.spring.boot.bean
+    config-location: classpath:mybatis-config.xml

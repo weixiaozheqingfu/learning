@@ -1,13 +1,12 @@
 package com.glitter.spring.boot.web.action;
 
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageInfo;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.plugin.page.Page;
+import com.glitter.spring.boot.plugin.page.PageInfo;
 import com.glitter.spring.boot.service.IUserInfoService;
-import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
