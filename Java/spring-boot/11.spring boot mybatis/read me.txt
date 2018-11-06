@@ -1,3 +1,4 @@
 1.spring-boot-mybatis 项目主要是基础的mybatis环境，可运行，使用的是dao层接口自动映射mapper文件的形式。
 2.spring-boot-mybatis1 项目主要演示自定义分页插件的使用。
-3.spring-boot-mybatis12 项目主要演示自定义分页插件采用application.yml和注解的方式进行引入。
+3.spring-boot-mybatis2 项目主要演示自定义分页插件采用application.yml和注解的方式进行引入。
+4.spring-boot-mybatis3 项目主要演示通过引入自定义插件jar包的方式，来进行无配置分页。

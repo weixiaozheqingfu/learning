@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glitter.spring.boot.persistence.dao.IAuthServerInfoDao">
+    <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.AuthServerInfo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="server_id" property="serverId" jdbcType="VARCHAR"/>
+        <result column="server_name" property="serverName" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="baseColumns">
+        id
+        ,server_id
+        ,server_name
+        ,create_time
+        ,update_time
+    </sql>
+
+    <sql id="whereSql">
+        <if test="id != null">
+            and id=#{id}
+		</if>
+        <if test="serverId != null ">
+            and server_id=#{serverId}
+		</if>
+        <if test="serverName != null ">
+            and server_name=#{serverName}
+		</if>
+        <if test="createTime != null">
+            and create_time=#{createTime}
+		</if>
+        <if test="updateTime != null">
+            and update_time=#{updateTime}
+		</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.glitter.spring.boot.bean.AuthServerInfo">
+        insert into auth_server_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="serverId != null ">
+                server_id,
+            </if>
+            <if test="serverName != null ">
+                server_name,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="serverId != null ">
+                #{serverId},
+            </if>
+            <if test="serverName != null ">
+                #{serverName},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+		</trim>
+    </insert>
+
+    <delete id="deleteById">
+        delete from auth_server_info where id =#{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from auth_server_info where id in
+        <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</delete>
+
+    <delete id="delete" parameterType="com.glitter.spring.boot.bean.AuthServerInfo">
+        delete from auth_server_info
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </delete>
+
+    <update id="updateById" parameterType="com.glitter.spring.boot.bean.AuthServerInfo">
+        update auth_server_info  set
+        <trim suffixOverrides=",">
+        <if test="serverId != null ">
+            server_id=#{serverId},
+        </if>
+        <if test="serverName != null ">
+            server_name=#{serverName},
+        </if>
+        <if test="createTime != null">
+            create_time=#{createTime},
+        </if>
+        <if test="updateTime != null">
+            update_time=#{updateTime},
+        </if>
+        </trim>
+        where id =#{id}
+	</update>
+
+    <select id="getById" resultMap="BaseResultMap">
+	    select <include refid="baseColumns"/> from auth_server_info where id =#{id}
+	</select>
+
+    <select id="getByIds" resultMap="BaseResultMap">
+	    select <include refid="baseColumns"/> from auth_server_info
+	    where id in
+	    <foreach collection="array" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</select>
+
+	<select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.AuthServerInfo">
+        select <include refid="baseColumns"/> from auth_server_info
+        <where>
+            <include refid="whereSql"/> limit 1
+        </where>
+	</select>
+
+	<select id="findAllList" resultMap="BaseResultMap">
+	     select <include refid="baseColumns"/> from auth_server_info
+	</select>
+
+	<select id="findList"  parameterType="com.glitter.spring.boot.bean.AuthServerInfo" resultMap="BaseResultMap">
+        select <include refid="baseColumns"/> from auth_server_info
+        <where>
+            <include refid="whereSql"/>
+        </where>
+	</select>
+
+	<select id="getCount"  parameterType="com.glitter.spring.boot.bean.AuthServerInfo" resultType="java.lang.Integer">
+        select count(1) from auth_server_info
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </select>
+
+</mapper>
