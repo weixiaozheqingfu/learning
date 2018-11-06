@@ -31,8 +31,6 @@ public interface IUserInfoService {
      */
     UserInfo getUserInfoById(Long id);
 
-//    PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize);
-
     PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize);
 
 }

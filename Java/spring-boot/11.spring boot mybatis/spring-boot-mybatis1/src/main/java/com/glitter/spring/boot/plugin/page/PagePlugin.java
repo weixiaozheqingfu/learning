@@ -1,25 +1,25 @@
 package com.glitter.spring.boot.plugin.page;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Properties;
-
+import com.alibaba.fastjson.JSONObject;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.executor.statement.RoutingStatementHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.ParameterMapping;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
-import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.plugin.*;
 import org.apache.ibatis.scripting.defaults.DefaultParameterHandler;
 import org.apache.ibatis.session.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * @ClassName: PagePlugin
@@ -38,31 +38,38 @@ import org.apache.ibatis.session.Configuration;
 @Intercepts(value = {@Signature(method = "prepare", type = StatementHandler.class, args = {Connection.class,Integer.class})})
 public class PagePlugin implements Interceptor {
 
+	private static final Logger logger = LoggerFactory.getLogger(PagePlugin.class);
+
 	private String dialect;
 
 	@Override
 	public Object intercept(Invocation invocation) throws Throwable {
-		RoutingStatementHandler handler = (RoutingStatementHandler) invocation.getTarget();
-		StatementHandler delegate = (StatementHandler) ReflectUtil.getFieldValue(handler, "delegate");
-		MappedStatement mappedStatement = (MappedStatement) ReflectUtil.getFieldValue(delegate, "mappedStatement");
+		try {
+			RoutingStatementHandler handler = (RoutingStatementHandler) invocation.getTarget();
+			StatementHandler delegate = (StatementHandler) ReflectUtil.getFieldValue(handler, "delegate");
+			MappedStatement mappedStatement = (MappedStatement) ReflectUtil.getFieldValue(delegate, "mappedStatement");
 
-		Page page = PageContext.getPage();
-		if(null == page){
+			Page page = PageContext.getPage();
+			if(null == page){
+                return invocation.proceed();
+            }
+
+			// 动态构建查询总条数sql并执行
+			BoundSql boundSql = delegate.getBoundSql();
+			Connection connection = (Connection) invocation.getArgs()[0];
+			int totalRecords = this.getTotalRecords(boundSql,mappedStatement,connection);
+			page.setTotalRecords(totalRecords);
+
+			// 给原查询列表sql赋予limit等分页属性后重新赋予boundSql对象,以便查询出分页后的结果
+			String sql = boundSql.getSql();
+			String pageSql = this.getPageSql(page, sql);
+			ReflectUtil.setFieldValue(boundSql, "sql", pageSql);
+
+			return invocation.proceed();
+		} catch (InvocationTargetException e) {
+			logger.error(JSONObject.toJSONString(e));
 			return invocation.proceed();
 		}
-
-		// 动态构建查询总条数sql并执行
-		BoundSql boundSql = delegate.getBoundSql();
-		Connection connection = (Connection) invocation.getArgs()[0];
-		int totalRecords = this.getTotalRecords(boundSql,mappedStatement,connection);
-		page.setTotalRecords(totalRecords);
-
-		// 给原查询列表sql赋予limit等分页属性后重新赋予boundSql对象,以便查询出分页后的结果
-		String sql = boundSql.getSql();
-		String pageSql = this.getPageSql(page, sql);
-		ReflectUtil.setFieldValue(boundSql, "sql", pageSql);
-
-		return invocation.proceed();
 	}
 
 	/**
@@ -70,7 +77,14 @@ public class PagePlugin implements Interceptor {
 	 */
 	@Override
 	public Object plugin(Object target) {
-		return Plugin.wrap(target, this);
+		Object o = null;
+		try {
+			o = Plugin.wrap(target, this);
+			return o;
+		} catch (Exception e) {
+			logger.error(JSONObject.toJSONString(e));
+			return o;
+		}
 	}
 
 	/**
@@ -78,7 +92,11 @@ public class PagePlugin implements Interceptor {
 	 */
 	@Override
 	public void setProperties(Properties properties) {
-		this.dialect = properties.getProperty("dialect");
+		try {
+			this.dialect = properties.getProperty("dialect");
+		} catch (Exception e) {
+			logger.error(JSONObject.toJSONString(e));
+		}
 	}
 
 	private int getTotalRecords(BoundSql boundSql, MappedStatement mappedStatement, Connection connection) {
@@ -102,7 +120,7 @@ public class PagePlugin implements Interceptor {
 				totalRecords = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			// TODO 记录日志  测试带参数参数看是否报错
+			logger.error(JSONObject.toJSONString(e));
 		} finally {
 			try {
 				if (rs != null){
@@ -112,7 +130,7 @@ public class PagePlugin implements Interceptor {
 					pstmt.close();
 				}
 			} catch (SQLException e) {
-				// TODO 记录日志
+				logger.error(JSONObject.toJSONString(e));
 			}
 		}
 		return totalRecords;
