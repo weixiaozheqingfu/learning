@@ -23,6 +23,19 @@ public class PageInfo<T> implements Serializable {
 	/** 结果集 */
 	private List<T> data;
 
+	/** 首页 */
+	private int firstPageNum;
+	/** 尾页 */
+	private int lastPageNum;
+	/** 上一页  */
+	private int prePageNum;
+	/** 下一页 */
+	private int nextPageNum;
+	/** 是否有上一页 */
+	private boolean hasPrePage;
+	/** 是否有下一页 */
+	private boolean hasNextPage;
+
 	public PageInfo(List<T> data){
 		Page page = PageContext.getPage();
 		if(null != page){
@@ -30,9 +43,16 @@ public class PageInfo<T> implements Serializable {
 			this.pageSize = page.getPageSize();
 			this.totalRecords = page.getTotalRecords();
 			this.totalPages = page.getTotalPages();
+			this.firstPageNum = page.getFirstPageNum();
+			this.lastPageNum = page.getLastPageNum();
+			this.prePageNum = page.getPrePageNum();
+			this.nextPageNum = page.getNextPageNum();
+			this.hasPrePage = page.hasPrePage();
+			this.hasNextPage = page.hasNextPage();
 		}
 		this.data = data;
 	}
+
 
 	public int getPageSize() {
 		return pageSize;
@@ -52,6 +72,30 @@ public class PageInfo<T> implements Serializable {
 
 	public List<T> getData() {
 		return data;
+	}
+
+	public int getFirstPageNum() {
+		return firstPageNum;
+	}
+
+	public int getLastPageNum() {
+		return lastPageNum;
+	}
+
+	public int getPrePageNum() {
+		return prePageNum;
+	}
+
+	public int getNextPageNum() {
+		return nextPageNum;
+	}
+
+	public boolean isHasPrePage() {
+		return hasPrePage;
+	}
+
+	public boolean isHasNextPage() {
+		return hasNextPage;
 	}
 
 }

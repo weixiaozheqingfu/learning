@@ -17,8 +17,6 @@ public class Application {
         SpringApplication.run(Application.class, args);
         System.out.println("main方法结束");
 
-        int totalPages = (10 + 10 - 1) / 10;
-
         Long begin = System.currentTimeMillis();
         logger.info("开始时间:" + begin);
         for (int i = 0; i < 1; i++) {

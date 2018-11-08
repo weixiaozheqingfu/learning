@@ -275,7 +275,7 @@
 	</select>
 
 	<select id="findAllList" resultMap="BaseResultMap">
-	     select <include refid="baseColumns"/> from user_info where delete_flag = 0
+	     select <include refid="baseColumns"/> from user_info
 	</select>
 
 	<select id="findList"  parameterType="com.glitter.spring.boot.bean.UserInfo" resultMap="BaseResultMap">

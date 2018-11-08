@@ -11,155 +11,132 @@ import java.util.List;
 public class Page<T> implements Serializable {
 
 	private static final long serialVersionUID = -6069386888143600090L;
-	
+
 	/** 默认页码 */
 	private static int DEFAULT_PAGE_NUM = 1;
 	/** 默认每页记录数 */
 	private static int DEFAULT_PAGE_SIZE = 10;
-	
+
 	/** 每页记录数 */
-	private int pageSize; 
+	private int pageSize;
 	/** 页码 */
-	private int pageNum; 
+	private int pageNum;
 	/** 总记录数 */
 	private int totalRecords;
-	
+
 	/** 起始索引 */
 	private int startIndex;
 	/** 结束索引  */
 	private int endIndex;
 	/** 总页数 (根据pageNum+totalRecords运算得到数据) */
-	private int totalPages; 
-	
+	private int totalPages;
+
 	/** 结果集 */
 	private List<T> data;
-	
-	
-	public Page(){
+
+
+	private Page(){
 
 	}
-	
-	public Page(int pageNum, int pageSize){
+
+	protected Page(int pageNum, int pageSize){
 		this.setPageSize(pageSize);
 		this.setPageNum(pageNum);
 	}
-	
-	public Page(int totalRecords){
+
+	protected Page(int totalRecords){
 		this.setTotalRecords(totalRecords);
 	}
-	
-	public Page(int pageNum, int pageSize, int totalRecords){
+
+	protected Page(int pageNum, int pageSize, int totalRecords){
 		this.setPageSize(pageSize);
 		this.setPageNum(pageNum);
 		this.setTotalRecords(totalRecords);
 	}
 
-	public int getPageNum() {
+	protected int getPageNum() {
 		return this.pageNum;
 	}
-	
-	public void setPageNum(int pageNum) {
-		if (pageNum < 1) {
-			pageNum = DEFAULT_PAGE_NUM;
-		}
-		this.pageNum = pageNum;
-		this.startIndex = this.pageSize * (pageNum - 1);
+
+	protected void setPageNum(int pageNum) {
+		this.pageNum = pageNum < 1 ? DEFAULT_PAGE_NUM : pageNum;
 	}
 
-	public int getPageSize() {
+	protected int getPageSize() {
 		return this.pageSize;
 	}
 
-	public void setPageSize(int pageSize) {
+	protected void setPageSize(int pageSize) {
 		this.pageSize = pageSize< 1 ? DEFAULT_PAGE_SIZE : pageSize;
 	}
 
-	public int getTotalRecords() {
+	protected int getTotalRecords() {
 		return this.totalRecords;
 	}
 
-	public void setTotalRecords(int totalRecords) {
+	protected void setTotalRecords(int totalRecords) {
 		this.totalRecords = totalRecords;
-		this.totalPages = (totalRecords + this.pageSize - 1) / this.pageSize;
-		if (this.pageNum > this.totalPages) {
-			if(this.totalPages>0){
-				this.pageNum = this.totalPages;
-			}else{
-				this.pageNum = DEFAULT_PAGE_NUM;
-			}
-			this.startIndex = this.pageSize * (this.pageNum - 1);
-			this.endIndex = totalRecords;
-		}
+
+		this.totalPages = 0 == totalRecords ? 0 : ((totalRecords + this.pageSize - 1) / this.pageSize);
+		// 比如pageNum=1,totalPages=0 或 比如pageNum=100000,totalPages=0 或 pageNum=100000,totalPages=5, 想要请求的页码已经大于实际的页码的情况, 要进行纠错调整
+		this.pageNum = 0 == totalRecords ? DEFAULT_PAGE_NUM : (this.pageNum <= this.totalPages ? this.pageNum: this.totalPages);
+
+		this.startIndex = this.pageSize * (this.pageNum - 1);
 		this.endIndex = this.startIndex + this.pageSize > totalRecords ? totalRecords : this.startIndex + this.pageSize;
 	}
-	
-	public int getStartIndex() {
+
+	protected int getStartIndex() {
 		return this.startIndex;
 	}
 
-	public int getEndIndex() {
+	protected int getEndIndex() {
 
 		return this.endIndex;
 	}
 
-	public int getTotalPages() {
+	protected int getTotalPages() {
 		return this.totalPages;
 	}
-	
-	public List<T> getData() {
+
+	protected List<T> getData() {
 		return this.data;
 	}
 
-	public void setData(List<T> data) {
+	protected void setData(List<T> data) {
 		this.data = data;
 		PageContext.removePage();
 	}
-	
+
 	/** -----------------------------------------------------------以下属于锦上添花部分,用不到就忽略----------------------------------------------------- */
 
 	/** 获取首页 */
-	public int getTopPageNo() {
+	protected int getFirstPageNum() {
 		return DEFAULT_PAGE_NUM;
 	}
 
+	/** 获取尾页 */
+	protected int getLastPageNum() {
+		return 0 == this.totalPages ? 1 : this.totalPages;
+	}
+
 	/** 获取上一页  */
-	public int getPreviousPageNum() {
-		if (this.pageNum <= 1) {
-			return DEFAULT_PAGE_NUM;
-		}
-		return this.pageNum - 1;
+	protected int getPrePageNum() {
+		return this.pageNum > 1 ? this.pageNum - 1 : DEFAULT_PAGE_NUM;
 	}
 
 	/** 获取下一页 */
-	public int getNextPageNum() {
-		if (this.pageNum >= getBottomPageNum()) {
-			return getBottomPageNum();
-		}
-		return this.pageNum + 1;
+	protected int getNextPageNum() {
+		return this.pageNum < this.getLastPageNum() ? this.pageNum + 1 : this.getLastPageNum();
 	}
 
-	/** 获取尾页 */
-	public int getBottomPageNum() {
-		return this.getTotalPages();
-	}
-	
 	/** 是否有上一页 */
-	public boolean isHavePrePage(){
-		if(this.pageNum > 1){
-			return true;
-		}else{
-			return false;
-		}
+	protected boolean hasPrePage(){
+		return this.pageNum > 1;
 	}
-	
+
 	/** 是否有下一页 */
-	public boolean isHaveNextPage(){
-		// 计算是否有下一页
-		if(this.pageNum < this.totalPages){
-			return true;
-		}else{
-			return false;
-		}
+	protected boolean hasNextPage(){
+		return this.pageNum < this.totalPages;
 	}
-	
+
 }
