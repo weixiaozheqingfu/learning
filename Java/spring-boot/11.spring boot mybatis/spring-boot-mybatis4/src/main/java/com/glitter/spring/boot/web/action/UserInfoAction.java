@@ -1,12 +1,13 @@
 package com.glitter.spring.boot.web.action;
 
-import com.github.pagehelper.PageInfo;
+//import com.github.pagehelper.PageInfo;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 
 
+import com.glitter.spring.boot.page.PageInfo;
 import com.glitter.spring.boot.service.IUserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

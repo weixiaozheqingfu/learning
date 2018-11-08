@@ -1,7 +1,8 @@
 package com.glitter.spring.boot.service;
 
-import com.github.pagehelper.PageInfo;
+//import com.github.pagehelper.PageInfo;
 import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.page.PageInfo;
 
 public interface IUserInfoService {
 

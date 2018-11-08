@@ -2,9 +2,10 @@ package com.glitter.spring.boot.service.impl;
 
 
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+//import com.github.pagehelper.PageInfo;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.page.PageInfo;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.persistence.dao.IUserInfoDao;

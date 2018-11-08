@@ -22,3 +22,9 @@ mybatis:
         default-statement-timeout: 25000
         default-fetch-size: 100
         map-underscore-to-camel-case: true
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
