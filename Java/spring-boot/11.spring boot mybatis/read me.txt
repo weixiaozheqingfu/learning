@@ -2,3 +2,18 @@
 2.spring-boot-mybatis1 项目主要演示自定义分页插件的使用。
 3.spring-boot-mybatis2 项目主要演示自定义分页插件采用application.yml和注解的方式进行引入。
 4.spring-boot-mybatis3 项目主要演示通过引入自定义插件jar包的方式，来进行无配置分页。
+5.spring-boot-mybatis4 项目主要演示github的分页插件pagehelper的使用。
+
+// TODO list
+
+6.spring-boot-mybatis5 项目主要演示手动实现dao接口,并通过调用mybaties的api方式来执行sql语句。
+
+7.spring-boot-mybatis6 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（包括自动映射mapper文件的情况下）。
+
+8.spring-boot-mybatis6 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（手动实现dao接口的情况下）。
+
+9.spring-boot-mybatis6 项目主要演示读写分离。
+
+10.spring-boot-mybatis6 项目主要演示多数据源。
+
+11.spring-boot-mybatis6 项目主要演示结合mycat的使用，分库分表场景。
