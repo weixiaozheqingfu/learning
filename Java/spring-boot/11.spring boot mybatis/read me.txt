@@ -3,18 +3,17 @@
 3.spring-boot-mybatis2 项目主要演示自定义分页插件采用application.yml和注解的方式进行引入。
 4.spring-boot-mybatis3 项目主要演示通过引入自定义插件jar包的方式，来进行无配置分页。
 5.spring-boot-mybatis4 项目主要演示github的分页插件pagehelper的使用。
+6.spring-boot-mybatis5 项目主要演示手动实现dao接口,并通过SqlSessionTemplate对象模板来操作sql语句。
 
 // TODO list
-
-6.spring-boot-mybatis5 项目主要演示手动实现dao接口,并通过SqlSessionTemplate对象模板来操作sql语句。
 
 7.spring-boot-mybatis6 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（包括自动映射mapper文件的情况下）。
 
 8.spring-boot-mybatis6 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（手动实现dao接口的情况下）。
 
 9.spring-boot-mybatis6 项目主要演示读写分离。
-  sqlSessionTemplate应该是多例的，然后分别引用w数据源和r数据源。
-  然后整个项目中应该有两个sqlSessionTemplate实例就对了，这个可以打印sqlSessionTemplate看是否始终有两个对象，而不是每用一次都产生一个新的。
+  sqlSessionTemplate应该是多例的，即读的和写的实例每次都是按照配置新new出来的就对了，这个可以打印sqlSessionTemplate看是否对象的hash值每次都不一样。读写模板对象根据配置在new创建对象的时候分别引用w数据源和r数据源。
+
   另外读写的开关应该控制在service层，保证整个方法执行过程中所有的sql语句使用的是同一种数据源。
   不能指定在dao层方法上，因为如果一个service层方法中既有读的dao方法调用，又有写的dao方法调用时，可能会有莫名的数据不一致的问题，因为读写库直接的数据同步是需要时间的。
   其实放到service层已经可以了，如果这个service层方法包含了写的dao方法，那么一定使用写的数据源，如果这个service方法中都是调用的读的dao方法，那这个service方法可以使用读数据源。这个可以通过service方法上加自定义注解来控制。
