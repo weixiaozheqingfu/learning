@@ -19,6 +19,8 @@
   其实放到service层已经可以了，如果这个service层方法包含了写的dao方法，那么一定使用写的数据源，如果这个service方法中都是调用的读的dao方法，那这个service方法可以使用读数据源。这个可以通过service方法上加自定义注解来控制。
   其实这样的读写分离已经非常好了，因为一般增删改的service方法中，读的操作并不是太多。而纯粹的查的service方法在系统中的占比是非常多的，他们都使用读数据源的话，会大大提升效率。
 
+  考虑将sqlSessionTemplate对象在aop的时候选择好放入threadLocal中，这样dao层使用的时候直接取就好了，并且是线程安全的。
+
 
 10.spring-boot-mybatis6 项目主要演示多数据源。
 
