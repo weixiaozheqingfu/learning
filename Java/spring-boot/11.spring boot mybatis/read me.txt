@@ -7,11 +7,13 @@
 
 // TODO list
 
-7.spring-boot-mybatis6 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（包括自动映射mapper文件的情况下）。
+7.spring-boot-mybatis6 项目主要演示事务管理，事务应该只与数据源有关。
 
-8.spring-boot-mybatis6 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（手动实现dao接口的情况下）。
+8.spring-boot-mybatis7 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（包括自动映射mapper文件的情况下）。
 
-9.spring-boot-mybatis6 项目主要演示读写分离。
+9.spring-boot-mybatis8 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（手动实现dao接口的情况下）。
+
+10.spring-boot-mybatis9 项目主要演示读写分离。
   sqlSessionTemplate应该是多例的，即读的和写的实例每次都是按照配置新new出来的就对了，这个可以打印sqlSessionTemplate看是否对象的hash值每次都不一样。读写模板对象根据配置在new创建对象的时候分别引用w数据源和r数据源。
 
   另外读写的开关应该控制在service层，保证整个方法执行过程中所有的sql语句使用的是同一种数据源。
@@ -22,6 +24,6 @@
   考虑将sqlSessionTemplate对象在aop的时候选择好放入threadLocal中，这样dao层使用的时候直接取就好了，并且是线程安全的。
 
 
-10.spring-boot-mybatis6 项目主要演示多数据源。
+11.spring-boot-mybatis10 项目主要演示多数据源。
 
-11.spring-boot-mybatis6 项目主要演示结合mycat的使用，分库分表场景。
+12.spring-boot-mybatis11 项目主要演示结合mycat的使用，分库分表场景。
