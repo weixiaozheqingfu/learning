@@ -3,7 +3,9 @@ package com.glitter.spring.boot.web;
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
-import com.glitter.spring.boot.exception.BusinessException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,19 +15,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/demo")
 public class DemoAction{
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     public ResponseResult<UserInfo> getUserInfo(@RequestParam Long id){
-        if(id<0){
-            throw new BusinessException("100101", "id值非法");
-        }
-        if(id==0){
-            throw new NullPointerException();
-        }
-        System.out.println(id);
+
+        redisTemplate.opsForValue().set("redis:test:1","1a里");
+        String str = (String)redisTemplate.opsForValue().get("redis:test:1");
+        System.out.println(str);
+
+        stringRedisTemplate.opsForValue().set("redis:test:2","2a里");
+        String str2 = stringRedisTemplate.opsForValue().get("redis:test:2");
+        System.out.println(str2);
+
         UserInfo userInfo = new UserInfo();
         userInfo.setName("张三丰");
         userInfo.setAge(100);
-        System.out.println(JSONObject.toJSONString(userInfo));
+
+        redisTemplate.opsForValue().set("redis:test:userInfo", JSONObject.toJSONString(userInfo));
+        Object o = (String)redisTemplate.opsForValue().get("redis:test:userInfo");
+        String userInfoStr = null == o ? null : String.valueOf(o);
+        System.out.println(userInfoStr);
+
+        redisTemplate.opsForValue().set("redis:test:userInfo", userInfo);
+        UserInfo userInfo1 = (UserInfo)redisTemplate.opsForValue().get("redis:test:userInfo");
+        System.out.println(userInfo1);
+
         return ResponseResult.success(userInfo);
     }
 

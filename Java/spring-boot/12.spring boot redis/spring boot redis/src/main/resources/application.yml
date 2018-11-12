@@ -1,0 +1,14 @@
+spring:
+    redis:
+        host: 172.28.18.34
+        port: 6379
+        timeout: 1000
+        password:
+        database: 3
+        # spring boot默认使用lettuce连接池 也可以自己替换成jedis连接池
+        lettuce:
+            pool:
+                max-active: 100
+                max-wait: 100000
+                max-idle: 8
+                min-idle: 0
