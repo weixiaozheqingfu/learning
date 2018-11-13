@@ -11,34 +11,11 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.nio.charset.StandardCharsets;
-
 
 @Configuration
 public class RedisConfiguration implements WebMvcConfigurer {
 
-//    /**
-//     * redisTemplate模板对象序列化使用的jdkSerializeable, 存储二进制字节码, 所以自定义序列化类
-//     * 当然,如果键值都是String字符串,其实可以直接使用StringRedisTemplate模板对象进行存取操作了
-//     *
-//     * @param redisConnectionFactory
-//     * @return
-//     */
-//    @Bean
-//    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-//        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory);
-//
-//        // 使用StringRedisSerializer替换默认序列化
-//        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer(StandardCharsets.UTF_8);
-//
-//        // 设置key的序列化规则和value的序列化规则都为String字符串,这样键值的存取都必须是字符串,否则运行时会报错
-//        redisTemplate.setKeySerializer(stringRedisSerializer);
-//        redisTemplate.setValueSerializer(stringRedisSerializer);
-//        redisTemplate.afterPropertiesSet();
-//
-//        return redisTemplate;
-//    }
+
 
     /**
      * redisTemplate 序列化使用的jdkSerializeable, 存储二进制字节码, 所以自定义序列化类

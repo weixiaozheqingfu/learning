@@ -1,11 +1,17 @@
 画时序图。
 
 
+1.spring-boot-session 自定义实现redis会话。
+
+2.spring-boot-session1 使用spring session实现redis会话。
+
+
+
+
+ 
 
 
 1.登陆成功后cookie中存放jSessionId值。
-
-
 
 
 2.前端发起请求，如果登陆会话失效，前端将cookie中jSessionId值清空。
@@ -21,7 +27,6 @@
   所以重复登陆的问题不需要考虑。
   
   
-
 4.登陆成功后，前端发起任何其他请求，都会带着jSessionId，服务器端验证处于登陆状态，则进行数据返回，否则返回登陆失效，前端跳转到首页。
 
 5.未登陆状态下，前端发起任何请求，jSessionId值为空，则服务器端验证jSessionId为空，表示未登陆，则返回未登陆。即使jSessionId不为空，服务器发现没有匹配的jSessionId，也是返回未登陆状态。
