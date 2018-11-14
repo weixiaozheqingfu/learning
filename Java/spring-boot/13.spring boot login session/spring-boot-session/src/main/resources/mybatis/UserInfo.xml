@@ -23,9 +23,18 @@
     <sql id="baseColumns">
         id
         ,account
+        ,password
         ,phone
         ,email
+        ,phone_verified
+        ,email_verified
+        ,full_name
+        ,nick_name
+        ,age
+        ,height
+        ,remark
         ,delete_flag
+        ,register_time
         ,create_time
         ,update_time
     </sql>

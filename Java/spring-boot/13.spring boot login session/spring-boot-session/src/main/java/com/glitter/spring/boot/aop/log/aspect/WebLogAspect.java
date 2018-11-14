@@ -16,8 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.HttpRequestHandler;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
+import org.springframework.web.servlet.support.WebContentGenerator;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -39,7 +42,7 @@ public class WebLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution(public * com.glitter.spring.boot.web..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    @Pointcut("execution(public * com.glitter.spring.boot.web.action..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void webLogAspectPointcut(){}
 
     @Before("webLogAspectPointcut()")
@@ -223,6 +226,9 @@ public class WebLogAspect {
             if(paramValues[i] instanceof HttpServletRequest) { continue; }
             if(paramValues[i] instanceof ServletResponse) { continue; }
             if(paramValues[i] instanceof HttpServletResponse) { continue; }
+            if(paramValues[i] instanceof ResourceHttpRequestHandler) { continue; }
+            if(paramValues[i] instanceof WebContentGenerator) { continue; }
+            if(paramValues[i] instanceof HttpRequestHandler) { continue; }
             result.put(paramNames[i], paramValues[i]);
         }
         return result;

@@ -3,6 +3,7 @@ package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.observer.GlitterPublisher;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
@@ -23,6 +24,9 @@ public class UserInfoServiceImpl implements IUserInfoService{
 
     @Autowired
     IUserInfoDao userInfoDao;
+
+    @Autowired
+    GlitterPublisher glitterPublisher;
 
     /**
      * 创建用户表; InnoDB free: 488448 kB
