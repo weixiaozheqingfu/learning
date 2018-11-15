@@ -37,11 +37,10 @@ public class SessionCacheImpl implements ICommonCache {
      */
     @Override
     public void add(String key, Object o, Integer expirtTime) {
-        String jsonStr = JSONObject.toJSONString(o);
         if (expirtTime == null) {
-            redisTemplate.opsForValue().set(key, jsonStr, expirtTime);
+            redisTemplate.opsForValue().set(key, o, expirtTime);
         }else {
-            redisTemplate.opsForValue().set(key, jsonStr, expirtTime, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(key, o, expirtTime, TimeUnit.SECONDS);
         }
     }
 
