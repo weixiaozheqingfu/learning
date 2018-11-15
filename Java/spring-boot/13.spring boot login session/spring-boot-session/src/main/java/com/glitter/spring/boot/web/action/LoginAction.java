@@ -1,7 +1,6 @@
 package com.glitter.spring.boot.web.action;
 
 import com.glitter.spring.boot.common.ResponseResult;
-import com.glitter.spring.boot.observer.CommonPublisher;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.util.CaptchaUtils;
@@ -30,9 +29,6 @@ public class LoginAction extends BaseAction{
 
     @Autowired
     private IRsaService rsaService;
-
-    @Autowired
-    CommonPublisher glitterPublisher;
 
     /**
      * 获取公钥

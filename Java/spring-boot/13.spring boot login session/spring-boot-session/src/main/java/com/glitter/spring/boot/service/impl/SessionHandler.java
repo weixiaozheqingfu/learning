@@ -3,7 +3,6 @@ package com.glitter.spring.boot.service.impl;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.context.ResponseContext;
-import com.glitter.spring.boot.observer.CommonPublisher;
 import com.glitter.spring.boot.persistence.cache.redis.SessionCacheImpl;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
@@ -19,9 +18,6 @@ public class SessionHandler implements ISessionHandler {
 
     @Autowired
     SessionCacheImpl sessionCache;
-
-    @Autowired
-    CommonPublisher glitterPublisher;
 
     @Override
     public ISession getSession() {

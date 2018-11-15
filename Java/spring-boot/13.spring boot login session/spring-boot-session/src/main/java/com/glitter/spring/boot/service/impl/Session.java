@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.glitter.spring.boot.observer.CommonPublisher;
+import com.glitter.spring.boot.observer.sessioncreate.SessionCreatePublisher;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.util.SpringContextUtil;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Session extends HashMap implements ISession {
 
-    CommonPublisher glitterPublisher = SpringContextUtil.getBean(CommonPublisher.class);
+    SessionCreatePublisher sessionCreatePublisher = SpringContextUtil.getBean(SessionCreatePublisher.class);
 
     @Override
     public Long getCreationTime() {
@@ -51,13 +51,13 @@ public class Session extends HashMap implements ISession {
     public void setAttribute(String key, Object value) {
         System.out.print("1");
         super.put(key, value);
-        glitterPublisher.publishSessionUpdateEvent(this);
+        sessionCreatePublisher.publishEvent(this);
     }
 
     @Override
     public void removeAttribute(String key) {
         super.remove(key);
-        glitterPublisher.publishSessionUpdateEvent(this);
+        sessionCreatePublisher.publishEvent(this);
     }
 
     @Override
