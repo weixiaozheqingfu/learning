@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.config;
 
-import com.glitter.spring.boot.observer.GlitterPublisher;
+import com.glitter.spring.boot.observer.CommonPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class BeanConfiguration {
 
     @Bean
-    public GlitterPublisher glitterPublisher() {
-        return new GlitterPublisher();
+    public CommonPublisher glitterPublisher() {
+        return new CommonPublisher();
     }
 
 }

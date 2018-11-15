@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.glitter.spring.boot.observer.GlitterPublisher;
+import com.glitter.spring.boot.observer.CommonPublisher;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.util.RSAUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.util.Map;
 public class RsaServiceImpl implements IRsaService {
 
     @Autowired
-    GlitterPublisher glitterPublisher;
+    CommonPublisher glitterPublisher;
 
     static String publicKey;
     static String privateKey;

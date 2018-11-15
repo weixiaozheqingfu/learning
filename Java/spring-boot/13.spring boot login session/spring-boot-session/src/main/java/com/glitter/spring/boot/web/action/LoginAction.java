@@ -1,9 +1,8 @@
 package com.glitter.spring.boot.web.action;
 
 import com.glitter.spring.boot.common.ResponseResult;
-import com.glitter.spring.boot.observer.GlitterPublisher;
+import com.glitter.spring.boot.observer.CommonPublisher;
 import com.glitter.spring.boot.service.IRsaService;
-import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.util.CaptchaUtils;
 import com.glitter.spring.boot.web.param.LoginInfo;
@@ -33,7 +32,7 @@ public class LoginAction extends BaseAction{
     private IRsaService rsaService;
 
     @Autowired
-    GlitterPublisher glitterPublisher;
+    CommonPublisher glitterPublisher;
 
     /**
      * 获取公钥
@@ -66,8 +65,7 @@ public class LoginAction extends BaseAction{
 
         // 2.生成验证码值并存入Session
         String graphCaptcha = captchaUtils.generateCaptchaCode();
-        ISession session = sessionHandler.getSession();
-        session.setAttribute("loginGraphCaptcha",graphCaptcha);
+        sessionHandler.getSession().setAttribute("loginGraphCaptcha",graphCaptcha);
 
         // 3.将验证码图片输入到客户端
 //        这种做法前端只要在img标签中指定src的链接路径即可。

@@ -1,5 +1,4 @@
-package com.glitter.spring.boot.observer;
-
+package com.glitter.spring.boot.observer.sessioncreate;
 
 import com.glitter.spring.boot.service.ISession;
 import org.springframework.context.ApplicationContext;
@@ -7,7 +6,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GlitterPublisher implements ApplicationContextAware {
+public class SessionCreatePublisher implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
@@ -16,9 +15,9 @@ public class GlitterPublisher implements ApplicationContextAware {
         this.applicationContext=applicationContext;
     }
 
-    public void publishSessionUpdateEvent(ISession session){
-        SessionUpdateEvent sessionUpdateEvent = new SessionUpdateEvent(session);
-        applicationContext.publishEvent(sessionUpdateEvent);
+    public void publishEvent(ISession session){
+        SessionCreateEvent sessionCreateEvent = new SessionCreateEvent(session);
+        applicationContext.publishEvent(sessionCreateEvent);
     }
 
 }

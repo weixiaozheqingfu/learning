@@ -1,15 +1,15 @@
-package com.glitter.spring.boot.observer;
+package com.glitter.spring.boot.observer.sessioncreate;
 
 import com.glitter.spring.boot.service.ISession;
 import org.springframework.context.ApplicationEvent;
 
 /**
- * Session属性更新事件
+ * Created by Administrator on 2017/12/28.
  */
-public class SessionUpdateEvent extends ApplicationEvent {
+public class SessionCreateEvent extends ApplicationEvent {
 
-    public SessionUpdateEvent(ISession content) {
-        super(content);
+    public SessionCreateEvent(ISession session) {
+        super(session);
     }
 
     public ISession getContent(){

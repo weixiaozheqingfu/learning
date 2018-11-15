@@ -1,7 +1,8 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.glitter.spring.boot.observer.GlitterPublisher;
+import com.glitter.spring.boot.observer.CommonPublisher;
 import com.glitter.spring.boot.service.ISession;
+import com.glitter.spring.boot.util.SpringContextUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,9 +10,7 @@ import java.util.List;
 
 public class Session extends HashMap implements ISession {
 
-    // 需要使用代码的方式得到该对象
-    GlitterPublisher glitterPublisher;
-
+    CommonPublisher glitterPublisher = SpringContextUtil.getBean(CommonPublisher.class);
 
     @Override
     public Long getCreationTime() {
@@ -52,7 +51,7 @@ public class Session extends HashMap implements ISession {
     public void setAttribute(String key, Object value) {
         System.out.print("1");
         super.put(key, value);
-//        glitterPublisher.publishSessionUpdateEvent(this);
+        glitterPublisher.publishSessionUpdateEvent(this);
     }
 
     @Override
