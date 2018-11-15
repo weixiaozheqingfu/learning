@@ -1,22 +1,17 @@
 package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.observer.GlitterPublisher;
-import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
 import com.glitter.spring.boot.service.ISession;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 
-@Service
-public class Session implements ISession {
 
-    @Autowired
+public class Session extends HashMap implements ISession {
+
+    // 需要使用代码的方式得到该对象
     GlitterPublisher glitterPublisher;
 
-    @Autowired
-    IUserInfoDao userInfoDao;
 
     @Override
     public Long getCreationTime() {
@@ -56,13 +51,13 @@ public class Session implements ISession {
     @Override
     public void setAttribute(String key, Object value) {
         System.out.print("1");
-//        super.put(key, value);
+        super.put(key, value);
 //        glitterPublisher.publishSessionUpdateEvent(this);
     }
 
     @Override
     public void removeAttribute(String key) {
-//        super.remove(key);
+        super.remove(key);
         glitterPublisher.publishSessionUpdateEvent(this);
     }
 
