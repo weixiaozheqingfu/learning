@@ -56,7 +56,7 @@ public class Session implements ISession,Serializable {
 
     @Override
     public Long getCreationTime() {
-        return this.getCreationTime();
+        return this.creationTime;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Session implements ISession,Serializable {
 
     @Override
     public Long getLastAccessedTime() {
-        return null;
+        return this.lastAccessedTime;
     }
 
     @Override
@@ -89,7 +89,7 @@ public class Session implements ISession,Serializable {
     public void setAttribute(String key, Object value) {
         this.attributes.put(key, value);
         SpringContextUtil.getBean(SessionCreatePublisher.class).publishEvent(this);
-        logger.error("时间发布完毕!");
+        logger.error("事件发布完毕!");
     }
 
     @Override
@@ -100,6 +100,11 @@ public class Session implements ISession,Serializable {
 
     @Override
     public void invalidate() {
-        // TODO redis清除,同时销毁当前对象
+        // TODO redis清除
+        this.setId(null);
+        this.setAttributes(null);
+        this.setCreationTime(null);
+        this.setLastAccessedTime(null);
+
     }
 }
