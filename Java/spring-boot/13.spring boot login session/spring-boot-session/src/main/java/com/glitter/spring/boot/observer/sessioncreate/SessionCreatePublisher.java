@@ -8,8 +8,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
+
 @Component
-public class SessionCreatePublisher implements ApplicationContextAware {
+public class SessionCreatePublisher implements ApplicationContextAware,Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
 

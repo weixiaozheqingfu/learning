@@ -3,7 +3,8 @@ package com.glitter.spring.boot.service.impl;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.context.ResponseContext;
-import com.glitter.spring.boot.persistence.cache.redis.SessionCacheImpl;
+import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
+import com.glitter.spring.boot.persistence.cache.ICommonCache;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
 import com.glitter.spring.boot.util.CookieUtils;
@@ -22,22 +23,26 @@ public class SessionHandler implements ISessionHandler {
     private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
 
     @Autowired
-    SessionCacheImpl sessionCache;
+    ICommonCache commonCache;
 
+    @Autowired
+    ICacheKeyManager cacheKeyManager;
+
+    /**
+     * 如果jsessionIdCookie为空或者在服务器不存在对应的Session对象,则进行Session对象的创建和jsessionIdCookie的浏览器回写
+     * @return
+     */
     @Override
     public ISession getSession() {
-        ISession session = new Session();
-        // 如果jsessionIdCookie为空或者在服务器不存在对应的Session对象,则进行Session对象的创建和jsessionIdCookie的浏览器回写
-        if (StringUtils.isBlank(JsessionIdCookieContext.get())
-                //  || null == (session = (ISession)sessionCache.getSession("jsessionId..."))
-                ) {
-            // TODO 创建session对象并写入并生成新的jsessionIdClient到客户端浏览器 同时在redis中记录
-            Cookie cookie = new Cookie(GlitterConstants.JSESSIONID, "TODO");
+        ISession session = null;
+        if (StringUtils.isBlank(JsessionIdCookieContext.get()) || null == (session = commonCache.get(cacheKeyManager.getSessionKey(JsessionIdCookieContext.get()))) ) {
+            session = new Session();
+            commonCache.add(cacheKeyManager.getSessionKey(session.getId()), session, cacheKeyManager.getSessionKeyKeyExpireTime());
+
+            Cookie cookie = new Cookie(GlitterConstants.JSESSIONID, session.getId());
             cookie.setPath("/");
             CookieUtils.updateCookie(ResponseContext.get(), cookie);
 
-            // TODO 创建Session对象，并保存在
-            session = new Session();
             logger.error("session创建完毕");
             return session;
         }

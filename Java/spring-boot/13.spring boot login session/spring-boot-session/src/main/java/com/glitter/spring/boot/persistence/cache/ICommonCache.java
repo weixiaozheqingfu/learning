@@ -34,15 +34,10 @@ public interface ICommonCache {
     /**
      * 获取
      * @param key
+     * @param <T>
      * @return
      */
-    String get(String key);
+    public <T> T get(String key);
 
-    /**
-     * 获取
-     * @param key
-     * @return
-     */
-    <T> T get(String key, Class<T> clazz);
 
 }

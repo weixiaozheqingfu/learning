@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class SessionCacheImpl implements ICommonCache {
+public class CommonCacheImpl implements ICommonCache {
 
-    private static final Logger logger = LoggerFactory.getLogger(SessionCacheImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(CommonCacheImpl.class);
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -65,31 +65,10 @@ public class SessionCacheImpl implements ICommonCache {
         redisTemplate.expire(key, expirtTime, TimeUnit.SECONDS);
     }
 
-    /**
-     * 获取
-     *
-     * @param key
-     * @return
-     */
     @Override
-    public String get(String key) {
-        Object o = redisTemplate.opsForValue().get(key);
-        String str = null == o ? null : String.valueOf(o);
-        return str;
-    }
-
-    /**
-     * 获取
-     *
-     * @param key
-     * @param clazz
-     * @return
-     */
-    @Override
-    public <T> T get(String key, Class<T> clazz) {
-        String jsonStr = this.get(key);
-        T t = StringUtils.isBlank(jsonStr) ? null : JSONObject.parseObject(jsonStr, clazz);
-        return t;
+    public <T> T get(String key) {
+        T o = (T)redisTemplate.opsForValue().get(key);
+        return o;
     }
 
 }

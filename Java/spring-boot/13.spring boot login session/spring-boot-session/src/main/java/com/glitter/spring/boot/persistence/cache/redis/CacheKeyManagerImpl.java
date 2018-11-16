@@ -38,8 +38,8 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
     }
 
     @Override
-    public String getSessionKey() {
-        return "session:" + UUID.randomUUID().toString();
+    public String getSessionKey(String uuid) {
+        return "session:" + uuid;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
     }
 
     @Override
-    public Integer getSessionKeyKeyExpireTime(String userId) {
+    public Integer getSessionKeyKeyExpireTime() {
         return DEFAULT_EXPIRE_TIME;
     }
 

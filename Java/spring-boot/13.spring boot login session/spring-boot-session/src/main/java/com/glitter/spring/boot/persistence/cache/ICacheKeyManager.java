@@ -17,12 +17,12 @@ public interface ICacheKeyManager<T> {
 
     Logger logger = LoggerFactory.getLogger(SpringBootStartApplication.class);
 
-    String getSessionKey();
+    String getSessionKey(String uuid);
 
     Integer getSessionKeyExpireTime();
 
     String getSessionKeyKey(String userId);
 
-    Integer getSessionKeyKeyExpireTime(String userId);
+    Integer getSessionKeyKeyExpireTime();
 
 }

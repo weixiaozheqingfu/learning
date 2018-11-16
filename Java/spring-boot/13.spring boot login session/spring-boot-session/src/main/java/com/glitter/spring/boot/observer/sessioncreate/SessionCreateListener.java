@@ -25,7 +25,7 @@ public class SessionCreateListener implements ApplicationListener<SessionCreateE
     public void onApplicationEvent(SessionCreateEvent applicationEvent) {
         logger.error("onApplicationEvent......");
         ISession session = applicationEvent.getContent();
-        commonCache.add(cacheKeyManager.getSessionKey(),session,cacheKeyManager.getSessionKeyExpireTime());
+        commonCache.add(cacheKeyManager.getSessionKey(session.getId()),session,cacheKeyManager.getSessionKeyExpireTime());
         return;
     }
 

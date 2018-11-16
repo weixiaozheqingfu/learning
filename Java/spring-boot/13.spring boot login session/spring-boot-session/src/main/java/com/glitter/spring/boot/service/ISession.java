@@ -10,10 +10,6 @@ public interface ISession {
 
     Long getLastAccessedTime();
 
-    void setMaxInactiveInterval(int var1);
-
-    Integer getMaxInactiveInterval();
-
     Object getAttribute(String var1);
 
     List<String> getAttributeNames();
