@@ -4,7 +4,6 @@ import com.glitter.spring.boot.observer.sessioncreate.SessionCreatePublisher;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.util.SpringContextUtil;
 import com.glitter.spring.boot.web.action.UserInfoAction;
-import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +22,7 @@ public class Session implements ISession,Serializable {
 
     private String id;
     private ConcurrentMap<String, Object> attributes;
+    private List<String> attributeNames;
     private Long creationTime;
     private Long lastAccessedTime;
 
@@ -52,6 +52,10 @@ public class Session implements ISession,Serializable {
 
     public void setLastAccessedTime(Long lastAccessedTime) {
         this.lastAccessedTime = lastAccessedTime;
+    }
+
+    public void getAttributeNames(List<String> attributeNames) {
+        this.attributeNames = attributeNames;
     }
 
     @Override
