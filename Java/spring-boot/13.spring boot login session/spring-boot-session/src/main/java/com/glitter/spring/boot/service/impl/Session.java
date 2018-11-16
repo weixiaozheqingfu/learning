@@ -105,6 +105,5 @@ public class Session implements ISession,Serializable {
         this.setAttributes(null);
         this.setCreationTime(null);
         this.setLastAccessedTime(null);
-
     }
 }
