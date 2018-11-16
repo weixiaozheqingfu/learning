@@ -1,6 +1,5 @@
 package com.glitter.spring.boot.observer.sessioncreate;
 
-import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonCache;
 import com.glitter.spring.boot.service.ISession;
