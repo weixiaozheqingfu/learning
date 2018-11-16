@@ -3,12 +3,17 @@ package com.glitter.spring.boot.service.impl;
 import com.glitter.spring.boot.observer.sessioncreate.SessionCreatePublisher;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.util.SpringContextUtil;
+import com.glitter.spring.boot.web.action.UserInfoAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
 
 
 public class Session extends HashMap implements ISession {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
 
     SessionCreatePublisher sessionCreatePublisher = SpringContextUtil.getBean(SessionCreatePublisher.class);
 
@@ -52,6 +57,7 @@ public class Session extends HashMap implements ISession {
         System.out.print("1");
         super.put(key, value);
         sessionCreatePublisher.publishEvent(this);
+         logger.error("时间发布完毕!");
     }
 
     @Override

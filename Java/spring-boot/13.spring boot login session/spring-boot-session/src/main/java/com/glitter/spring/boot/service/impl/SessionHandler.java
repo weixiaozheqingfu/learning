@@ -7,7 +7,10 @@ import com.glitter.spring.boot.persistence.cache.redis.SessionCacheImpl;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
 import com.glitter.spring.boot.util.CookieUtils;
+import com.glitter.spring.boot.web.action.UserInfoAction;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,8 @@ import javax.servlet.http.Cookie;
 
 @Service
 public class SessionHandler implements ISessionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
 
     @Autowired
     SessionCacheImpl sessionCache;
@@ -33,6 +38,7 @@ public class SessionHandler implements ISessionHandler {
 
             // TODO 创建Session对象，并保存在
             session = new Session();
+            logger.error("session创建完毕");
             return session;
         }
         return session;
