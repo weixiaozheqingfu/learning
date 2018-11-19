@@ -1,14 +1,20 @@
 画时序图。
 
 
-1.spring-boot-session 自定义实现redis会话。
+1.spring-boot-session 自定义实现redis会话。用户名密码方式登录。模拟传统session操作方式，session以整个对象的方式整存redis整取redis。
 
-2.spring-boot-session1 使用spring session实现redis会话。
+2.spring-boot-session1 自定义实现redis会话。用户名手机号验证码方式登录。模拟传统session操作方式，session对象以hashmap的方式存入redis，读取写入redis都是按照session的属性分别实时写入或读取。
+
+2.spring-boot-session1 自定义实现redis会话。用户名邮箱验证码方式登录。不再模拟传统session的方式，会话信息分别单独进行存储，客户端需要维护多份类似jsessionId的凭证码，例如邮箱验证码，图形验证码，用户会话信息等都需要单独的凭证写入客户端cookie。
+
+3.spring-boot-session2 使用spring session实现redis会话。加入注册流程，需要发邮件激活邮箱。 与自定义实现redis会话2比较像。自己实现归自己实现，明白原理之后，还是推荐使用spring session。
 
 
 
 
- 
+应该可以区分出给用户提示：未登陆，被他端踢出，会话过期的情况。
+建议：如果session中没有取到user信息，说明是没有挡路，可以进一步将getSession后的sessionId值与客户端传入的jsessionId进行对比，如果相等，说明是未登录状态，如果不相等，说明是会话过期状态。
+
 
 
 1.登陆成功后cookie中存放jSessionId值。
@@ -59,3 +65,8 @@
   用户登录会话只是用户自行在广义会话中自定义的一部分属性值来完成登录验证而已，它是搭了广义session的顺风车并利用了其通信原理，即广义会话保证了客户端和服务器端的数据访问连贯一致性。
  
   并且实验这种做法时，采用手机号验证码登陆。
+
+
+
+密码加盐,好好研究一下，搞彻底，搞一个真正符合加盐逻辑的。
+注册流程，要发邮箱验证码，并进行验证。或者发邮箱超链接，用户进行点击验证。两种方式都要做一下，尤其第二种方式要参考成熟的业内做法，尤其是前端的跳转情况。
