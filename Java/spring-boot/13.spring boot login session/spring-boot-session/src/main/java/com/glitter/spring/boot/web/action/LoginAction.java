@@ -89,6 +89,8 @@ public class LoginAction extends BaseAction{
             throw new BusinessException("-2","图形验证码输入错误");
         }
 
+        // 3.验证用户名密码
+
         String pwd = null;
         try {
             pwd = rsaService.decrypt(paramBean.getPassword());
