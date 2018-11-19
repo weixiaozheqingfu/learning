@@ -6,18 +6,22 @@
 
     <script type="text/javascript">
         $(function(){
-            $.ajax({
-                type: "GET",
-                url: "http://localhost:8080/login/getLoginGraphCaptcha",
-                data: "id=1",
-                async: false,
-                success: function(data){
-                    captcha = "data:image/png;base64,"+data.data;
-                    $("#captcha").val()
-                    $("#captcha").attr("src",captcha);
-                }
-            });
 
+            getLoginGraphCaptcha();
+
+            function getLoginGraphCaptcha() {
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost:8080/login/getLoginGraphCaptcha",
+                    data: "id=1",
+                    async: false,
+                    success: function(data){
+                        captcha = "data:image/png;base64,"+data.data;
+                        $("#captcha").val()
+                        $("#captcha").attr("src",captcha);
+                    }
+                });
+            }
 
             $("#submitBtn").click(function(){
                 $.ajax({
@@ -27,7 +31,9 @@
                     data: getLoginFromData(),
                     dataType: "json",
                     success: function (resultObj) {
-                        alert(resultObj.code);
+                        if(resultObj.code=='-2'){
+                            getLoginGraphCaptcha();
+                        }
                     },
                     error: function (message) {
                         alert(message);
