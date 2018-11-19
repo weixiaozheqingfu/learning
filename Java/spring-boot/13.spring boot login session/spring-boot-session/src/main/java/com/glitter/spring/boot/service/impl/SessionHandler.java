@@ -29,7 +29,8 @@ public class SessionHandler implements ISessionHandler {
     ICacheKeyManager cacheKeyManager;
 
     /**
-     * 如果jsessionIdCookie为空或者在服务器不存在对应的Session对象,则进行Session对象的创建和jsessionIdCookie的浏览器回写
+     * 如果jsessionIdCookie为空或者在服务器不存在对应的Session对象,则进行Session对象的创建和jsessionIdCookie的浏览器回写。
+     * 即无论客户端传入的jseesionId是否合法,这里都会保证返回一个合法合适的session会话对象。
      * @return
      */
     @Override

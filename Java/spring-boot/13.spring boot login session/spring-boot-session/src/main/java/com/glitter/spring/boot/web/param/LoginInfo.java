@@ -10,5 +10,7 @@ public class LoginInfo extends BaseBean {
     private String account;
     /** 密码 */
     private String password;
+    /** 图形验证码 */
+    private String graphCaptcha;
  
 }

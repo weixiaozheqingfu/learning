@@ -1,6 +1,8 @@
 package com.glitter.spring.boot.web.action;
 
 import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.constant.GlitterConstants;
+import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.util.CaptchaUtils;
@@ -40,17 +42,6 @@ public class LoginAction extends BaseAction{
         return ResponseResult.success(publicKey);
     }
 
-    /**
-     * 获取公钥
-     * @return
-     */
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public ResponseResult<String> login(@RequestBody LoginInfo paramBean) throws Exception {
-        String pwd = rsaService.decrypt(paramBean.getPassword());
-        logger.info(paramBean.getAccount() + ":" + pwd);
-        return ResponseResult.success(pwd);
-    }
-
     @RequestMapping(value = "/getLoginGraphCaptcha", method = RequestMethod.GET)
     public ResponseResult<String> getLoginGraphCaptcha() throws IOException {
         // 1.设置验证码属性
@@ -76,5 +67,35 @@ public class LoginAction extends BaseAction{
         ImageIO.write(captchaUtils.generateCaptchaImg(graphCaptcha), "jpg", out);
         return ResponseResult.success(new String(Base64.encodeBase64(out.toByteArray())));
     }
+
+    /**
+     * 登陆
+     * @return
+     */
+    @RequestMapping(value = "login", method = RequestMethod.POST)
+    public ResponseResult<String> login(@RequestBody LoginInfo paramBean) throws Exception {
+        // 1.参数基本验证
+        if (null == paramBean) { throw new BusinessException("-1","请输入账号和密码"); }
+        if (null == paramBean.getAccount()) { throw new BusinessException("-1","请输入账号"); }
+        if (null == paramBean.getPassword()) { throw new BusinessException("-1","请输入密码"); }
+        if (null == paramBean.getGraphCaptcha()) { throw new BusinessException("-1","请输入图形验证码"); }
+
+        // 2.验证图形验证码
+        // 如果客户端凭证jsessionId值为空或非法,则会得到一个全新的session对象,其中的验证码值自然是空的。
+        // 如果客户端凭证jsessionId值在服务器存在,则会取出其中的验证码值进行比较(当然你如果提前没有往session中放入验证码值的话,验证码的值自然也会是空的)
+        String loginGraphCaptcha = (String)sessionHandler.getSession().getAttribute(GlitterConstants.LOGIN_GRAPHCAPTCHA);
+        if(!paramBean.getGraphCaptcha().equals(loginGraphCaptcha)){ throw new BusinessException("-2","图形验证码输入错误"); }
+
+        String pwd = null;
+        try {
+            pwd = rsaService.decrypt(paramBean.getPassword());
+        } catch (Exception e) {
+            logger.error("密码解密失败");
+            throw new BusinessException("-1","密码错误");
+        }
+        logger.info(paramBean.getAccount() + ":" + pwd);
+        return ResponseResult.success(pwd);
+    }
+
 
 }

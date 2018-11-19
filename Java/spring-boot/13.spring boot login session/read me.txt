@@ -48,3 +48,14 @@
 拦截器thredLocal中只存jSessionId即可。不要存储sessionInfo，sessionInfo用的时候直接从redis中取，可以写到baseAction中封装一个公用方法。
 这样当sessionInfo信息发生变化时，thredLocal是不用维护这种变化的，thredLocal最好的实践就是拦截器中赋值一次，出拦截器清空thredLocal，中间只用于从thredLocal取值，而不再有值的变化。
 否则，代码的可读性就很差了。
+
+
+
+
+
+7.另外一种模拟传统session方式，seesion的读取都是时时读取redis的做法，获取session时，new出一个session对象，然后检查前端传的sessionId在redis中是否存在id条目，存在则赋值sessionId到session对象中，不再重写jsession到客户端。
+  读取和设置session属性值到redis中都是时时的。只要访问了session对象，就一定能拿到session对象，并且客户端就开始处于广义会话期了。不管其传入的jseesionId是否在redis中存在，不存在，就new出一个合法的会话回写到客户端，合法就直接使用该session。
+  简而言之，广义会话是只要用户访问了session，就会给用户返回一个正确的会话对象，之前存在就使用之前的并续期，之前不存在就创造一个并回写到客户端cookie中。事实上我们使用的就是广义会话，
+  用户登录会话只是用户自行在广义会话中自定义的一部分属性值来完成登录验证而已，它是搭了广义session的顺风车并利用了其通信原理，即广义会话保证了客户端和服务器端的数据访问连贯一致性。
+ 
+  并且实验这种做法时，采用手机号验证码登陆。
