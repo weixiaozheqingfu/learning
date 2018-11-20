@@ -32,7 +32,14 @@
                     dataType: "json",
                     success: function (resultObj) {
                         if(resultObj.code=='-2'){
+                            alert(resultObj.message);
                             getLoginGraphCaptcha();
+                        }
+                        if(resultObj.code=='-1'){
+                            alert(resultObj.message);
+                        }
+                        if(resultObj.code=='0'){
+                            window.location.href="http://localhost:8080/index.html";
                         }
                     },
                     error: function (message) {

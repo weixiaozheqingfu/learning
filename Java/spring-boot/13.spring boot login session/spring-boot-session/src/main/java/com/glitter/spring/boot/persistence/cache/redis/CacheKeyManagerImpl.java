@@ -7,15 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
 public class CacheKeyManagerImpl implements ICacheKeyManager {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheKeyManagerImpl.class);
 
-    /** 30分钟 */
-    private static final int DEFAULT_EXPIRE_TIME = 60 * 30;
+    /** 1分钟 */
+    private static final int DEFAULT_EXPIRE_TIME = 60 * 1;
 
     /**
      * 接口变量默认修饰符public、static、final可省

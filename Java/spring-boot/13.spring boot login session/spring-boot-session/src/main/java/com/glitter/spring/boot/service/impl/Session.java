@@ -1,12 +1,16 @@
 package com.glitter.spring.boot.service.impl;
 
+import com.glitter.spring.boot.constant.GlitterConstants;
+import com.glitter.spring.boot.context.ResponseContext;
 import com.glitter.spring.boot.observer.sessioncreate.SessionCreatePublisher;
 import com.glitter.spring.boot.service.ISession;
+import com.glitter.spring.boot.util.CookieUtils;
 import com.glitter.spring.boot.util.SpringContextUtil;
 import com.glitter.spring.boot.web.action.UserInfoAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.Cookie;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,10 +108,15 @@ public class Session implements ISession,Serializable {
 
     @Override
     public void invalidate() {
-        // TODO redis清除
-        this.setId(null);
-        this.setAttributes(null);
-        this.setCreationTime(null);
-        this.setLastAccessedTime(null);
+        // TODO 调用是件的方式 1.原有会话清除
+
+        // 2.创建新会话并写入浏览器,不在推荐这样做了,浪费服务器资源,并且我们重新生成会话对象也不回写覆盖新的jsessionId值到客户端,
+        // 客户端下次请求时,还是使用旧的jsessionId值,服务器端发现没有对应的session对象时,自然就会重新创建一个新的出来,什么时候用,什么时候创建,这样不浪费占用服务器资源,同时也符合单一入口原则。
+//        ISession session = new Session();
+//        commonCache.add(cacheKeyManager.getSessionKey(session.getId()), session, cacheKeyManager.getSessionKeyKeyExpireTime());
+//
+//        Cookie cookie = new Cookie(GlitterConstants.JSESSIONID, session.getId());
+//        cookie.setPath("/");
+//        CookieUtils.updateCookie(ResponseContext.get(), cookie);
     }
 }

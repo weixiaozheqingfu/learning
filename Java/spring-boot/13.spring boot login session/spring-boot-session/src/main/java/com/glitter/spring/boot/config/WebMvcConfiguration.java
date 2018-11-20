@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.config;
 
+import com.glitter.spring.boot.web.interceptor.LoginInterceptor;
 import com.glitter.spring.boot.web.interceptor.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,11 +18,20 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return new RequestInterceptor();
     }
 
+    @Bean
+    LoginInterceptor loginInterceptor(){
+        return new LoginInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<String> aemoInterceptorAddPathPatterns = new ArrayList<>();
-        aemoInterceptorAddPathPatterns.add("/**");
+        List<String> requestInterceptorAddPathPatterns = new ArrayList<>();
+        requestInterceptorAddPathPatterns.add("/**");
 
-        registry.addInterceptor(requestInterceptor()).addPathPatterns(aemoInterceptorAddPathPatterns);
+        List<String> loginInterceptorAddPathPatterns = new ArrayList<>();
+        loginInterceptorAddPathPatterns.add("/userInfo/*");
+
+        registry.addInterceptor(requestInterceptor()).addPathPatterns(requestInterceptorAddPathPatterns);
+        registry.addInterceptor(loginInterceptor()).addPathPatterns(loginInterceptorAddPathPatterns);
     }
 }

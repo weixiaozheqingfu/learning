@@ -47,6 +47,7 @@ public class SessionHandler implements ISessionHandler {
             logger.error("session创建完毕");
             return session;
         }
+        commonCache.renewal(session.getId(), cacheKeyManager.getSessionKeyExpireTime());
         return session;
     }
 }

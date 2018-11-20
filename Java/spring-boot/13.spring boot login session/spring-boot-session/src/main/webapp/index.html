@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="js/jsencrypt.min.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            getUserInfo();
+
+            function getUserInfo() {
+                $.ajax({
+                    type: "GET",
+                    url: "http://localhost:8080/userInfo/getLoginUserInfo",
+                    data: "id=1",
+                    async: false,
+                    success: function(data){
+                        if(data.code != 0){
+                            alert(data.message);
+                        } else{
+                            $("#userNameSpan").html(","+data.data.fullName);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+<div id="myDiv"></div>
+<form name="loginFrom">
+    欢迎你来到首页<span id="userNameSpan"></span>!
+</form>
+</body>
+</html>

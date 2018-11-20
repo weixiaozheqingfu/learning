@@ -1,7 +1,9 @@
 package com.glitter.spring.boot.web.action;
 
+import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
+import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.service.IUserInfoService;
@@ -83,14 +85,13 @@ public class LoginAction extends BaseAction{
         // 2.验证图形验证码
         // 如果客户端凭证jsessionId值为空或非法,则会得到一个全新的session对象,其中的验证码值自然是空的。
         // 如果客户端凭证jsessionId值在服务器存在,则会取出其中的验证码值进行比较(当然你如果提前没有往session中放入验证码值的话,验证码的值自然也会是空的)
-        String loginGraphCaptcha = (String)sessionHandler.getSession().getAttribute(GlitterConstants.LOGIN_GRAPHCAPTCHA);
+        String loginGraphCaptcha = (String)sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
         if(!paramBean.getGraphCaptcha().equals(loginGraphCaptcha)){
-            sessionHandler.getSession().setAttribute(GlitterConstants.LOGIN_GRAPHCAPTCHA,"");
+            sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA,"");
             throw new BusinessException("-2","图形验证码输入错误");
         }
 
-        // 3.验证用户名密码
-
+        // 3.密码解密
         String pwd = null;
         try {
             pwd = rsaService.decrypt(paramBean.getPassword());
@@ -98,9 +99,16 @@ public class LoginAction extends BaseAction{
             logger.error("密码解密失败");
             throw new BusinessException("-1","密码错误");
         }
-        logger.info(paramBean.getAccount() + ":" + pwd);
-        return ResponseResult.success(pwd);
+
+        // 4.验证用户名密码
+        UserInfo userInfo = userInfoService.getByAccount(paramBean.getAccount());
+        if(null == userInfo){ throw new BusinessException("-1","用户名或密码错误"); }
+        if (!pwd.equals(userInfo.getPassword())) { throw new BusinessException("-1", "用户名或密码错误"); }
+
+        // 5.记录用户登录会话信息
+        sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
+        return ResponseResult.success(null);
     }
 
-
 }
+

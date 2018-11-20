@@ -83,6 +83,14 @@ public class UserInfoServiceImpl implements IUserInfoService{
         return pageInfo;
     }
 
+    @Override
+    public UserInfo getByAccount(String account) {
+        UserInfo record = new UserInfo();
+        record.setAccount(account);
+        UserInfo userInfo = userInfoDao.get(record);
+        return userInfo;
+    }
+
     /**
      * 根据主键获取用户表; InnoDB free: 488448 kB
      * @param id

@@ -30,6 +30,8 @@ public interface IUserInfoService {
      */
     UserInfo getUserInfoById(Long id);
 
+    UserInfo getByAccount(String account);
+
     PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize);
 
 }

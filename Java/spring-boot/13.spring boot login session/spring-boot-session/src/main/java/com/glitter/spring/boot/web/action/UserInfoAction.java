@@ -3,9 +3,9 @@ package com.glitter.spring.boot.web.action;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.CoreConstants;
+import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
-
-
+import com.glitter.spring.boot.service.ISessionHandler;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.pagehelper.plugin.PageInfo;
 import org.slf4j.Logger;
@@ -21,6 +21,9 @@ public class UserInfoAction{
 
     @Autowired
     private IUserInfoService userInfoService;
+
+    @Autowired
+    private ISessionHandler sessionHandler;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseResult create(@RequestBody UserInfo paramBean) {
@@ -53,6 +56,12 @@ public class UserInfoAction{
         }
         result = userInfoService.getUserInfoById(id);
 
+        return ResponseResult.success(result);
+    }
+
+    @RequestMapping(value = "getLoginUserInfo", method = RequestMethod.GET)
+    public ResponseResult<UserInfo> getUserInfoById() {
+        UserInfo result = (UserInfo) sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_USER);
         return ResponseResult.success(result);
     }
 
