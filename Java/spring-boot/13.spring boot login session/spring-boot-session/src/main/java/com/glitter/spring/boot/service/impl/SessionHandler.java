@@ -35,6 +35,7 @@ public class SessionHandler implements ISessionHandler {
      *
      * 保证一个线程中的sessionId值是一致的,但每次通过SessionHandler.getSession()拿到的对象都是最新new出来的,与redis中会话信息是同步的。
      * 为了简单就采用这种方式,足够使用,因为一个线程中调用SessionHandler.getSession()的次数不会太多,只要拿到的session对象信息是与redis是同步的即可,session对象不是同一个无所谓.
+     * 这种感觉就好像每次都从数据库查询id为1的人员信息对象一样,每次调用数据库返回的java对象都是新的,但是java对象中的人员信息每次都是一致的(如果两次查询之间数据库数据未发生变更).
      *
      * 当然伪单例模式也可以,即在一个线程中,通过SessionHandler.getSession()拿到的对象都是同一个,感觉在这一个线程中拿到的session对象就好像是单例一样,挺好,只是实现起来就复杂多了,简约起见,就不再研究这种方式了.
      *
