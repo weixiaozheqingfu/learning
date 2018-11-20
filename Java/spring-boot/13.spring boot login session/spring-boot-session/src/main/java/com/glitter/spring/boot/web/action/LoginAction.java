@@ -7,6 +7,7 @@ import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.service.IUserInfoService;
+import com.glitter.spring.boot.service.impl.Session;
 import com.glitter.spring.boot.util.CaptchaUtils;
 import com.glitter.spring.boot.web.param.LoginInfo;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 

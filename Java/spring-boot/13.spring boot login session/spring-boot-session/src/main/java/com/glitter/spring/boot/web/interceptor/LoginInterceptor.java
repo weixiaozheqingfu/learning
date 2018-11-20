@@ -1,7 +1,7 @@
 package com.glitter.spring.boot.web.interceptor;
 
 import com.glitter.spring.boot.constant.GlitterConstants;
-import com.glitter.spring.boot.context.JsessionIdCookieContext;
+import com.glitter.spring.boot.context.JsessionIdRequestContext;
 import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.context.ResponseContext;
 import com.glitter.spring.boot.exception.BusinessException;
@@ -25,7 +25,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
-        String jsessionIdCookie = JsessionIdCookieContext.get();
+        String jsessionIdCookie = JsessionIdRequestContext.get();
         // 如果客户端请求的jsessionIdCookie值为空,可能是第一次访问或者手动清空cookie,或者cookie到期等各种情况,
         // 不论哪种情况,没说的,当前请求发出的客户端浏览器,没有相应的服务器会话对象数据与之对应,所以用户在当前客户端就是未登录状态。
         if(StringUtils.isBlank(jsessionIdCookie)){ throw new BusinessException("-1", "用户未登陆"); }
@@ -54,7 +54,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
         RequestContext.remove();
         ResponseContext.remove();
-        JsessionIdCookieContext.remove();
+        JsessionIdRequestContext.remove();
     }
 
 }

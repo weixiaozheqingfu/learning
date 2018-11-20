@@ -66,6 +66,7 @@ public class CommonCacheImpl implements ICommonCache {
 
     @Override
     public <T> T get(String key) {
+
         T o = (T)redisTemplate.opsForValue().get(key);
         return o;
     }
