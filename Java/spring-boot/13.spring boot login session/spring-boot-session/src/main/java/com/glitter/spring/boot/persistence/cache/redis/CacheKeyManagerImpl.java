@@ -13,7 +13,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
     private static final Logger logger = LoggerFactory.getLogger(CacheKeyManagerImpl.class);
 
     /** 1分钟 */
-    private static final int DEFAULT_EXPIRE_TIME = 60 * 1;
+    private static final int DEFAULT_EXPIRE_TIME = 60 * 2;
 
     /**
      * 接口变量默认修饰符public、static、final可省

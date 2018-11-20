@@ -2,6 +2,7 @@ package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.JsessionIdCookieContext;
+import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.context.ResponseContext;
 import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonCache;
@@ -40,14 +41,19 @@ public class SessionHandler implements ISessionHandler {
             session = new Session();
             commonCache.add(cacheKeyManager.getSessionKey(session.getId()), session, cacheKeyManager.getSessionKeyKeyExpireTime());
 
-            Cookie cookie = new Cookie(GlitterConstants.JSESSIONID, session.getId());
-            cookie.setPath("/");
-            CookieUtils.updateCookie(ResponseContext.get(), cookie);
+            Cookie cookie = CookieUtils.getCookieByName(RequestContext.get(),GlitterConstants.JSESSIONID);
+            if(null == cookie){
+                cookie = new Cookie(GlitterConstants.JSESSIONID, session.getId());
+                cookie.setPath("/");
+                CookieUtils.updateCookie(ResponseContext.get(), cookie);
+            }else{
+                cookie.setValue(session.getId());
+            }
 
             logger.error("session创建完毕");
             return session;
         }
-        commonCache.renewal(session.getId(), cacheKeyManager.getSessionKeyExpireTime());
+        commonCache.renewal(cacheKeyManager.getSessionKey(session.getId()), cacheKeyManager.getSessionKeyExpireTime());
         return session;
     }
 }
