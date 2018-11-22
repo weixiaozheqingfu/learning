@@ -15,10 +15,13 @@
                     data: "id=1",
                     async: false,
                     success: function(data){
-                        if(data.code != 0){
-                            alert(data.message);
-                        } else{
+                        if(data.code == 0){
                             $("#userNameSpan").html(","+data.data.fullName);
+                        } else if (data.code == -2){
+                            alert(data.message);
+                            window.location.href="http://localhost:8081/login.html";
+                        } else {
+                            alert(data.message);
                         }
                     }
                 });
@@ -31,10 +34,10 @@
                     url: "http://localhost:8081/login/logout",
                     async: false,
                     success: function(data){
-                        if(data.code != 0){
-                            alert(data.message);
-                        } else{
+                        if(data.code == 0){
                             window.location.href="http://localhost:8081/login.html";
+                        } else{
+                            alert(data.message);
                         }
                     }
                 });

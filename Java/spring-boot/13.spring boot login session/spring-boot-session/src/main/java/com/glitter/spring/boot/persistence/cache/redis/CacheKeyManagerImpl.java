@@ -30,7 +30,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
             if (StringUtils.isBlank(str[i])) {
                 continue;
             }
-            result += ":" + str;
+            result += ":" + str[i];
         }
         return result;
     }
