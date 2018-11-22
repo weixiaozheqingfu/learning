@@ -37,7 +37,13 @@ public interface ICommonCache {
      * @param <T>
      * @return
      */
-    public <T> T get(String key);
+    <T> T get(String key);
 
+    /**
+     * 验证键是否存在
+     * @param key
+     * @return
+     */
+    boolean isExists(String key);
 
 }

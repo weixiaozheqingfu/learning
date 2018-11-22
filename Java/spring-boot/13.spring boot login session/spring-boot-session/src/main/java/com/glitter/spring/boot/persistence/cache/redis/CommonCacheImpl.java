@@ -66,9 +66,19 @@ public class CommonCacheImpl implements ICommonCache {
 
     @Override
     public <T> T get(String key) {
-
         T o = (T)redisTemplate.opsForValue().get(key);
         return o;
+    }
+
+    /**
+     * 验证键是否存在
+     *
+     * @param key
+     * @return
+     */
+    @Override
+    public boolean isExists(String key) {
+        return redisTemplate.hasKey(key);
     }
 
 }
