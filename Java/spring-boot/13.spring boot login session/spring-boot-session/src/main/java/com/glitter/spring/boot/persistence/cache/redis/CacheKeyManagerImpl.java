@@ -37,7 +37,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
 
     @Override
     public String getSessionKey(String uuid) {
-        return "session:" + uuid;
+        return CacheKeyManagerImpl.getKey("session", uuid);
     }
 
     @Override
@@ -57,6 +57,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
      */
     @Override
     public String getSessionKeyKey(String userId) {
-        return "session:limitMultiLogin:userId:" + userId;
+        return CacheKeyManagerImpl.getKey("session", "limitMultiLogin", "userId", userId);
     }
+
 }
