@@ -82,6 +82,7 @@ public class SessionHandler implements ISessionHandler {
 
         // 如果当前线程中的session不为空,并且在缓存中依然存在,则表明session未过期,可以继续直接使用该线程中的session
         if(null != session && commonCache.isExists(cacheKeyManager.getSessionKey(session.getId()))){
+            commonCache.renewal(cacheKeyManager.getSessionKey(session.getId()), cacheKeyManager.getSessionKeyExpireTime());
             return session;
         }
 

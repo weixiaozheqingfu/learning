@@ -24,7 +24,7 @@ public class SessionDeletePublisher implements ApplicationContextAware,Serializa
     }
 
     public void publishEvent(ISession session){
-        logger.error("SessionDeletePublisher.publishEvent,sessionId:{}", session.getId());
+        logger.info("SessionDeletePublisher.publishEvent,sessionId:{}", session.getId());
         SessionDeleteEvent sessionDeleteEvent = new SessionDeleteEvent(session);
         applicationContext.publishEvent(sessionDeleteEvent);
     }

@@ -14,7 +14,7 @@ public class SessionContext {
         return threadLocal.get();
     }
 
-    protected static void remove() {
+    public static void remove() {
         threadLocal.remove();
     }
 

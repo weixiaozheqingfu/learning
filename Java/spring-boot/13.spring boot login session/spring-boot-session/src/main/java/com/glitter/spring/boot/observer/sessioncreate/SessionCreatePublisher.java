@@ -24,7 +24,7 @@ public class SessionCreatePublisher implements ApplicationContextAware,Serializa
     }
 
     public void publishEvent(ISession session){
-        logger.error("SessionCreatePublisher.publishEvent,sessionId:{}", session.getId());
+        logger.info("SessionCreatePublisher.publishEvent,sessionId:{}", session.getId());
         SessionCreateEvent sessionCreateEvent = new SessionCreateEvent(session);
         applicationContext.publishEvent(sessionCreateEvent);
     }

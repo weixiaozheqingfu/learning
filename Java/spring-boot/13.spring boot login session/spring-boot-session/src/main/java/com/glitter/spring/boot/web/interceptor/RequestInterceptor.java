@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.web.interceptor;
 
 import com.glitter.spring.boot.constant.GlitterConstants;
+import com.glitter.spring.boot.context.ContextManager;
 import com.glitter.spring.boot.context.JsessionIdRequestContext;
 import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.context.ResponseContext;
@@ -32,9 +33,7 @@ public class RequestInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        RequestContext.remove();
-        ResponseContext.remove();
-        JsessionIdRequestContext.remove();
+        ContextManager.removeAllContext();
     }
 
 }

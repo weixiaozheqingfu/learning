@@ -1,12 +1,14 @@
 package com.glitter.spring.boot.web.interceptor;
 
 import com.glitter.spring.boot.constant.GlitterConstants;
+import com.glitter.spring.boot.context.ContextManager;
 import com.glitter.spring.boot.context.JsessionIdRequestContext;
 import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.context.ResponseContext;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
+import com.glitter.spring.boot.service.impl.SessionContext;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +54,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-        RequestContext.remove();
-        ResponseContext.remove();
-        JsessionIdRequestContext.remove();
+        ContextManager.removeAllContext();
     }
 
 }

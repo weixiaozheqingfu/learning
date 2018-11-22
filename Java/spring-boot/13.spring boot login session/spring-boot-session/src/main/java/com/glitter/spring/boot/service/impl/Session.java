@@ -98,7 +98,6 @@ public class Session implements ISession,Serializable {
     public void setAttribute(String key, Object value) {
         this.attributes.put(key, value);
         SpringContextUtil.getBean(SessionCreatePublisher.class).publishEvent(this);
-        logger.error("事件发布完毕!");
     }
 
     @Override

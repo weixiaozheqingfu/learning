@@ -2,6 +2,7 @@ package com.glitter.spring.boot.exception;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.context.ContextManager;
 import com.glitter.spring.boot.util.TemplateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ public class GlobalExceptionHandler {
         try {
             // 如果有需要的话,这里也可以将参数打印出来RequestLogInfoContext.get()
             logger.error("handleBusinessException捕获业务异常信息:{}", JSONObject.toJSONString(e));
+            ContextManager.removeAllContext();
             return new ResponseResult(e.getCode(), e.getMessage());
         } catch (Exception ex) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), ex));
@@ -38,6 +40,7 @@ public class GlobalExceptionHandler {
     public ResponseResult handleException(Exception e) {
         try {
             logger.error("handleException捕获运行异常信息:{}", JSONObject.toJSONString(e));
+            ContextManager.removeAllContext();
             return new ResponseResult("-1", "系统异常");
         } catch (Exception ex) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), ex));
