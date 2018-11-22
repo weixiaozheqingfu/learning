@@ -11,7 +11,7 @@
             function getUserInfo() {
                 $.ajax({
                     type: "GET",
-                    url: "http://localhost:8080/userInfo/getLoginUserInfo",
+                    url: "http://localhost:8081/userInfo/getLoginUserInfo",
                     data: "id=1",
                     async: false,
                     success: function(data){
@@ -23,13 +23,28 @@
                     }
                 });
             }
+
+
+            $("#logoutBtn").click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: "http://localhost:8081/login/logout",
+                    async: false,
+                    success: function(data){
+                        if(data.code != 0){
+                            alert(data.message);
+                        } else{
+                            window.location.href="http://localhost:8081/login.html";
+                        }
+                    }
+                });
+            });
+
         });
     </script>
 </head>
 <body>
-<div id="myDiv"></div>
-<form name="loginFrom">
-    欢迎你来到首页<span id="userNameSpan"></span>!
-</form>
+欢迎你来到首页<span id="userNameSpan"></span>! <br>
+<input type="button" name="logoutBtn" id="logoutBtn" value="退出" />
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.glitter.spring.boot.observer.sessioncreate;
+package com.glitter.spring.boot.observer.sessiondelete;
 
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.web.action.UserInfoAction;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.Serializable;
 
 @Component
-public class SessionCreatePublisher implements ApplicationContextAware,Serializable {
+public class SessionDeletePublisher implements ApplicationContextAware,Serializable {
 
     private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
 
@@ -24,9 +24,9 @@ public class SessionCreatePublisher implements ApplicationContextAware,Serializa
     }
 
     public void publishEvent(ISession session){
-        logger.error("SessionCreatePublisher.publishEvent,sessionId:{}", session.getId());
-        SessionCreateEvent sessionCreateEvent = new SessionCreateEvent(session);
-        applicationContext.publishEvent(sessionCreateEvent);
+        logger.error("SessionDeletePublisher.publishEvent,sessionId:{}", session.getId());
+        SessionDeleteEvent sessionDeleteEvent = new SessionDeleteEvent(session);
+        applicationContext.publishEvent(sessionDeleteEvent);
     }
 
 }

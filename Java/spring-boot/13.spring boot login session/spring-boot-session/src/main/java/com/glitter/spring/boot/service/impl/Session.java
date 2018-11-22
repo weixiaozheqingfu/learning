@@ -3,6 +3,7 @@ package com.glitter.spring.boot.service.impl;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.ResponseContext;
 import com.glitter.spring.boot.observer.sessioncreate.SessionCreatePublisher;
+import com.glitter.spring.boot.observer.sessiondelete.SessionDeletePublisher;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.util.CookieUtils;
 import com.glitter.spring.boot.util.SpringContextUtil;
@@ -28,14 +29,14 @@ public class Session implements ISession,Serializable {
     private ConcurrentMap<String, Object> attributes;
     private List<String> attributeNames;
     private Long creationTime;
-    private Long lastAccessedTime;
+//    private Long lastAccessedTime;
 
     protected Session(){
         Long now = System.currentTimeMillis();
         this.id = UUID.randomUUID().toString();
         this.attributes = new ConcurrentHashMap();
         this.creationTime = now;
-        this.lastAccessedTime = now;
+//        this.lastAccessedTime = now;
     }
 
     public void setId(String id) {
@@ -54,9 +55,9 @@ public class Session implements ISession,Serializable {
         this.creationTime = creationTime;
     }
 
-    public void setLastAccessedTime(Long lastAccessedTime) {
-        this.lastAccessedTime = lastAccessedTime;
-    }
+//    public void setLastAccessedTime(Long lastAccessedTime) {
+//        this.lastAccessedTime = lastAccessedTime;
+//    }
 
     public void getAttributeNames(List<String> attributeNames) {
         this.attributeNames = attributeNames;
@@ -72,10 +73,10 @@ public class Session implements ISession,Serializable {
         return this.id;
     }
 
-    @Override
-    public Long getLastAccessedTime() {
-        return this.lastAccessedTime;
-    }
+//    @Override
+//    public Long getLastAccessedTime() {
+//        return this.lastAccessedTime;
+//    }
 
     @Override
     public Object getAttribute(String key) {
@@ -108,7 +109,7 @@ public class Session implements ISession,Serializable {
 
     @Override
     public void invalidate() {
-        // TODO 调用是件的方式 1.原有会话清除
+        SpringContextUtil.getBean(SessionDeletePublisher.class).publishEvent(this);
 
         // 2.创建新会话并写入浏览器,不在推荐这样做了,浪费服务器资源,并且我们重新生成会话对象也不回写覆盖新的jsessionId值到客户端,
         // 客户端下次请求时,还是使用旧的jsessionId值,服务器端发现没有对应的session对象时,自然就会重新创建一个新的出来,什么时候用,什么时候创建,这样不浪费占用服务器资源,同时也符合单一入口原则。

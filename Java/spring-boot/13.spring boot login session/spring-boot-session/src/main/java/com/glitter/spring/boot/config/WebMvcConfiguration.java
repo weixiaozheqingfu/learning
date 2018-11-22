@@ -30,6 +30,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
         List<String> loginInterceptorAddPathPatterns = new ArrayList<>();
         loginInterceptorAddPathPatterns.add("/userInfo/*");
+        loginInterceptorAddPathPatterns.add("/login/logout");
 
         registry.addInterceptor(requestInterceptor()).addPathPatterns(requestInterceptorAddPathPatterns);
         registry.addInterceptor(loginInterceptor()).addPathPatterns(loginInterceptorAddPathPatterns);

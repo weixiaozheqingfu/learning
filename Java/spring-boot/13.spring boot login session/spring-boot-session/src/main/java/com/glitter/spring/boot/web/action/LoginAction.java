@@ -89,7 +89,7 @@ public class LoginAction extends BaseAction{
         // 如果客户端凭证jsessionId值在服务器存在,则会取出其中的验证码值进行比较(当然你如果提前没有往session中放入验证码值的话,验证码的值自然也会是空的)
         String loginGraphCaptcha = (String)sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
         if(!paramBean.getGraphCaptcha().equals(loginGraphCaptcha)){
-            sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA,"");
+            sessionHandler.getSession().removeAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
             throw new BusinessException("-2","图形验证码输入错误");
         }
 
@@ -109,6 +109,17 @@ public class LoginAction extends BaseAction{
 
         // 5.记录用户登录会话信息
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
+        return ResponseResult.success(null);
+    }
+
+    /**
+     * 退出
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    public ResponseResult logout() throws Exception {
+        sessionHandler.getSession().invalidate();
         return ResponseResult.success(null);
     }
 

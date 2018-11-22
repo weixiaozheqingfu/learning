@@ -8,7 +8,7 @@ public interface ISession {
 
     String getId();
 
-    Long getLastAccessedTime();
+//    Long getLastAccessedTime();
 
     Object getAttribute(String var1);
 
