@@ -106,7 +106,7 @@ public class LoginAction extends BaseAction{
 
         // 5.记录用户登录会话信息
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
-        commonCache.add(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())), sessionHandler.getSession().getId());
+        commonCache.add(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())), sessionHandler.getSession().getId(), cacheKeyManager.getLimitMultiLoginKeyExpireTime());
 
         return ResponseResult.success(null);
     }
