@@ -21,8 +21,8 @@ public interface ICacheKeyManager<T> {
 
     Integer getSessionKeyExpireTime();
 
-    String getSessionKeyKey(String userId);
+    String getLimitMultiLoginKey(String userId);
 
-    Integer getSessionKeyKeyExpireTime();
+    Integer getLimitMultiLoginKeyExpireTime();
 
 }

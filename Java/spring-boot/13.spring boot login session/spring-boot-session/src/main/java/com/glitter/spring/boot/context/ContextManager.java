@@ -7,7 +7,7 @@ public class ContextManager {
     public static void removeAllContext() {
         RequestContext.remove();
         ResponseContext.remove();
-        JsessionIdRequestContext.remove();
+        JsessionIdCookieContext.remove();
         SessionContext.remove();
     }
 

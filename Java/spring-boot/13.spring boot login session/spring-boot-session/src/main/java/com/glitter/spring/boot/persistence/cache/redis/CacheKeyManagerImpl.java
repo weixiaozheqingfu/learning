@@ -45,8 +45,9 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
         return DEFAULT_EXPIRE_TIME;
     }
 
+
     @Override
-    public Integer getSessionKeyKeyExpireTime() {
+    public Integer getLimitMultiLoginKeyExpireTime() {
         return DEFAULT_EXPIRE_TIME;
     }
 
@@ -56,7 +57,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
      * @return
      */
     @Override
-    public String getSessionKeyKey(String userId) {
+    public String getLimitMultiLoginKey(String userId) {
         return CacheKeyManagerImpl.getKey("session", "limitMultiLogin", "userId", userId);
     }
 

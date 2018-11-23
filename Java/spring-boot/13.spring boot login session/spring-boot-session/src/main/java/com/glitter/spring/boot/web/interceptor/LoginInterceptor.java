@@ -2,13 +2,10 @@ package com.glitter.spring.boot.web.interceptor;
 
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.ContextManager;
-import com.glitter.spring.boot.context.JsessionIdRequestContext;
-import com.glitter.spring.boot.context.RequestContext;
-import com.glitter.spring.boot.context.ResponseContext;
+import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
-import com.glitter.spring.boot.service.impl.SessionContext;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +24,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
-        String jsessionIdCookie = JsessionIdRequestContext.get();
+        String jsessionIdCookie = JsessionIdCookieContext.get();
         // 如果客户端请求的jsessionIdCookie值为空,可能是第一次访问或者手动清空cookie,或者cookie到期等各种情况,
         // 不论哪种情况,没说的,当前请求发出的客户端浏览器,没有相应的服务器会话对象数据与之对应,所以用户在当前客户端就是未登录状态。
         if(StringUtils.isBlank(jsessionIdCookie)){ throw new BusinessException("-2", "用户未登陆"); }
@@ -43,6 +40,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         // 又比如退出时只调用了session.removeAttribute(GlitterConstants.SESSION_USER);那么在服务器端的session会话对象中就清除了标识用户登录的属性信息,
         // 那么用户在当前客户端也是未登录状态。
         if (null == session.getAttribute(GlitterConstants.SESSION_USER)){ throw new BusinessException("-2", "用户未登陆"); }
+
+        // TODO 限制单端登陆
 
         return true;
     }

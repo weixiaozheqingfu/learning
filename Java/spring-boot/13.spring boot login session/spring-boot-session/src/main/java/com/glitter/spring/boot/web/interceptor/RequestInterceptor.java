@@ -2,7 +2,7 @@ package com.glitter.spring.boot.web.interceptor;
 
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.ContextManager;
-import com.glitter.spring.boot.context.JsessionIdRequestContext;
+import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.context.ResponseContext;
 import com.glitter.spring.boot.util.CookieUtils;
@@ -20,7 +20,7 @@ public class RequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
         String jsessionIdCookie = CookieUtils.getCookieValueByName(httpServletRequest, GlitterConstants.JSESSIONID);
-        JsessionIdRequestContext.set(jsessionIdCookie);
+        JsessionIdCookieContext.set(jsessionIdCookie);
         ResponseContext.set(httpServletResponse);
         RequestContext.set(httpServletRequest);
         return true;

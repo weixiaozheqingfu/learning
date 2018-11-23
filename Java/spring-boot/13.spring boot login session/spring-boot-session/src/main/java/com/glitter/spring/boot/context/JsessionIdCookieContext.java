@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.context;
 
-public class JsessionIdResponseContext {
+public class JsessionIdCookieContext {
 
     public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
 

@@ -3,11 +3,9 @@ package com.glitter.spring.boot.web.action;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
-import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.service.IUserInfoService;
-import com.glitter.spring.boot.service.impl.Session;
 import com.glitter.spring.boot.util.CaptchaUtils;
 import com.glitter.spring.boot.web.param.LoginInfo;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpSession;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -109,6 +106,8 @@ public class LoginAction extends BaseAction{
 
         // 5.记录用户登录会话信息
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
+        commonCache.add(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())), sessionHandler.getSession().getId());
+
         return ResponseResult.success(null);
     }
 

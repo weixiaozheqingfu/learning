@@ -1,14 +1,15 @@
 package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.constant.GlitterConstants;
-import com.glitter.spring.boot.context.JsessionIdRequestContext;
-import com.glitter.spring.boot.context.JsessionIdResponseContext;
+import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.context.ResponseContext;
+import com.glitter.spring.boot.observer.sessionrenewal.SessionRenewalPublisher;
 import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonCache;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
 import com.glitter.spring.boot.util.CookieUtils;
+import com.glitter.spring.boot.util.SpringContextUtil;
 import com.glitter.spring.boot.web.action.UserInfoAction;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -83,13 +84,15 @@ public class SessionHandler implements ISessionHandler {
         // 如果当前线程中的session不为空,并且在缓存中依然存在,则表明session未过期,可以继续直接使用该线程中的session
         if(null != session && commonCache.isExists(cacheKeyManager.getSessionKey(session.getId()))){
             commonCache.renewal(cacheKeyManager.getSessionKey(session.getId()), cacheKeyManager.getSessionKeyExpireTime());
+            SpringContextUtil.getBean(SessionRenewalPublisher.class).publishEvent(session);
             return session;
         }
 
         // 某线程中第一次调用该方法时,要么执行此逻辑
-        if (StringUtils.isBlank(JsessionIdRequestContext.get()) || null == (session = commonCache.get(cacheKeyManager.getSessionKey(JsessionIdRequestContext.get()))) ) {
+        if (StringUtils.isBlank(JsessionIdCookieContext.get()) || null == (session = commonCache.get(cacheKeyManager.getSessionKey(JsessionIdCookieContext.get()))) ) {
             session = new Session();
-            commonCache.add(cacheKeyManager.getSessionKey(session.getId()), session, cacheKeyManager.getSessionKeyKeyExpireTime());
+            commonCache.add(cacheKeyManager.getSessionKey(session.getId()), session, cacheKeyManager.getLimitMultiLoginKeyExpireTime());
+            SpringContextUtil.getBean(SessionRenewalPublisher.class).publishEvent(session);
 
             Cookie cookie = new Cookie(GlitterConstants.JSESSIONID, session.getId());
             cookie.setPath("/");
@@ -101,6 +104,7 @@ public class SessionHandler implements ISessionHandler {
 
         // 某线程中第一次调用该方法时,要么执行此逻辑
         commonCache.renewal(cacheKeyManager.getSessionKey(session.getId()), cacheKeyManager.getSessionKeyExpireTime());
+        SpringContextUtil.getBean(SessionRenewalPublisher.class).publishEvent(session);
         SessionContext.set(session);
         return session;
     }
