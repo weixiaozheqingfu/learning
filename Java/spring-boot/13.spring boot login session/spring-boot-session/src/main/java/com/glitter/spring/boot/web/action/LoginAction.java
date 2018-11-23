@@ -5,6 +5,7 @@ import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IRsaService;
+import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.util.CaptchaUtils;
 import com.glitter.spring.boot.web.param.LoginInfo;
@@ -118,7 +119,15 @@ public class LoginAction extends BaseAction{
      */
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     public ResponseResult logout() throws Exception {
-        sessionHandler.getSession().invalidate();
+        ISession session = sessionHandler.getSession();
+
+        UserInfo userInfo;
+        if (null == (userInfo = (UserInfo)session.getAttribute(GlitterConstants.SESSION_USER))){
+            return ResponseResult.success(null);
+        }
+
+        session.invalidate();
+        commonCache.del(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
         return ResponseResult.success(null);
     }
 
