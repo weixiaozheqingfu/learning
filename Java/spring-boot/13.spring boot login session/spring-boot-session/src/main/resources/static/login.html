@@ -6,13 +6,15 @@
 
     <script type="text/javascript">
         $(function(){
+            // var domain = "http://localhost:8081";
+            var domain = "http://limengjun.com/demo";
 
             getLoginGraphCaptcha();
 
             function getLoginGraphCaptcha() {
                 $.ajax({
                     type: "GET",
-                    url: "http://localhost:8081/login/getLoginGraphCaptcha",
+                    url: domain + "/login/getLoginGraphCaptcha",
                     data: "id=1",
                     async: false,
                     success: function(data){
@@ -26,13 +28,13 @@
             $("#submitBtn").click(function(){
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:8081/login/login",
+                    url: domain + "/login/login",
                     contentType: "application/json; charset=utf-8",
                     data: getLoginFromData(),
                     dataType: "json",
                     success: function (resultObj) {
                         if(resultObj.code=='0'){
-                            window.location.href="http://localhost:8081/index.html";
+                            window.location.href=domain + "/index.html";
                         } else {
                             if(resultObj.code=='-2'){
                                 alert(resultObj.message);
@@ -71,7 +73,7 @@
                 var resultStr = "";
                 $.ajax({
                     type: "GET",
-                    url: "http://localhost:8081/login/getPublicKey",
+                    url: domain + "/login/getPublicKey",
                     data: "id=1",
                     async: false,
                     success: function(data){

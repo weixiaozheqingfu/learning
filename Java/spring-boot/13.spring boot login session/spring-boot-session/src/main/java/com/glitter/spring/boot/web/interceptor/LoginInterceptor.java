@@ -63,6 +63,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             session.invalidate();
             throw new BusinessException("-2", "您的账号已在其它地方登陆，若不是本人操作，请注意账号安全！");
         }
+        logger.info("LoginInterceptor.preHandle验证成功,jsessionId:{},userId:{},fullName:{}",jsessionIdCookie,userInfo.getId(),userInfo.getFullName());
         return true;
     }
 

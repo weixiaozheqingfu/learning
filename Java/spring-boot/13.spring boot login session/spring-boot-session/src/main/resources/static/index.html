@@ -6,12 +6,15 @@
 
     <script type="text/javascript">
         $(function(){
+            // var domain = "http://localhost:8081";
+            var domain = "http://limengjun.com/demo";
+
             getUserInfo();
 
             function getUserInfo() {
                 $.ajax({
                     type: "GET",
-                    url: "http://localhost:8081/userInfo/getLoginUserInfo",
+                    url: domain + "/userInfo/getLoginUserInfo",
                     data: "id=1",
                     async: false,
                     success: function(data){
@@ -19,7 +22,7 @@
                             $("#userNameSpan").html(","+data.data.fullName);
                         } else if (data.code == -2){
                             alert(data.message);
-                            window.location.href="http://localhost:8081/login.html";
+                            window.location.href=domain + "/login.html";
                         } else {
                             alert(data.message);
                         }
@@ -31,11 +34,11 @@
             $("#logoutBtn").click(function(){
                 $.ajax({
                     type: "POST",
-                    url: "http://localhost:8081/login/logout",
+                    url: domain + "/login/logout",
                     async: false,
                     success: function(data){
                         if(data.code == 0){
-                            window.location.href="http://localhost:8081/login.html";
+                            window.location.href=domain + "/login.html";
                         } else{
                             alert(data.message);
                         }
