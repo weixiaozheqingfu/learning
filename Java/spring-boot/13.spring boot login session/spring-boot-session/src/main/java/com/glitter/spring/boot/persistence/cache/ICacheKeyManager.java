@@ -10,10 +10,8 @@ import org.slf4j.LoggerFactory;
  * 方法命名规则:
  * 以值的所属对象名称+key,如getSessionKey,
  * 如果值是字符串类型,则可以根据其业务含义命名,如getSessionKeyKey,即获取SessionKey的key
- *
- * @param <T>
  */
-public interface ICacheKeyManager<T> {
+public interface ICacheKeyManager {
 
     Logger logger = LoggerFactory.getLogger(SpringBootStartApplication.class);
 

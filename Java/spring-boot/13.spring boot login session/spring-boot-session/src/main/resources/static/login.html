@@ -6,8 +6,8 @@
 
     <script type="text/javascript">
         $(function(){
-            // var domain = "http://localhost:8081";
-            var domain = "http://limengjun.com/demo";
+            var domain = "http://localhost:8081";
+            // var domain = "http://limengjun.com/demo";
 
             getLoginGraphCaptcha();
 
@@ -90,11 +90,18 @@
 <body>
 <div id="myDiv"></div>
 <form name="loginFrom">
-    帐号<input type="text" name="account" id="account" size="18" height="28px" value="" /><br>
-    密码<input type="password" name="password" id="password" size="18" height="28px" value="" /><br>
-    验证码:<input type="text" name="graphCaptcha" id="graphCaptcha" size="18" height="28px" value="" /><img id="captcha" width="100px" src="" >
-    <!-- 验证码1:<input type="text" name="graphCaptcha1" size="18" value="" /><img id="captcha1" width="100px" src="http://localhost:8081/login/getLoginGraphCaptcha"><br> -->
-       <input type="button" name="submitBtn" id="submitBtn" value="登陆" />
+    帐号:
+    <input type="text" name="account" id="account" size="18" height="28px" value="" /><br>
+    密码:
+    <input type="password" name="password" id="password" size="18" height="28px" value="" /><br>
+    验证码:
+    <input type="text" name="graphCaptcha" id="graphCaptcha" size="18" height="28px" value="" /><img id="captcha" width="100px" src="" >
+    <!--
+    验证码1:
+    <input type="text" name="graphCaptcha1" size="18" value="" /><img id="captcha1" width="100px" src="http://localhost:8081/login/getLoginGraphCaptcha"><br>
+    -->
+    <input type="button" name="submitBtn" id="submitBtn" value="登陆" />
+
 </form>
 </body>
 </html>

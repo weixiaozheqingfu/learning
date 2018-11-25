@@ -3,6 +3,7 @@ package com.glitter.spring.boot.web.action;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
+import com.glitter.spring.boot.context.RequestContext;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.service.ISession;
@@ -44,6 +45,11 @@ public class LoginAction extends BaseAction{
         return ResponseResult.success(publicKey);
     }
 
+    /**
+     * 获取图形验证码
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/getLoginGraphCaptcha", method = RequestMethod.GET)
     public ResponseResult<String> getLoginGraphCaptcha() throws IOException {
         // 1.设置验证码属性
@@ -107,6 +113,8 @@ public class LoginAction extends BaseAction{
 
         // 5.记录用户登录会话信息
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
+
+        // 6.限制多端同时登陆逻辑
         commonCache.add(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())), sessionHandler.getSession().getId(), cacheKeyManager.getLimitMultiLoginKeyExpireTime());
 
         return ResponseResult.success(null);
@@ -119,14 +127,19 @@ public class LoginAction extends BaseAction{
      */
     @RequestMapping(value = "logout", method = RequestMethod.POST)
     public ResponseResult logout() throws Exception {
+        // 1.获取session会话对象
         ISession session = sessionHandler.getSession();
 
+        // 2.如果session会话对象中不存在用户信息,说明已经退出登录,返回成功即可(容错处理,这种情况不可能发生).
         UserInfo userInfo;
         if (null == (userInfo = (UserInfo)session.getAttribute(GlitterConstants.SESSION_USER))){
             return ResponseResult.success(null);
         }
 
+        // 3.注销session会话
         session.invalidate();
+
+        // 4.注销限制多端同时登陆的相关代码逻辑
         commonCache.del(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
         return ResponseResult.success(null);
     }

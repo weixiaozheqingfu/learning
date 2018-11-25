@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
+import java.util.UUID;
 
 @Service
 public class SessionHandler implements ISessionHandler {
@@ -71,7 +72,7 @@ public class SessionHandler implements ISessionHandler {
 
     /**
      * 整个项目中获取session对象的唯一方式
-     * 并且方法内部也是整个项目中创建session的唯一方式
+     * 并且方法内部也是整个项目中创建session的唯一地方
      *
      * 每一个线程中多处调用该方法得到的session对象都是同一个,
      * 除非某处在调用该方法时session在redis中过期或认为销毁,则该方法会返回一个全新的session对象,这是完成正常的逻辑.
@@ -90,9 +91,7 @@ public class SessionHandler implements ISessionHandler {
 
         // 某线程中第一次调用该方法时,要么执行此逻辑
         if (StringUtils.isBlank(JsessionIdCookieContext.get()) || null == (session = commonCache.get(cacheKeyManager.getSessionKey(JsessionIdCookieContext.get()))) ) {
-            session = new Session();
-            commonCache.add(cacheKeyManager.getSessionKey(session.getId()), session, cacheKeyManager.getLimitMultiLoginKeyExpireTime());
-            SpringContextUtil.getBean(SessionRenewalPublisher.class).publishEvent(session);
+            session = new Session(UUID.randomUUID().toString());
 
             Cookie cookie = new Cookie(GlitterConstants.JSESSIONID, session.getId());
             cookie.setPath("/");

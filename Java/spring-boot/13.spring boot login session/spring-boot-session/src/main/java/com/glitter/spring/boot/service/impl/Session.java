@@ -4,6 +4,7 @@ import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.ResponseContext;
 import com.glitter.spring.boot.observer.sessioncreate.SessionCreatePublisher;
 import com.glitter.spring.boot.observer.sessiondelete.SessionDeletePublisher;
+import com.glitter.spring.boot.observer.sessionupdate.SessionUpdatePublisher;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.util.CookieUtils;
 import com.glitter.spring.boot.util.SpringContextUtil;
@@ -29,14 +30,19 @@ public class Session implements ISession,Serializable {
     private ConcurrentMap<String, Object> attributes;
     private List<String> attributeNames;
     private Long creationTime;
-//    private Long lastAccessedTime;
+//  private Long lastAccessedTime;
 
     protected Session(){
+
+    }
+
+    protected Session(String id){
         Long now = System.currentTimeMillis();
-        this.id = UUID.randomUUID().toString();
+        this.id = id;
         this.attributes = new ConcurrentHashMap();
         this.creationTime = now;
-//        this.lastAccessedTime = now;
+//      this.lastAccessedTime = now;
+        SpringContextUtil.getBean(SessionCreatePublisher.class).publishEvent(this);
     }
 
     public void setId(String id) {
@@ -58,10 +64,6 @@ public class Session implements ISession,Serializable {
 //    public void setLastAccessedTime(Long lastAccessedTime) {
 //        this.lastAccessedTime = lastAccessedTime;
 //    }
-
-    public void getAttributeNames(List<String> attributeNames) {
-        this.attributeNames = attributeNames;
-    }
 
     @Override
     public Long getCreationTime() {
@@ -97,17 +99,24 @@ public class Session implements ISession,Serializable {
     @Override
     public void setAttribute(String key, Object value) {
         this.attributes.put(key, value);
-        SpringContextUtil.getBean(SessionCreatePublisher.class).publishEvent(this);
+        SpringContextUtil.getBean(SessionUpdatePublisher.class).publishEvent(this);
     }
 
     @Override
     public void removeAttribute(String key) {
         this.attributes.remove(key);
-        SpringContextUtil.getBean(SessionCreatePublisher.class).publishEvent(this);
+        SpringContextUtil.getBean(SessionUpdatePublisher.class).publishEvent(this);
     }
 
     @Override
     public void invalidate() {
+        ISession session = SessionContext.get();
+        if(null != session ){
+            if(this == session){
+                SessionContext.remove();
+            }
+        }
+
         SpringContextUtil.getBean(SessionDeletePublisher.class).publishEvent(this);
 
         // 2.创建新会话并写入浏览器,不在推荐这样做了,浪费服务器资源,并且我们重新生成会话对象也不回写覆盖新的jsessionId值到客户端,
@@ -119,4 +128,5 @@ public class Session implements ISession,Serializable {
 //        cookie.setPath("/");
 //        CookieUtils.updateCookie(ResponseContext.get(), cookie);
     }
+
 }
