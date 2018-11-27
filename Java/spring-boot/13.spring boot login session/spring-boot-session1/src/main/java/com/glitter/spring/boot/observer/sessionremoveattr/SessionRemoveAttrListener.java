@@ -37,7 +37,14 @@ public class SessionRemoveAttrListener implements ApplicationListener<SessionRem
         // 注销会话,同时注销限制多端同时登陆的相关代码逻辑
         UserInfo userInfo = null;
         if(null == (userInfo = (UserInfo)attribute.get(GlitterConstants.SESSION_USER))){ return; }
-        commonCache.del(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
+
+        // 检查当前的sessionId与gliter:session:limitMultiLogin:userId:1中的sessionId是否一致,
+        // 一致则同步删除gliter:session:limitMultiLogin:userId:1键
+        // 不一致说明当前的session是已经被其他端"挤掉"了,gliter:session:limitMultiLogin:userId:1已经关联了其他session对象的id,所以不可删除
+        String jsessionIdEffective = commonCache.get(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
+        if(session.getId().equals(jsessionIdEffective)){
+            commonCache.del(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
+        }
         return;
     }
 

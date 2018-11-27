@@ -81,8 +81,8 @@ public class LoginAction extends BaseAction{
 
         // 2.验证图形验证码
         String loginGraphCaptcha = (String)sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
+        sessionHandler.getSession().removeAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
         if(!paramBean.getGraphCaptcha().equals(loginGraphCaptcha)){
-            sessionHandler.getSession().removeAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
             throw new BusinessException("-2","图形验证码输入错误");
         }
 

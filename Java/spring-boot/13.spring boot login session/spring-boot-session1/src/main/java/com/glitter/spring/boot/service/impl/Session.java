@@ -17,9 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -41,10 +39,8 @@ public class Session implements ISession,Serializable {
         this.attributes = new ConcurrentHashMap();
         this.creationTime = now;
 
-        Map<Object, Object> map = new HashMap();
-        map.put("id", id);
-        map.put("creationTime", creationTime);
-        SpringContextUtil.getBean(ICommonHashCache.class).putAll(SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKey(this.id), map);
+        SpringContextUtil.getBean(ICommonHashCache.class).putIfAbsent(SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKey(this.id), "id", id);
+        SpringContextUtil.getBean(ICommonHashCache.class).putIfAbsent(SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKey(this.id), "creationTime", creationTime);
         SpringContextUtil.getBean(ICommonHashCache.class).renewal(SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKey(this.id), SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKeyExpireTime());
         SpringContextUtil.getBean(SessionCreatePublisher.class).publishEvent(this);
     }

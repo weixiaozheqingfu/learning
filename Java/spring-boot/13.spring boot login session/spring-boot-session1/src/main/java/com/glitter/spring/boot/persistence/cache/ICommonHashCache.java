@@ -10,6 +10,8 @@ public interface ICommonHashCache {
 
     void putAll(String key, Map<Object, Object> map);
 
+    void putIfAbsent(String key, Object mkey, Object value);
+
     void del(String key, Object... o);
 
     void delAll(String key);

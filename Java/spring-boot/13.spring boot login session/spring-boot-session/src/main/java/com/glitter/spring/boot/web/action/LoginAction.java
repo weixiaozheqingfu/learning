@@ -92,8 +92,8 @@ public class LoginAction extends BaseAction{
         // 如果客户端凭证jsessionId值为空或非法,则会得到一个全新的session对象,其中的验证码值自然是空的。
         // 如果客户端凭证jsessionId值在服务器存在,则会取出其中的验证码值进行比较(当然你如果提前没有往session中放入验证码值的话,验证码的值自然也会是空的)
         String loginGraphCaptcha = (String)sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
+        sessionHandler.getSession().removeAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
         if(!paramBean.getGraphCaptcha().equals(loginGraphCaptcha)){
-            sessionHandler.getSession().removeAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
             throw new BusinessException("-2","图形验证码输入错误");
         }
 

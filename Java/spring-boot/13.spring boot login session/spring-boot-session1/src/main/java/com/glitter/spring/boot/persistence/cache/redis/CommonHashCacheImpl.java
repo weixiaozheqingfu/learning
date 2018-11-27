@@ -34,6 +34,11 @@ public class CommonHashCacheImpl implements ICommonHashCache {
     }
 
     @Override
+    public void putIfAbsent(String key, Object mkey, Object value) {
+        redisTemplate.opsForHash().putIfAbsent(key, mkey, value);
+    }
+
+    @Override
     public void del(String key, Object... o) {
         if(StringUtils.isBlank(key)) { return; }
         redisTemplate.opsForHash().delete(key, o);
@@ -42,7 +47,7 @@ public class CommonHashCacheImpl implements ICommonHashCache {
     @Override
     public void delAll(String key) {
         if(StringUtils.isBlank(key)) { return; }
-        redisTemplate.opsForHash().delete(key);
+        redisTemplate.delete(key);
     }
 
     @Override
