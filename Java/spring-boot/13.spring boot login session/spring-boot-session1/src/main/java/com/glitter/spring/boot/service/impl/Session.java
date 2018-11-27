@@ -41,10 +41,11 @@ public class Session implements ISession,Serializable {
         this.attributes = new ConcurrentHashMap();
         this.creationTime = now;
 
-        Map<String, Object> map = new HashMap();
+        Map<Object, Object> map = new HashMap();
         map.put("id", id);
         map.put("creationTime", creationTime);
         SpringContextUtil.getBean(ICommonHashCache.class).putAll(SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKey(this.id), map);
+        SpringContextUtil.getBean(ICommonHashCache.class).renewal(SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKey(this.id), SpringContextUtil.getBean(ICacheKeyManager.class).getSessionKeyExpireTime());
         SpringContextUtil.getBean(SessionCreatePublisher.class).publishEvent(this);
     }
 

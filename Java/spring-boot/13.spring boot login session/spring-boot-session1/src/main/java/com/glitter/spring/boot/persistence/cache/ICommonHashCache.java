@@ -8,7 +8,7 @@ public interface ICommonHashCache {
 
     void put(String key, Object mkey, Object value);
 
-    void putAll(String key, Map<String, Object> map);
+    void putAll(String key, Map<Object, Object> map);
 
     void del(String key, Object... o);
 

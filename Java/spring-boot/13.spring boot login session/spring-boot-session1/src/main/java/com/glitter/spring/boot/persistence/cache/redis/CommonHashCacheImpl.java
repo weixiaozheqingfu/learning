@@ -29,7 +29,7 @@ public class CommonHashCacheImpl implements ICommonHashCache {
     }
 
     @Override
-    public void putAll(String key, Map<String, Object> map) {
+    public void putAll(String key, Map<Object, Object> map) {
         redisTemplate.opsForHash().putAll(key, map);
     }
 
