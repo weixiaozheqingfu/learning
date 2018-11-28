@@ -2,7 +2,6 @@ package com.glitter.spring.boot.observer.sessionremoveattr;
 
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.constant.GlitterConstants;
-import com.glitter.spring.boot.observer.sessionaddattr.SessionAddAttrParam;
 import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonCache;
 import com.glitter.spring.boot.service.ISession;
@@ -13,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
 
 @Component
 public class SessionRemoveAttrListener implements ApplicationListener<SessionRemoveAttrEvent> {
@@ -31,7 +30,7 @@ public class SessionRemoveAttrListener implements ApplicationListener<SessionRem
         logger.info("SessionRemoveAttrListener.onApplicationEvent,输入参数:{}", applicationEvent);
         SessionRemoveAttrParam sessionRemoveAttrParam = applicationEvent.getContent();
         ISession session = sessionRemoveAttrParam.getSession();
-        ConcurrentMap<String, Object> attribute = sessionRemoveAttrParam.getAttribute();
+        Map<String, Object> attribute = sessionRemoveAttrParam.getAttribute();
         logger.info("SessionRemoveAttrListener.onApplicationEvent,sessionId:{}", session.getId());
 
         // 注销会话,同时注销限制多端同时登陆的相关代码逻辑

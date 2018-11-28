@@ -3,14 +3,18 @@ package com.glitter.spring.boot.observer.sessionaddattr;
 import com.glitter.spring.boot.service.ISession;
 import lombok.Data;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 public class SessionAddAttrParam {
 
     private ISession session;
 
-    private ConcurrentMap<String, Object> attribute = new ConcurrentHashMap();
+    private Map<String, Object> attribute;
+
+    public SessionAddAttrParam(){
+        this.attribute = new HashMap();
+    }
 
 }

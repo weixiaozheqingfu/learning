@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ConcurrentMap;
+import java.util.Map;
 
 @Component
 public class SessionAddAttrListener implements ApplicationListener<SessionAddAttrEvent> {
@@ -30,7 +30,7 @@ public class SessionAddAttrListener implements ApplicationListener<SessionAddAtt
         logger.info("SessionAddAttrListener.onApplicationEvent,输入参数:{}", applicationEvent);
         SessionAddAttrParam sessionAddAttrParam = applicationEvent.getContent();
         ISession session = sessionAddAttrParam.getSession();
-        ConcurrentMap<String, Object> attribute = sessionAddAttrParam.getAttribute();
+        Map<String, Object> attribute = sessionAddAttrParam.getAttribute();
         logger.info("SessionAddAttrListener.onApplicationEvent,sessionId:{}", session.getId());
 
         // 限制多端同时登陆逻辑
