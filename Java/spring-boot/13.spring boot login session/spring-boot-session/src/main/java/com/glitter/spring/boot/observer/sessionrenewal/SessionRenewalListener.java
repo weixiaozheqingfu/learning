@@ -31,10 +31,14 @@ public class SessionRenewalListener implements ApplicationListener<SessionRenewa
         UserInfo userInfo = null;
         if(null == (userInfo = (UserInfo)session.getAttribute(GlitterConstants.SESSION_USER))){ return; }
 
-        // 对限制单端登陆进行续期
-        if (commonCache.isExists(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())))) {
-            commonCache.renewal(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())), cacheKeyManager.getLimitMultiLoginKeyExpireTime());
+        String jsessionIdEffective = commonCache.get(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
+        if(session.getId().equals(jsessionIdEffective)){
+            // 对限制单端登陆进行续期
+            if (commonCache.isExists(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())))) {
+                commonCache.renewal(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())), cacheKeyManager.getLimitMultiLoginKeyExpireTime());
+            }
         }
+
         return;
     }
 
