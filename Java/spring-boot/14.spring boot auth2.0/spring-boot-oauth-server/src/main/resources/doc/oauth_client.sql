@@ -49,45 +49,6 @@ CREATE TABLE oauth_client_info (
   PRIMARY KEY (id)
 ) COMMENT='auth客户端信息表';
 
--- 这张是服务器端的授权码模式表
-CREATE TABLE oauth_code (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  user_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  client_id varchar(100) NOT NULL DEFAULT '' COMMENT '应用id',
-  scope varchar(200) NOT NULL DEFAULT '' COMMENT '权限范围',
-  code varchar(50) NOT NULL DEFAULT '' COMMENT '授权码',
-  expire_in bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '授权码过期时长,单位秒',
-  expire_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '授权码过期时间',
-  delete_flag bit(1) NOT NULL DEFAULT 0 COMMENT '0:未删除 1：已删除',
-  create_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  update_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
-  PRIMARY KEY (id),
-  KEY idx_code (code)
-) COMMENT='授权码表';
-
--- 这张是服务器端的accessToken表
-CREATE TABLE oauth_access_token (
-  id bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  user_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  client_id varchar(100) NOT NULL DEFAULT '' COMMENT '应用id',
-  scope varchar(200) NOT NULL DEFAULT '' COMMENT '授权范围',
-  access_token varchar(50) NOT NULL DEFAULT '' COMMENT 'access_token',
-  token_type varchar(10) NOT NULL DEFAULT '' COMMENT 'access_token类型,bearer类型或mac类型',
-  access_token_expire_in bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'access_token过期时长,单位秒',
-  access_token_expire_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'access_token过期时间',
-  refresh_token varchar(50) NOT NULL DEFAULT '' COMMENT '刷新token',
-  refresh_token_expire_in bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'refresh_token过期时长,单位秒',
-  refresh_token_expire_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'access_token过期时间',
-  delete_flag bit(1) NOT NULL DEFAULT 0 COMMENT '0:未删除 1：已删除',
-  create_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  update_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
-  PRIMARY KEY (id),
-  KEY idx_access_token (access_token),
-  KEY idx_refresh_token (refresh_token)
-) COMMENT='accessToken表';
-
-
-
 
 -- 用户表与三方账号表是一对多关系，一个用户可以绑定多个三方账户，绑定的三方账户也可以解绑（删除记录，物理删除即可）。同时该表也是三方账户auth认证的授权表。
 -- 与码云相同的做法,第一次就使用三方账号登陆,则先进行auth认证,通过后,将auth认证信息先保存在redis中,不直接保存在本表,并设置过期时间10分钟,将key返回到浏览器,
