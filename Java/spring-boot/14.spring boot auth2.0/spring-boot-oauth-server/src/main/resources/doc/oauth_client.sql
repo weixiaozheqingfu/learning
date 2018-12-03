@@ -9,8 +9,8 @@ CREATE TABLE user_info (
   email_verified bit(1) NOT NULL DEFAULT 0 COMMENT '邮箱验证标识(0:未认证 1:已认证)',
   full_name varchar(50) NOT NULL DEFAULT '' COMMENT '姓名',
   nick_name varchar(50) NOT NULL DEFAULT '' COMMENT '昵称',
+  sex tinyint(3) NOT NULL DEFAULT 0 COMMENT '0:未填写,1:男,2:女,3:未知',
   age tinyint(3) NOT NULL DEFAULT 0 COMMENT '年龄',
-  height smallint(6) NOT NULL DEFAULT 0 COMMENT '身高(单位mm)',
   remark varchar(200) NOT NULL DEFAULT '' COMMENT '备注',
   delete_flag bit(1) NOT NULL DEFAULT 0 COMMENT '0:未删除 1：已删除',
   register_time datetime DEFAULT NULL COMMENT '注册时间',
@@ -19,6 +19,8 @@ CREATE TABLE user_info (
   PRIMARY KEY (id)
 ) COMMENT='用户表';
 
+
+-- 内容为客户端自定义录入的
 CREATE TABLE oauth_server_info (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   server_id varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台id',
@@ -28,22 +30,34 @@ CREATE TABLE oauth_server_info (
   PRIMARY KEY (id)
 ) COMMENT='第三方auth服务平台信息表';
 
-CREATE TABLE oauth_server_interface_info (
+-- 内容为从授权服务器开放平台摘录下的
+CREATE TABLE oauth_scope_info (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  auth_server_info_id bigint(20) NOT NULL DEFAULT 0 COMMENT '第三方auth服务端信息表主键',
-  interface_name varchar(100) NOT NULL DEFAULT '' COMMENT '接口名称',
-  interface_url varchar(200) NOT NULL DEFAULT '' COMMENT '接口地址',
-  interface_remark varchar(500) NOT NULL DEFAULT '' COMMENT '接口说明',
+  scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
+  scope_desc bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围描述',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='第三方auth服务平台声明接口信息表';
+) COMMENT='授权作用域表';
+
+-- 内容为从授权服务器开放平台摘录下的
+CREATE TABLE oauth_interface_info (
+  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  scope_id bigint(20) NOT NULL DEFAULT 0 COMMENT '授权作用域id',
+  interface_name varchar(100) NOT NULL DEFAULT '' COMMENT '接口名称',
+  interface_uri varchar(200) NOT NULL DEFAULT '' COMMENT '接口地址',
+  interface_desc varchar(500) NOT NULL DEFAULT '' COMMENT '接口详细描述',
+  create_time datetime DEFAULT NULL COMMENT '创建时间',
+  update_time datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (id)
+) COMMENT='授权接口表';
+
 
 CREATE TABLE oauth_client_info (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   client_id varchar(50) NOT NULL DEFAULT 0 COMMENT '第三方auth服务平台分配的客户端id',
   client_secret varchar(50) NOT NULL DEFAULT 0 COMMENT '第三方auth服务平台分配的客户端密码',
-  auth_server_info_id bigint(20) NOT NULL DEFAULT 0 COMMENT '第三方auth服务端信息表主键',
+  server_id bigint(20) NOT NULL DEFAULT 0 COMMENT '第三方auth服务端信息表主键',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
