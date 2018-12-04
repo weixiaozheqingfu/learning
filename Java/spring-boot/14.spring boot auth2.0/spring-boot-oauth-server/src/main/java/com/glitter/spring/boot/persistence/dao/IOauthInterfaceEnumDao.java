@@ -1,18 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.bean.OauthInterfaceEnum;
 
 import java.util.List;
 
-public interface IUserInfoDao{
+public interface IOauthInterfaceEnumDao{
 
     /**
     * 插入操作
     *
-    * @param userInfo
+    * @param oauthInterfaceEnum
     * @return
     */
-    int insert(UserInfo userInfo);
+    int insert(OauthInterfaceEnum oauthInterfaceEnum);
 
     /**
     * 根据主键删除
@@ -33,18 +33,18 @@ public interface IUserInfoDao{
     /**
     * 根据条件删除
     *
-    * @param userInfo
+    * @param oauthInterfaceEnum
     * @return
     */
-    int delete(UserInfo userInfo);
+    int delete(OauthInterfaceEnum oauthInterfaceEnum);
 
     /**
     * 根据主键更新
     *
-    * @param userInfo
+    * @param oauthInterfaceEnum
     * @return
     */
-    int updateById(UserInfo userInfo);
+    int updateById(OauthInterfaceEnum oauthInterfaceEnum);
 
     /**
      * 按主键查询
@@ -52,7 +52,7 @@ public interface IUserInfoDao{
      * @param id
      * @return
      */
-    UserInfo getUserInfoById(Long id);
+    OauthInterfaceEnum getOauthInterfaceEnumById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,37 +60,37 @@ public interface IUserInfoDao{
      * @param ids
      * @return
      */
-    List<UserInfo> getUserInfoByIds(Long[] ids);
+    List<OauthInterfaceEnum> getOauthInterfaceEnumByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthInterfaceEnum
      * @return
      */
-    UserInfo getUserInfo(UserInfo userInfo);
+    OauthInterfaceEnum getOauthInterfaceEnum(OauthInterfaceEnum oauthInterfaceEnum);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<UserInfo> findAllList();
+    List<OauthInterfaceEnum> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthInterfaceEnum
      * @return
      */
-    List<UserInfo> findList(UserInfo userInfo);
+    List<OauthInterfaceEnum> findList(OauthInterfaceEnum oauthInterfaceEnum);
 
     /**
      * 按条件获取数量
      *
-     * @param userInfo
+     * @param oauthInterfaceEnum
      * @return
      */
-    int getCount(UserInfo userInfo);
+    int getCount(OauthInterfaceEnum oauthInterfaceEnum);
 
 }

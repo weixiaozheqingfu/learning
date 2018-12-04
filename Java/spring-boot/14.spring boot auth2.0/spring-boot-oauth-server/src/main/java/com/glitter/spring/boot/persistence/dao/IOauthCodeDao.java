@@ -1,17 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.AuthTokenInfo;
+import com.glitter.spring.boot.bean.OauthCode;
+
 import java.util.List;
 
-public interface IAuthTokenInfoDao{
+public interface IOauthCodeDao{
 
     /**
     * 插入操作
     *
-    * @param authTokenInfo
+    * @param oauthCode
     * @return
     */
-    int insert(AuthTokenInfo authTokenInfo);
+    int insert(OauthCode oauthCode);
 
     /**
     * 根据主键删除
@@ -32,18 +33,18 @@ public interface IAuthTokenInfoDao{
     /**
     * 根据条件删除
     *
-    * @param authTokenInfo
+    * @param oauthCode
     * @return
     */
-    int delete(AuthTokenInfo authTokenInfo);
+    int delete(OauthCode oauthCode);
 
     /**
     * 根据主键更新
     *
-    * @param authTokenInfo
+    * @param oauthCode
     * @return
     */
-    int updateById(AuthTokenInfo authTokenInfo);
+    int updateById(OauthCode oauthCode);
 
     /**
      * 按主键查询
@@ -51,7 +52,7 @@ public interface IAuthTokenInfoDao{
      * @param id
      * @return
      */
-    AuthTokenInfo getById(Long id);
+    OauthCode getOauthCodeById(Long id);
 
     /**
      * 按主键集合查询
@@ -59,37 +60,37 @@ public interface IAuthTokenInfoDao{
      * @param ids
      * @return
      */
-    List<AuthTokenInfo> getByIds(Long[] ids);
+    List<OauthCode> getOauthCodeByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param authTokenInfo
+     * @param oauthCode
      * @return
      */
-    AuthTokenInfo get(AuthTokenInfo authTokenInfo);
+    OauthCode getOauthCode(OauthCode oauthCode);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<AuthTokenInfo> findAllList();
+    List<OauthCode> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param authTokenInfo
+     * @param oauthCode
      * @return
      */
-    List<AuthTokenInfo> findList(AuthTokenInfo authTokenInfo);
+    List<OauthCode> findList(OauthCode oauthCode);
 
     /**
      * 按条件获取数量
      *
-     * @param authTokenInfo
+     * @param oauthCode
      * @return
      */
-    int getCount(AuthTokenInfo authTokenInfo);
+    int getCount(OauthCode oauthCode);
 
 }

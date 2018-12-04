@@ -1,18 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.bean.OauthClientInfo;
 
 import java.util.List;
 
-public interface IUserInfoDao{
+public interface IOauthClientInfoDao{
 
     /**
     * 插入操作
     *
-    * @param userInfo
+    * @param oauthClientInfo
     * @return
     */
-    int insert(UserInfo userInfo);
+    int insert(OauthClientInfo oauthClientInfo);
 
     /**
     * 根据主键删除
@@ -33,18 +33,18 @@ public interface IUserInfoDao{
     /**
     * 根据条件删除
     *
-    * @param userInfo
+    * @param oauthClientInfo
     * @return
     */
-    int delete(UserInfo userInfo);
+    int delete(OauthClientInfo oauthClientInfo);
 
     /**
     * 根据主键更新
     *
-    * @param userInfo
+    * @param oauthClientInfo
     * @return
     */
-    int updateById(UserInfo userInfo);
+    int updateById(OauthClientInfo oauthClientInfo);
 
     /**
      * 按主键查询
@@ -52,7 +52,7 @@ public interface IUserInfoDao{
      * @param id
      * @return
      */
-    UserInfo getUserInfoById(Long id);
+    OauthClientInfo getOauthClientInfoById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,37 +60,37 @@ public interface IUserInfoDao{
      * @param ids
      * @return
      */
-    List<UserInfo> getUserInfoByIds(Long[] ids);
+    List<OauthClientInfo> getOauthClientInfoByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthClientInfo
      * @return
      */
-    UserInfo getUserInfo(UserInfo userInfo);
+    OauthClientInfo getOauthClientInfo(OauthClientInfo oauthClientInfo);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<UserInfo> findAllList();
+    List<OauthClientInfo> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthClientInfo
      * @return
      */
-    List<UserInfo> findList(UserInfo userInfo);
+    List<OauthClientInfo> findList(OauthClientInfo oauthClientInfo);
 
     /**
      * 按条件获取数量
      *
-     * @param userInfo
+     * @param oauthClientInfo
      * @return
      */
-    int getCount(UserInfo userInfo);
+    int getCount(OauthClientInfo oauthClientInfo);
 
 }

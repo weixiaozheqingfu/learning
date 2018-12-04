@@ -1,18 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.bean.OauthDeveloperRM;
 
 import java.util.List;
 
-public interface IUserInfoDao{
+public interface IOauthDeveloperRMDao{
 
     /**
     * 插入操作
     *
-    * @param userInfo
+    * @param oauthDeveloperRM
     * @return
     */
-    int insert(UserInfo userInfo);
+    int insert(OauthDeveloperRM oauthDeveloperRM);
 
     /**
     * 根据主键删除
@@ -33,18 +33,18 @@ public interface IUserInfoDao{
     /**
     * 根据条件删除
     *
-    * @param userInfo
+    * @param oauthDeveloperRM
     * @return
     */
-    int delete(UserInfo userInfo);
+    int delete(OauthDeveloperRM oauthDeveloperRM);
 
     /**
     * 根据主键更新
     *
-    * @param userInfo
+    * @param oauthDeveloperRM
     * @return
     */
-    int updateById(UserInfo userInfo);
+    int updateById(OauthDeveloperRM oauthDeveloperRM);
 
     /**
      * 按主键查询
@@ -52,7 +52,7 @@ public interface IUserInfoDao{
      * @param id
      * @return
      */
-    UserInfo getUserInfoById(Long id);
+    OauthDeveloperRM getOauthDeveloperRMById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,37 +60,37 @@ public interface IUserInfoDao{
      * @param ids
      * @return
      */
-    List<UserInfo> getUserInfoByIds(Long[] ids);
+    List<OauthDeveloperRM> getOauthDeveloperRMByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthDeveloperRM
      * @return
      */
-    UserInfo getUserInfo(UserInfo userInfo);
+    OauthDeveloperRM getOauthDeveloperRM(OauthDeveloperRM oauthDeveloperRM);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<UserInfo> findAllList();
+    List<OauthDeveloperRM> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthDeveloperRM
      * @return
      */
-    List<UserInfo> findList(UserInfo userInfo);
+    List<OauthDeveloperRM> findList(OauthDeveloperRM oauthDeveloperRM);
 
     /**
      * 按条件获取数量
      *
-     * @param userInfo
+     * @param oauthDeveloperRM
      * @return
      */
-    int getCount(UserInfo userInfo);
+    int getCount(OauthDeveloperRM oauthDeveloperRM);
 
 }

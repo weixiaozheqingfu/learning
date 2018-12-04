@@ -1,7 +1,6 @@
 package com.glitter.spring.boot.bean;
 
 import lombok.Data;
-
 import java.util.Date;
 
 @Data
@@ -15,20 +14,14 @@ public class UserInfo extends BaseBean {
     private String password;
     /** 手机 */
     private String phone;
-    /** 邮箱 */
-    private String email;
-    /** 手机验证标识(0:未认证 1:已认证) */
-    private Boolean phoneVerified;
-    /** 邮箱验证标识(0:未认证 1:已认证) */
-    private Boolean emailVerified;
     /** 姓名 */
     private String fullName;
     /** 昵称 */
     private String nickName;
+    /** 0:未填写,1:男,2:女,3:未知 */
+    private Integer sex;
     /** 年龄 */
     private Integer age;
-    /** 身高(单位mm) */
-    private Integer height;
     /** 备注 */
     private String remark;
     /** 0:未删除 1：已删除 */

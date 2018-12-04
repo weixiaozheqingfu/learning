@@ -1,17 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.AuthClientInfo;
+import com.glitter.spring.boot.bean.DeveloperInfo;
+
 import java.util.List;
 
-public interface IAuthClientInfoDao{
+public interface IDeveloperInfoDao{
 
     /**
     * 插入操作
     *
-    * @param authClientInfo
+    * @param developerInfo
     * @return
     */
-    int insert(AuthClientInfo authClientInfo);
+    int insert(DeveloperInfo developerInfo);
 
     /**
     * 根据主键删除
@@ -32,18 +33,18 @@ public interface IAuthClientInfoDao{
     /**
     * 根据条件删除
     *
-    * @param authClientInfo
+    * @param developerInfo
     * @return
     */
-    int delete(AuthClientInfo authClientInfo);
+    int delete(DeveloperInfo developerInfo);
 
     /**
     * 根据主键更新
     *
-    * @param authClientInfo
+    * @param developerInfo
     * @return
     */
-    int updateById(AuthClientInfo authClientInfo);
+    int updateById(DeveloperInfo developerInfo);
 
     /**
      * 按主键查询
@@ -51,7 +52,7 @@ public interface IAuthClientInfoDao{
      * @param id
      * @return
      */
-    AuthClientInfo getById(Long id);
+    DeveloperInfo getDeveloperInfoById(Long id);
 
     /**
      * 按主键集合查询
@@ -59,37 +60,37 @@ public interface IAuthClientInfoDao{
      * @param ids
      * @return
      */
-    List<AuthClientInfo> getByIds(Long[] ids);
+    List<DeveloperInfo> getDeveloperInfoByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param authClientInfo
+     * @param developerInfo
      * @return
      */
-    AuthClientInfo get(AuthClientInfo authClientInfo);
+    DeveloperInfo getDeveloperInfo(DeveloperInfo developerInfo);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<AuthClientInfo> findAllList();
+    List<DeveloperInfo> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param authClientInfo
+     * @param developerInfo
      * @return
      */
-    List<AuthClientInfo> findList(AuthClientInfo authClientInfo);
+    List<DeveloperInfo> findList(DeveloperInfo developerInfo);
 
     /**
      * 按条件获取数量
      *
-     * @param authClientInfo
+     * @param developerInfo
      * @return
      */
-    int getCount(AuthClientInfo authClientInfo);
+    int getCount(DeveloperInfo developerInfo);
 
 }

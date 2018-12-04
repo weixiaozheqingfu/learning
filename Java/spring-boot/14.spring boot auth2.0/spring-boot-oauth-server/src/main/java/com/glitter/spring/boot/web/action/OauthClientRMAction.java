@@ -1,37 +1,35 @@
 package com.glitter.spring.boot.web.action;
 
-import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.bean.OauthClientRM;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.CoreConstants;
-import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
-import com.glitter.spring.boot.service.IUserInfoService;
-
+import com.glitter.spring.boot.service.IOauthClientRMService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/userInfo")
-public class UserInfoAction extends BaseAction{
+@RequestMapping("/oauthClientRM")
+public class OauthClientRMAction extends BaseAction{
 
-    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(OauthClientRMAction.class);
 
     @Autowired
-    private IUserInfoService userInfoService;
+    private IOauthClientRMService oauthClientRMService;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseResult create(@RequestBody UserInfo paramBean) {
+    public ResponseResult create(@RequestBody OauthClientRM paramBean) {
         // TODO 参数校验
-        userInfoService.create(paramBean);
+        oauthClientRMService.create(paramBean);
         return ResponseResult.success(null);
     }
 
     @RequestMapping(value = "/modifyById", method = RequestMethod.POST)
-    public ResponseResult modifyById(@RequestBody UserInfo paramBean) {
+    public ResponseResult modifyById(@RequestBody OauthClientRM paramBean) {
         // TODO 参数校验
-        userInfoService.modifyById(paramBean);
+        oauthClientRMService.modifyById(paramBean);
         return ResponseResult.success(null);
     }
 
@@ -40,23 +38,18 @@ public class UserInfoAction extends BaseAction{
         if(null == id) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常，id值为空!");
         }
-        userInfoService.deleteById(id);
+        oauthClientRMService.deleteById(id);
         return ResponseResult.success(null);
     }
 
-    @RequestMapping(value = "getUserInfoById", method = RequestMethod.POST)
-    public ResponseResult<UserInfo> getUserInfoById(@RequestParam Long id) {
-        UserInfo result = null;
+    @RequestMapping(value = "getOauthClientRMById", method = RequestMethod.POST)
+    public ResponseResult<OauthClientRM> getOauthClientRMById(@RequestParam Long id) {
+        OauthClientRM result = null;
         if(null == id) {
             return ResponseResult.success(result);
         }
-        result = userInfoService.getUserInfoById(id);
+        result = oauthClientRMService.getOauthClientRMById(id);
         return ResponseResult.success(result);
     }
 
-	@RequestMapping(value = "getLoginUserInfo", method = RequestMethod.GET)
-    public ResponseResult<UserInfo> getUserInfoById() {
-        UserInfo result = (UserInfo) sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_USER);
-        return ResponseResult.success(result);
-    }
 }

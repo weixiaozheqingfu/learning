@@ -1,18 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.bean.OauthClientRM;
 
 import java.util.List;
 
-public interface IUserInfoDao{
+public interface IOauthClientRMDao{
 
     /**
     * 插入操作
     *
-    * @param userInfo
+    * @param oauthClientRM
     * @return
     */
-    int insert(UserInfo userInfo);
+    int insert(OauthClientRM oauthClientRM);
 
     /**
     * 根据主键删除
@@ -33,18 +33,18 @@ public interface IUserInfoDao{
     /**
     * 根据条件删除
     *
-    * @param userInfo
+    * @param oauthClientRM
     * @return
     */
-    int delete(UserInfo userInfo);
+    int delete(OauthClientRM oauthClientRM);
 
     /**
     * 根据主键更新
     *
-    * @param userInfo
+    * @param oauthClientRM
     * @return
     */
-    int updateById(UserInfo userInfo);
+    int updateById(OauthClientRM oauthClientRM);
 
     /**
      * 按主键查询
@@ -52,7 +52,7 @@ public interface IUserInfoDao{
      * @param id
      * @return
      */
-    UserInfo getUserInfoById(Long id);
+    OauthClientRM getOauthClientRMById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,37 +60,37 @@ public interface IUserInfoDao{
      * @param ids
      * @return
      */
-    List<UserInfo> getUserInfoByIds(Long[] ids);
+    List<OauthClientRM> getOauthClientRMByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthClientRM
      * @return
      */
-    UserInfo getUserInfo(UserInfo userInfo);
+    OauthClientRM getOauthClientRM(OauthClientRM oauthClientRM);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<UserInfo> findAllList();
+    List<OauthClientRM> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthClientRM
      * @return
      */
-    List<UserInfo> findList(UserInfo userInfo);
+    List<OauthClientRM> findList(OauthClientRM oauthClientRM);
 
     /**
      * 按条件获取数量
      *
-     * @param userInfo
+     * @param oauthClientRM
      * @return
      */
-    int getCount(UserInfo userInfo);
+    int getCount(OauthClientRM oauthClientRM);
 
 }

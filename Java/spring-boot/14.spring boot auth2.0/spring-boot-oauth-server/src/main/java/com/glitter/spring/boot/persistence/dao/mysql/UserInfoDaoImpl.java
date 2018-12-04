@@ -1,16 +1,17 @@
 package com.glitter.spring.boot.persistence.dao.mysql;
 
-import org.springframework.stereotype.Repository;
+import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
-import com.glitter.spring.boot.bean.UserInfo;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
 public class UserInfoDaoImpl implements IUserInfoDao{
 
-    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IUserInfoDao";
+    private static final String NAME_SPACE = "UserInfo";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;
@@ -41,17 +42,17 @@ public class UserInfoDaoImpl implements IUserInfoDao{
     }
 
     @Override
-    public UserInfo getById(Long id) {
+    public UserInfo getUserInfoById(Long id) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getById", id);
     }
 
     @Override
-    public List<UserInfo> getByIds(Long[] ids) {
+    public List<UserInfo> getUserInfoByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }
 
     @Override
-    public UserInfo get(UserInfo userInfo) {
+    public UserInfo getUserInfo(UserInfo userInfo) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".get", userInfo);
     }
 

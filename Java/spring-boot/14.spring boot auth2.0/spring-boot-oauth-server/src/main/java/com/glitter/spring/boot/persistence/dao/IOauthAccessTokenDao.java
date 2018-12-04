@@ -1,17 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.AuthServerInfo;
+import com.glitter.spring.boot.bean.OauthAccessToken;
+
 import java.util.List;
 
-public interface IAuthServerInfoDao{
+public interface IOauthAccessTokenDao{
 
     /**
     * 插入操作
     *
-    * @param authServerInfo
+    * @param oauthAccessToken
     * @return
     */
-    int insert(AuthServerInfo authServerInfo);
+    int insert(OauthAccessToken oauthAccessToken);
 
     /**
     * 根据主键删除
@@ -32,18 +33,18 @@ public interface IAuthServerInfoDao{
     /**
     * 根据条件删除
     *
-    * @param authServerInfo
+    * @param oauthAccessToken
     * @return
     */
-    int delete(AuthServerInfo authServerInfo);
+    int delete(OauthAccessToken oauthAccessToken);
 
     /**
     * 根据主键更新
     *
-    * @param authServerInfo
+    * @param oauthAccessToken
     * @return
     */
-    int updateById(AuthServerInfo authServerInfo);
+    int updateById(OauthAccessToken oauthAccessToken);
 
     /**
      * 按主键查询
@@ -51,7 +52,7 @@ public interface IAuthServerInfoDao{
      * @param id
      * @return
      */
-    AuthServerInfo getById(Long id);
+    OauthAccessToken getOauthAccessTokenById(Long id);
 
     /**
      * 按主键集合查询
@@ -59,37 +60,37 @@ public interface IAuthServerInfoDao{
      * @param ids
      * @return
      */
-    List<AuthServerInfo> getByIds(Long[] ids);
+    List<OauthAccessToken> getOauthAccessTokenByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param authServerInfo
+     * @param oauthAccessToken
      * @return
      */
-    AuthServerInfo get(AuthServerInfo authServerInfo);
+    OauthAccessToken getOauthAccessToken(OauthAccessToken oauthAccessToken);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<AuthServerInfo> findAllList();
+    List<OauthAccessToken> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param authServerInfo
+     * @param oauthAccessToken
      * @return
      */
-    List<AuthServerInfo> findList(AuthServerInfo authServerInfo);
+    List<OauthAccessToken> findList(OauthAccessToken oauthAccessToken);
 
     /**
      * 按条件获取数量
      *
-     * @param authServerInfo
+     * @param oauthAccessToken
      * @return
      */
-    int getCount(AuthServerInfo authServerInfo);
+    int getCount(OauthAccessToken oauthAccessToken);
 
 }

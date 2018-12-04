@@ -1,18 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.bean.OauthScopeEnum;
 
 import java.util.List;
 
-public interface IUserInfoDao{
+public interface IOauthScopeEnumDao{
 
     /**
     * 插入操作
     *
-    * @param userInfo
+    * @param oauthScopeEnum
     * @return
     */
-    int insert(UserInfo userInfo);
+    int insert(OauthScopeEnum oauthScopeEnum);
 
     /**
     * 根据主键删除
@@ -33,18 +33,18 @@ public interface IUserInfoDao{
     /**
     * 根据条件删除
     *
-    * @param userInfo
+    * @param oauthScopeEnum
     * @return
     */
-    int delete(UserInfo userInfo);
+    int delete(OauthScopeEnum oauthScopeEnum);
 
     /**
     * 根据主键更新
     *
-    * @param userInfo
+    * @param oauthScopeEnum
     * @return
     */
-    int updateById(UserInfo userInfo);
+    int updateById(OauthScopeEnum oauthScopeEnum);
 
     /**
      * 按主键查询
@@ -52,7 +52,7 @@ public interface IUserInfoDao{
      * @param id
      * @return
      */
-    UserInfo getUserInfoById(Long id);
+    OauthScopeEnum getOauthScopeEnumById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,37 +60,37 @@ public interface IUserInfoDao{
      * @param ids
      * @return
      */
-    List<UserInfo> getUserInfoByIds(Long[] ids);
+    List<OauthScopeEnum> getOauthScopeEnumByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthScopeEnum
      * @return
      */
-    UserInfo getUserInfo(UserInfo userInfo);
+    OauthScopeEnum getOauthScopeEnum(OauthScopeEnum oauthScopeEnum);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<UserInfo> findAllList();
+    List<OauthScopeEnum> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param userInfo
+     * @param oauthScopeEnum
      * @return
      */
-    List<UserInfo> findList(UserInfo userInfo);
+    List<OauthScopeEnum> findList(OauthScopeEnum oauthScopeEnum);
 
     /**
      * 按条件获取数量
      *
-     * @param userInfo
+     * @param oauthScopeEnum
      * @return
      */
-    int getCount(UserInfo userInfo);
+    int getCount(OauthScopeEnum oauthScopeEnum);
 
 }

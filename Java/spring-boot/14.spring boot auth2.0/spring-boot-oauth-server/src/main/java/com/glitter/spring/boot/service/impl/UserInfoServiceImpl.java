@@ -1,20 +1,16 @@
 package com.glitter.spring.boot.service.impl;
 
-
-import com.glitter.spring.boot.constant.CoreConstants;
-import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
-import com.pagehelper.plugin.PageHelper;
-import com.pagehelper.plugin.PageInfo;
+import com.glitter.spring.boot.constant.CoreConstants;
+import com.glitter.spring.boot.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class UserInfoServiceImpl implements IUserInfoService{
@@ -25,7 +21,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
     IUserInfoDao userInfoDao;
 
     /**
-     * 创建用户表; InnoDB free: 488448 kB
+     * 创建用户信息表; InnoDB free: 488448 kB
      * @param userInfo
      */
     @Override
@@ -42,7 +38,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
     }
 
     /**
-     * 修改用户表; InnoDB free: 488448 kB
+     * 修改用户信息表; InnoDB free: 488448 kB
      * @param userInfo
      */
     @Override
@@ -56,7 +52,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
     }
 
     /**
-     * 根据主键删除用户表; InnoDB free: 488448 kB
+     * 根据主键删除用户信息表; InnoDB free: 488448 kB
      * @param id
      */
     @Override
@@ -75,24 +71,8 @@ public class UserInfoServiceImpl implements IUserInfoService{
         }
     }
 
-    @Override
-    public PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
-        List<UserInfo> userInfos = userInfoDao.findAllList();
-        PageInfo<UserInfo> pageInfo = new PageInfo(userInfos);
-        return pageInfo;
-    }
-
-    @Override
-    public UserInfo getByAccount(String account) {
-        UserInfo record = new UserInfo();
-        record.setAccount(account);
-        UserInfo userInfo = userInfoDao.get(record);
-        return userInfo;
-    }
-
     /**
-     * 根据主键获取用户表; InnoDB free: 488448 kB
+     * 根据主键获取用户信息表; InnoDB free: 488448 kB
      * @param id
      * @return
      */
@@ -102,7 +82,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
         if(null == id){
             return result;
         }
-        result = userInfoDao.getById(id);
+        result = userInfoDao.getUserInfoById(id);
         return result;
     }
 

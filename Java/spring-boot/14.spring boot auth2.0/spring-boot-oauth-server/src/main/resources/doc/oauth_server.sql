@@ -62,7 +62,7 @@ CREATE TABLE oauth_client_info (
 -- 该表数据有一个积累的过程,代码逻辑优先查询该表,如果没有查询到结果则生成一条记录.
 -- 每一个开放平台开发者账号针对同一个资源获取到的资源id都是不同的,且在同账号下保持唯一不变,进一步增强了资源信息的安全性.因为不同的账号针对相同的资源拿到的资源id是不同的.
 -- 同时,如果一个开发者账号下有多个client应用,那么这些应用之间针对相同资源得到的unionid是相同的,可以使同一个开发者账号下的不同应用针对资源信息可以通过unionid进行打通.
-CREATE TABLE oauth_developer_resource_mapping (
+CREATE TABLE oauth_developer_r_m (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   developer_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '开发者用户id',
   user_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
@@ -70,11 +70,11 @@ CREATE TABLE oauth_developer_resource_mapping (
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='开放平台开发者账号的资源信息映射表';
+) COMMENT='开放平台开发者账号的资源信息映射表oauth_developer_resource_mapping';
 
 -- 该表数据有一个积累的过程,代码逻辑优先查询该表,如果没有查询到结果则生成一条记录.
 -- 每一个客户端针对同一个资源获取到的资源id都是不同的,且在同一个客户端下保持唯一不变,进一步增强了资源信息的安全性.因为不同的客户端针对相同的资源拿到的资源id是不同的.
-CREATE TABLE oauth_client_resource_mapping (
+CREATE TABLE oauth_client_r_m (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   client_id varchar(50) NOT NULL DEFAULT '' COMMENT '客户端id',
   user_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
@@ -82,7 +82,7 @@ CREATE TABLE oauth_client_resource_mapping (
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='客户端的资源信息映射表';
+) COMMENT='客户端的资源信息映射表oauth_client_resource_mapping';
 
 -- 根据client_id和user_id查询oauth_client_resource_mapping表,如果不能查到对应资源映射数据,则新增oauth_client_resource_mapping表记录.
 -- 根据client_id查询到其所属的developer_account_id,再根据developer_account_id和user_id查询oauth_developer_resource_mapping表,如果不能查到对应资源映射数据,则新增oauth_developer_resource_mapping表记录
