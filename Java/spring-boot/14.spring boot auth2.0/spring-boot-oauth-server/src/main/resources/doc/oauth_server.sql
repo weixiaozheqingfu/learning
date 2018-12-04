@@ -16,28 +16,28 @@ CREATE TABLE user_info (
 ) COMMENT='用户信息表';
 
 -- scope_name和scope_desc是对外公开的
-CREATE TABLE oauth_scope_info (
+CREATE TABLE oauth_scope_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
   scope_desc bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围描述',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='授权作用域表';
+) COMMENT='授权作用域枚举表';
 
 -- 与oauth_scope_info是多对一关系,该列表及与scope的对应关系是对外公开的,客户端明确知道需要申明申明scope,也知道这个scope包含了哪些接口,对于用户,只要知道scope名称即可。
-CREATE TABLE oauth_interface_info (
+CREATE TABLE oauth_interface_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  scope_id bigint(20) NOT NULL DEFAULT 0 COMMENT '授权作用域id',
   interface_name varchar(100) NOT NULL DEFAULT '' COMMENT '接口名称',
   interface_uri varchar(200) NOT NULL DEFAULT '' COMMENT '接口地址',
   interface_desc varchar(500) NOT NULL DEFAULT '' COMMENT '接口详细描述',
+  scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='授权接口表';
+) COMMENT='授权接口枚举表';
 
-CREATE TABLE developer_account (
+CREATE TABLE developer_info (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   account varchar(50) NOT NULL DEFAULT '' COMMENT '账号',
   password varchar(50) NOT NULL DEFAULT '' COMMENT '密码',
@@ -64,7 +64,7 @@ CREATE TABLE oauth_client_info (
 -- 同时,如果一个开发者账号下有多个client应用,那么这些应用之间针对相同资源得到的unionid是相同的,可以使同一个开发者账号下的不同应用针对资源信息可以通过unionid进行打通.
 CREATE TABLE oauth_developer_resource_mapping (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  developer_account_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '开发者账号id',
+  developer_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '开发者用户id',
   user_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
   union_id varchar(100) NOT NULL DEFAULT '' COMMENT '用户统一标识。针对一个开放平台开发者帐号下的应用，同一用户的unionid是唯一的。',
   create_time datetime DEFAULT NULL COMMENT '创建时间',

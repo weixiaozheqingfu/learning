@@ -20,38 +20,40 @@ CREATE TABLE user_info (
 ) COMMENT='用户表';
 
 -- 内容为客户端自定义录入的
-CREATE TABLE oauth_server_info (
+CREATE TABLE oauth_server_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  server_id varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台id',
+  server_type varchar(20) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
   server_name varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台名称(如qq,微信,新浪微博等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='第三方auth服务平台信息表';
+) COMMENT='第三方auth服务平台枚举信息表';
 
 -- 内容为从授权服务器开放平台摘录下的
 -- 用于客户端运营平台可动态配置,这张表可以没有
-CREATE TABLE oauth_scope_info (
+CREATE TABLE oauth_scope_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
   scope_desc bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围描述',
+  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='授权作用域表';
+) COMMENT='授权作用域枚举表';
 
 -- 内容为从授权服务器开放平台摘录下的
 -- 用于客户端运营平台可动态配置,这张表可以没有
-CREATE TABLE oauth_interface_info (
+CREATE TABLE oauth_interface_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  scope_id bigint(20) NOT NULL DEFAULT 0 COMMENT '授权作用域id',
   interface_name varchar(100) NOT NULL DEFAULT '' COMMENT '接口名称',
-  interface_uri varchar(200) NOT NULL DEFAULT '' COMMENT '接口地址',
+  interface_uri varchar(100) NOT NULL DEFAULT '' COMMENT '接口地址',
   interface_desc varchar(500) NOT NULL DEFAULT '' COMMENT '接口详细描述',
+  scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
+  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='授权接口表';
+) COMMENT='授权接口枚举表';
 
 
 -- 客户端针对每一个第三方auth服务器都有唯一的一条配置记录与之对应
@@ -59,10 +61,10 @@ CREATE TABLE oauth_interface_info (
 -- response_type的token对应grant_type的implicit
 CREATE TABLE oauth_client_base_config (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  server_id bigint(20) NOT NULL DEFAULT 0 COMMENT '第三方auth服务端信息表主键',
-  client_id varchar(50) NOT NULL DEFAULT 0 COMMENT '第三方auth服务平台分配的客户端id',
-  client_secret varchar(50) NOT NULL DEFAULT 0 COMMENT '第三方auth服务平台分配的客户端密码',
+  client_id varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台分配的客户端id',
+  client_secret varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台分配的客户端密码',
   redirect_uri varchar(200) NOT NULL DEFAULT '' COMMENT '客户端应用回调地址',
+  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
@@ -79,16 +81,16 @@ CREATE TABLE oauth_client_base_config (
 -- 前提:请求授权页时,根据请求授权页时的业务场景不同,需要将state_type拼接在state参数后.
 CREATE TABLE oauth_client_scenario_config (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  scenario_name varchar(20) NOT NULL DEFAULT 0 COMMENT '业务场景名称',
-  scenario_desc varchar(50) NOT NULL DEFAULT 0 COMMENT '业务场景说明',
-  server_id bigint(20) NOT NULL DEFAULT 0 COMMENT '第三方auth服务端信息表主键',
-  client_id varchar(50) NOT NULL DEFAULT 0 COMMENT '第三方auth服务平台分配的客户端id',
+  client_id varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台分配的客户端id',
   response_type	varchar(50) NOT NULL DEFAULT '' COMMENT '声明第三方auth服务平台响应模式,使第三方auth平台知道客户端想使用哪一种响应模式,auth平台存在两种响应模式即code,token',
   grant_type varchar(50) NOT NULL DEFAULT '' COMMENT '声明第三方auth服务平台授权类型,使第三方auth平台知道客户端想使用哪一种授权类型进行授权流程,auth服务器端都会有对应的逻辑处理,auth平台存在的授权模式共5种,如authorization_code,implicit,refresh_token等',
   scope varchar(200) NOT NULL DEFAULT '' COMMENT '针对于第三方auth服务的众多授权作用域,客户端应用声明需要用户确认授权的作用域,授权多个作用域用逗号（,）分隔',
   state_type varchar(50) NOT NULL DEFAULT 0 COMMENT 'state参数后缀值,不同的值表示不同的含义,具体含义由客户端自行定义使用逻辑',
   state_type_desc varchar(100) NOT NULL DEFAULT 0 COMMENT 'state_type描述',
   response_url varchar(50) NOT NULL DEFAULT 0 COMMENT '自定义不同场景下获取accessToken成功后的响应地址',
+  scenario_name varchar(20) NOT NULL DEFAULT 0 COMMENT '业务场景名称',
+  scenario_desc varchar(50) NOT NULL DEFAULT 0 COMMENT '业务场景说明',
+  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
@@ -101,23 +103,31 @@ CREATE TABLE oauth_client_scenario_config (
 -- 如果用户10分钟过了都没有点击按钮，则刚才的auth认证通过信息已经从redis中删除作废，此时可提示用户连接失败，请重试！，码云也是这样的。
 CREATE TABLE oauth_access_token (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  user_id bigint(20) NOT NULL DEFAULT 0 COMMENT '用户表主键',
-  third_account_id varchar(50) NOT NULL DEFAULT '' COMMENT '三方账号id',
-
   open_id varchar(100) NOT NULL DEFAULT '' COMMENT '用户对外开放id,对当前开发者帐号唯一',
   union_id varchar(100) NOT NULL DEFAULT '' COMMENT '用户统一标识。针对一个开放平台开发者帐号下的应用，同一用户的unionid是唯一的。',
   access_token varchar(50) NOT NULL DEFAULT '' COMMENT 'access_token',
   expire_in bigint(20) NOT NULL DEFAULT 0 COMMENT 'access_token过期时间',
   refresh_token varchar(20) NOT NULL DEFAULT '' COMMENT 'refresh_token',
-  server_id bigint(20) NOT NULL DEFAULT 0 COMMENT '第三方auth服务端信息表主键',
-  server_name varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台名称(如qq,微信,新浪微博等)',
   scope varchar(200) NOT NULL DEFAULT '' COMMENT '授权作用域,授权多个作用域用逗号（,）分隔',
-  interface_uri varchar(200) NOT NULL DEFAULT '' COMMENT '接口地址,授权多个接口地址用逗号（,）分隔',
-
+  interface_uri varchar(500) NOT NULL DEFAULT '' COMMENT '接口地址,授权多个接口地址用逗号（,）分隔',
+  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
 ) COMMENT='auth认证信息表,也是三方账户表';
+
+CREATE TABLE account_binding (
+  id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  user_id bigint(20) NOT NULL DEFAULT 0 COMMENT '用户表id',
+  open_id varchar(100) NOT NULL DEFAULT '' COMMENT '用户对外开放id,对当前开发者帐号唯一',
+  union_id varchar(100) NOT NULL DEFAULT '' COMMENT '用户统一标识。针对一个开放平台开发者帐号下的应用，同一用户的unionid是唯一的。不一定所有第三方都有此字段.',
+  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
+  bind_time datetime DEFAULT NULL COMMENT '绑定时间',
+  create_time datetime DEFAULT NULL COMMENT '创建时间',
+  update_time datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (id)
+) COMMENT='第三方账户绑定表';
+
 
 
 -- 第三方账号表与user表的关系，这张表需要考虑如何设计,应该有一个绑定关系。
