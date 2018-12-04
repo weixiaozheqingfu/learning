@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="OauthAccessToken">
+    <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.OauthAccessToken">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
+        <result column="client_id" property="clientId" jdbcType="VARCHAR"/>
+        <result column="scope" property="scope" jdbcType="VARCHAR"/>
+        <result column="interface_uri" property="interfaceUri" jdbcType="VARCHAR"/>
+        <result column="token_type" property="tokenType" jdbcType="VARCHAR"/>
+        <result column="access_token" property="accessToken" jdbcType="VARCHAR"/>
+        <result column="access_token_expire_in" property="accessTokenExpireIn" jdbcType="BIGINT"/>
+        <result column="access_token_expire_time" property="accessTokenExpireTime" jdbcType="TIMESTAMP"/>
+        <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR"/>
+        <result column="refresh_token_expire_in" property="refreshTokenExpireIn" jdbcType="BIGINT"/>
+        <result column="refresh_token_expire_time" property="refreshTokenExpireTime" jdbcType="TIMESTAMP"/>
+        <result column="delete_flag" property="deleteFlag" jdbcType="BIT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="baseColumns">
+        id
+        ,user_id
+        ,open_id
+        ,union_id
+        ,client_id
+        ,scope
+        ,interface_uri
+        ,token_type
+        ,access_token
+        ,access_token_expire_in
+        ,access_token_expire_time
+        ,refresh_token
+        ,refresh_token_expire_in
+        ,refresh_token_expire_time
+        ,delete_flag
+        ,create_time
+        ,update_time
+    </sql>
+
+    <sql id="whereSql">
+        <if test="id != null">
+            and id=#{id}
+		</if>
+        <if test="userId != null">
+            and user_id=#{userId}
+		</if>
+        <if test="openId != null ">
+            and open_id=#{openId}
+		</if>
+        <if test="unionId != null ">
+            and union_id=#{unionId}
+		</if>
+        <if test="clientId != null ">
+            and client_id=#{clientId}
+		</if>
+        <if test="scope != null ">
+            and scope=#{scope}
+		</if>
+        <if test="interfaceUri != null ">
+            and interface_uri=#{interfaceUri}
+		</if>
+        <if test="tokenType != null ">
+            and token_type=#{tokenType}
+		</if>
+        <if test="accessToken != null ">
+            and access_token=#{accessToken}
+		</if>
+        <if test="accessTokenExpireIn != null">
+            and access_token_expire_in=#{accessTokenExpireIn}
+		</if>
+        <if test="accessTokenExpireTime != null">
+            and access_token_expire_time=#{accessTokenExpireTime}
+		</if>
+        <if test="refreshToken != null ">
+            and refresh_token=#{refreshToken}
+		</if>
+        <if test="refreshTokenExpireIn != null">
+            and refresh_token_expire_in=#{refreshTokenExpireIn}
+		</if>
+        <if test="refreshTokenExpireTime != null">
+            and refresh_token_expire_time=#{refreshTokenExpireTime}
+		</if>
+        <if test="deleteFlag != null">
+            and delete_flag=#{deleteFlag}
+		</if>
+        <if test="createTime != null">
+            and create_time=#{createTime}
+		</if>
+        <if test="updateTime != null">
+            and update_time=#{updateTime}
+		</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
+        insert into oauth_access_token
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="openId != null ">
+                open_id,
+            </if>
+            <if test="unionId != null ">
+                union_id,
+            </if>
+            <if test="clientId != null ">
+                client_id,
+            </if>
+            <if test="scope != null ">
+                scope,
+            </if>
+            <if test="interfaceUri != null ">
+                interface_uri,
+            </if>
+            <if test="tokenType != null ">
+                token_type,
+            </if>
+            <if test="accessToken != null ">
+                access_token,
+            </if>
+            <if test="accessTokenExpireIn != null">
+                access_token_expire_in,
+            </if>
+            <if test="accessTokenExpireTime != null">
+                access_token_expire_time,
+            </if>
+            <if test="refreshToken != null ">
+                refresh_token,
+            </if>
+            <if test="refreshTokenExpireIn != null">
+                refresh_token_expire_in,
+            </if>
+            <if test="refreshTokenExpireTime != null">
+                refresh_token_expire_time,
+            </if>
+            <if test="deleteFlag != null">
+                delete_flag,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="openId != null ">
+                #{openId},
+            </if>
+            <if test="unionId != null ">
+                #{unionId},
+            </if>
+            <if test="clientId != null ">
+                #{clientId},
+            </if>
+            <if test="scope != null ">
+                #{scope},
+            </if>
+            <if test="interfaceUri != null ">
+                #{interfaceUri},
+            </if>
+            <if test="tokenType != null ">
+                #{tokenType},
+            </if>
+            <if test="accessToken != null ">
+                #{accessToken},
+            </if>
+            <if test="accessTokenExpireIn != null">
+                #{accessTokenExpireIn},
+            </if>
+            <if test="accessTokenExpireTime != null">
+                #{accessTokenExpireTime},
+            </if>
+            <if test="refreshToken != null ">
+                #{refreshToken},
+            </if>
+            <if test="refreshTokenExpireIn != null">
+                #{refreshTokenExpireIn},
+            </if>
+            <if test="refreshTokenExpireTime != null">
+                #{refreshTokenExpireTime},
+            </if>
+            <if test="deleteFlag != null">
+                #{deleteFlag},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+		</trim>
+    </insert>
+
+    <delete id="deleteById">
+        delete from oauth_access_token where id =#{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from oauth_access_token where id in
+        <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</delete>
+
+    <delete id="delete" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
+        delete from oauth_access_token
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </delete>
+
+    <update id="updateById" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
+        update oauth_access_token  set
+        <trim suffixOverrides=",">
+        <if test="userId != null">
+            user_id=#{userId},
+        </if>
+        <if test="openId != null ">
+            open_id=#{openId},
+        </if>
+        <if test="unionId != null ">
+            union_id=#{unionId},
+        </if>
+        <if test="clientId != null ">
+            client_id=#{clientId},
+        </if>
+        <if test="scope != null ">
+            scope=#{scope},
+        </if>
+        <if test="interfaceUri != null ">
+            interface_uri=#{interfaceUri},
+        </if>
+        <if test="tokenType != null ">
+            token_type=#{tokenType},
+        </if>
+        <if test="accessToken != null ">
+            access_token=#{accessToken},
+        </if>
+        <if test="accessTokenExpireIn != null">
+            access_token_expire_in=#{accessTokenExpireIn},
+        </if>
+        <if test="accessTokenExpireTime != null">
+            access_token_expire_time=#{accessTokenExpireTime},
+        </if>
+        <if test="refreshToken != null ">
+            refresh_token=#{refreshToken},
+        </if>
+        <if test="refreshTokenExpireIn != null">
+            refresh_token_expire_in=#{refreshTokenExpireIn},
+        </if>
+        <if test="refreshTokenExpireTime != null">
+            refresh_token_expire_time=#{refreshTokenExpireTime},
+        </if>
+        <if test="deleteFlag != null">
+            delete_flag=#{deleteFlag},
+        </if>
+        <if test="createTime != null">
+            create_time=#{createTime},
+        </if>
+        <if test="updateTime != null">
+            update_time=#{updateTime},
+        </if>
+        </trim>
+        where id =#{id}
+	</update>
+
+    <select id="getById" resultMap="BaseResultMap">
+	    select <include refid="baseColumns"/> from oauth_access_token where id =#{id}
+	</select>
+
+    <select id="getByIds" resultMap="BaseResultMap">
+	    select <include refid="baseColumns"/> from oauth_access_token
+	    where id in
+	    <foreach collection="array" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</select>
+
+	<select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
+        select <include refid="baseColumns"/> from oauth_access_token
+        <where>
+            <include refid="whereSql"/> limit 1
+        </where>
+	</select>
+
+	<select id="findAllList" resultMap="BaseResultMap">
+	     select <include refid="baseColumns"/> from oauth_access_token
+	</select>
+
+	<select id="findList"  parameterType="com.glitter.spring.boot.bean.OauthAccessToken" resultMap="BaseResultMap">
+        select <include refid="baseColumns"/> from oauth_access_token
+        <where>
+            <include refid="whereSql"/>
+        </where>
+	</select>
+
+	<select id="getCount"  parameterType="com.glitter.spring.boot.bean.OauthAccessToken" resultType="java.lang.Integer">
+        select count(1) from oauth_access_token
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </select>
+
+</mapper>
