@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class OauthScopeEnumServiceImpl implements IOauthScopeEnumService{
@@ -84,4 +85,8 @@ public class OauthScopeEnumServiceImpl implements IOauthScopeEnumService{
         return result;
     }
 
+    @Override
+    public List<OauthScopeEnum> getAllOauthScopeEnums() {
+        return oauthScopeEnumDao.findAllList();
+    }
 }

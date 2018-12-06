@@ -2,6 +2,8 @@ package com.glitter.spring.boot.service;
 
 import com.glitter.spring.boot.bean.OauthScopeEnum;
 
+import java.util.List;
+
 public interface IOauthScopeEnumService {
 
     /**
@@ -28,5 +30,7 @@ public interface IOauthScopeEnumService {
      * @return
      */
     OauthScopeEnum getOauthScopeEnumById(Long id);
+
+    List<OauthScopeEnum> getAllOauthScopeEnums();
 
 }

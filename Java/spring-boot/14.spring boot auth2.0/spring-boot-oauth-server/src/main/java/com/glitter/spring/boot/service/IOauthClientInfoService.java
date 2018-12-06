@@ -29,4 +29,6 @@ public interface IOauthClientInfoService {
      */
     OauthClientInfo getOauthClientInfoById(Long id);
 
+    OauthClientInfo getOauthClientInfoByClientId(String clientId);
+
 }

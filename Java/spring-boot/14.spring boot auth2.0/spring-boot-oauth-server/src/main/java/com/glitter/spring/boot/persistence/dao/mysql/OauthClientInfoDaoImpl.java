@@ -47,6 +47,11 @@ public class OauthClientInfoDaoImpl implements IOauthClientInfoDao{
     }
 
     @Override
+    public OauthClientInfo getOauthClientInfoByClientId(String clientId) {
+        return sqlSessionTemplate.selectOne(NAME_SPACE + ".getByClientId", clientId);
+    }
+
+    @Override
     public List<OauthClientInfo> getOauthClientInfoByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }

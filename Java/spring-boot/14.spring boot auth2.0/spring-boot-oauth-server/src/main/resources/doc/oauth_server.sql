@@ -18,8 +18,8 @@ CREATE TABLE user_info (
 -- scope_name和scope_desc是对外公开的
 CREATE TABLE oauth_scope_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
-  scope_desc bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围描述',
+  scope_name varchar(100) NOT NULL DEFAULT '' COMMENT '授权范围名称',
+  scope_desc varchar(100) NOT NULL DEFAULT '' COMMENT '授权范围描述',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)

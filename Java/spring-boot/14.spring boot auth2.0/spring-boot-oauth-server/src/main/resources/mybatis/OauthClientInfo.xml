@@ -156,6 +156,10 @@
 	    select <include refid="baseColumns"/> from oauth_client_info where id =#{id}
 	</select>
 
+    <select id="getByClientId" resultMap="BaseResultMap">
+        select <include refid="baseColumns"/> from oauth_client_info where client_id =#{clientId}
+    </select>
+
     <select id="getByIds" resultMap="BaseResultMap">
 	    select <include refid="baseColumns"/> from oauth_client_info
 	    where id in

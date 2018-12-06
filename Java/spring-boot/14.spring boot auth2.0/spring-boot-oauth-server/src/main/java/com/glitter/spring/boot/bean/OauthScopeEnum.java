@@ -8,9 +8,9 @@ public class OauthScopeEnum extends BaseBean {
     /** 主键 */
     private Long id;
     /** 授权范围名称 */
-    private Long scopeName;
+    private String scopeName;
     /** 授权范围描述 */
-    private Long scopeDesc;
+    private String scopeDesc;
     /** 创建时间 */
     private Date createTime;
     /** 更新时间 */

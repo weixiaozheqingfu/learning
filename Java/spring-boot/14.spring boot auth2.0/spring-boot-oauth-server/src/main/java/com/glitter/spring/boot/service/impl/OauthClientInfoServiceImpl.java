@@ -85,4 +85,13 @@ public class OauthClientInfoServiceImpl implements IOauthClientInfoService{
         return result;
     }
 
+    @Override
+    public OauthClientInfo getOauthClientInfoByClientId(String clientId) {
+        OauthClientInfo result = null;
+        if(null == clientId){
+            return result;
+        }
+        result = oauthClientInfoDao.getOauthClientInfoByClientId(clientId);
+        return result;
+    }
 }

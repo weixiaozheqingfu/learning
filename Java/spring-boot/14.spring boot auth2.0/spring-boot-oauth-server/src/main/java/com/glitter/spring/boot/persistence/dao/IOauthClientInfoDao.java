@@ -54,6 +54,8 @@ public interface IOauthClientInfoDao{
      */
     OauthClientInfo getOauthClientInfoById(Long id);
 
+    OauthClientInfo getOauthClientInfoByClientId(String clientId);
+
     /**
      * 按主键集合查询
      *
