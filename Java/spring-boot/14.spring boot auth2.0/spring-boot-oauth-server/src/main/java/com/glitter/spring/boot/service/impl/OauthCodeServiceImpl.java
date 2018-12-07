@@ -117,7 +117,8 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         oauthCode.setUnionId(unionId);
         oauthCode.setCode(code);
         oauthCode.setInterfaceUri(interfaceUri);
-        // TODO 过期时间的设置
+        oauthCode.setExpireIn(60L);
+        oauthCode.setExpireTime(new Date(now.getTime() + oauthCode.getExpireIn() * 60L));
         oauthCodeDao.insert(oauthCode);
 
         return code;
