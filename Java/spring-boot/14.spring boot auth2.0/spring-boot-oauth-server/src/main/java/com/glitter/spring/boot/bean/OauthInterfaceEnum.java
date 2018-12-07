@@ -14,7 +14,7 @@ public class OauthInterfaceEnum extends BaseBean {
     /** 接口详细描述 */
     private String interfaceDesc;
     /** 授权范围名称 */
-    private Long scopeName;
+    private String scopeName;
     /** 创建时间 */
     private Date createTime;
     /** 更新时间 */

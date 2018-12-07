@@ -31,7 +31,7 @@ CREATE TABLE oauth_interface_enum (
   interface_name varchar(100) NOT NULL DEFAULT '' COMMENT '接口名称',
   interface_uri varchar(200) NOT NULL DEFAULT '' COMMENT '接口地址',
   interface_desc varchar(500) NOT NULL DEFAULT '' COMMENT '接口详细描述',
-  scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
+  scope_name varchar(100) NOT NULL DEFAULT '' COMMENT '授权范围名称',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
@@ -53,7 +53,7 @@ CREATE TABLE oauth_client_info (
   client_secret varchar(50) NOT NULL DEFAULT '' COMMENT '客户端应用秘钥',
   client_name varchar(50) NOT NULL DEFAULT '' COMMENT '客户端应用名称',
   redirect_uri varchar(200) NOT NULL DEFAULT '' COMMENT '客户端应用回调地址',
-  developer_account_id varchar(50) NOT NULL DEFAULT '' COMMENT '客户端应用所属开发者账号',
+  developer_id bigint(20) NOT NULL DEFAULT 0 COMMENT '客户端应用所属开发者账号',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)

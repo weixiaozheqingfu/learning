@@ -5,6 +5,7 @@ import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,4 +87,16 @@ public class UserInfoServiceImpl implements IUserInfoService{
         return result;
     }
 
+    @Override
+    public UserInfo getUserInfoByAccount(String account) {
+        UserInfo result = null;
+        if(StringUtils.isBlank(account)){
+            return result;
+        }
+        UserInfo record = new UserInfo();
+        record.setAccount(account);
+        record.setDeleteFlag(false);
+        result = userInfoDao.getUserInfo(record);
+        return result;
+    }
 }

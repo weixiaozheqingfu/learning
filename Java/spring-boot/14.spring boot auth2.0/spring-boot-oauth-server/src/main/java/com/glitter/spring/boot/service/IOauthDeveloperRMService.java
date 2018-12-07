@@ -5,10 +5,12 @@ import com.glitter.spring.boot.bean.OauthDeveloperRM;
 public interface IOauthDeveloperRMService {
 
     /**
-     * 创建开放平台开发者账号的资源信息映射表; InnoDB free: 488448 kB
-     * @param oauthDeveloperRM
+     * 创建开放平台开发者账号的资源信息映射
+     * @param developerId
+     * @param userId
+     * @return
      */
-    void create(OauthDeveloperRM oauthDeveloperRM);
+    String create(Long developerId, Long userId);
 
     /**
      * 修改开放平台开发者账号的资源信息映射表; InnoDB free: 488448 kB
@@ -28,5 +30,7 @@ public interface IOauthDeveloperRMService {
      * @return
      */
     OauthDeveloperRM getOauthDeveloperRMById(Long id);
+
+    OauthDeveloperRM getByDeveloperIdAndUserId(Long developerId, Long userId);
 
 }

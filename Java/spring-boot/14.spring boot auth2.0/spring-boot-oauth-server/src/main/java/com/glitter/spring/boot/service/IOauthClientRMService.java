@@ -5,10 +5,12 @@ import com.glitter.spring.boot.bean.OauthClientRM;
 public interface IOauthClientRMService {
 
     /**
-     * 创建客户端的资源信息映射表; InnoDB free: 488448 kB
-     * @param oauthClientRM
+     * 创建客户端的资源信息映射
+     * @param clientId
+     * @param userId
+     * @return
      */
-    void create(OauthClientRM oauthClientRM);
+    String create(String clientId, Long userId);
 
     /**
      * 修改客户端的资源信息映射表; InnoDB free: 488448 kB
@@ -27,6 +29,8 @@ public interface IOauthClientRMService {
      * @param id
      * @return
      */
-    OauthClientRM getOauthClientRMById(Long id);
+    OauthClientRM getById(Long id);
+
+    OauthClientRM getByClientIdAndUserId(String clientId, Long userId);
 
 }

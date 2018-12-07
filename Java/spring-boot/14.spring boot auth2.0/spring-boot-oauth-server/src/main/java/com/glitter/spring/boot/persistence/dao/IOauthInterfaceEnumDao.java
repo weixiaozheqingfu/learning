@@ -62,6 +62,8 @@ public interface IOauthInterfaceEnumDao{
      */
     List<OauthInterfaceEnum> getOauthInterfaceEnumByIds(Long[] ids);
 
+    List<OauthInterfaceEnum> getOauthInterfaceEnumByScopes(String[] scopes);
+
     /**
      * 按条件查询
      *

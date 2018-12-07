@@ -17,7 +17,7 @@ public class OauthClientInfo extends BaseBean {
     /** 客户端应用回调地址 */
     private String redirectUri;
     /** 客户端应用所属开发者账号 */
-    private String developerAccountId;
+    private Long developerId;
     /** 创建时间 */
     private Date createTime;
     /** 更新时间 */

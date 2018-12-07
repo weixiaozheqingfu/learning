@@ -52,6 +52,11 @@ public class OauthInterfaceEnumDaoImpl implements IOauthInterfaceEnumDao{
     }
 
     @Override
+    public List<OauthInterfaceEnum> getOauthInterfaceEnumByScopes(String[] scopes) {
+        return sqlSessionTemplate.selectList(NAME_SPACE + ".getByScopes", scopes);
+    }
+
+    @Override
     public OauthInterfaceEnum getOauthInterfaceEnum(OauthInterfaceEnum oauthInterfaceEnum) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".get", oauthInterfaceEnum);
     }

@@ -6,7 +6,7 @@
         <result column="interface_name" property="interfaceName" jdbcType="VARCHAR"/>
         <result column="interface_uri" property="interfaceUri" jdbcType="VARCHAR"/>
         <result column="interface_desc" property="interfaceDesc" jdbcType="VARCHAR"/>
-        <result column="scope_name" property="scopeName" jdbcType="BIGINT"/>
+        <result column="scope_name" property="scopeName" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -149,6 +149,14 @@
             #{item}
         </foreach>
 	</select>
+
+    <select id="getByScopes" resultMap="BaseResultMap">
+        select <include refid="baseColumns"/> from oauth_interface_enum
+        where scope_name in
+        <foreach collection="array" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 
 	<select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthInterfaceEnum">
         select <include refid="baseColumns"/> from oauth_interface_enum

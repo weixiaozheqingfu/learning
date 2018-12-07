@@ -76,11 +76,11 @@
 
 <div class="cloud"></div>
 
-<input id="client_id" type="hidden" value="1100511"/>
-<input id="redirect_uri" type="hidden" value="https://gitee.com/auth/csdn/callback"/>
-<input id="scope" type="hidden" value="get_user_open_info"/>
-<input id="response_type" type="hidden" value="code"/>
-<input id="state" type="hidden" value="123"/>
+<input id="client_id" type="hidden" th:value="${clientId}"/>
+<input id="redirect_uri" type="hidden" th:value="${redirect_uri}"/>
+<input id="scope" type="hidden" th:value="${scope}"/>
+<input id="response_type" type="hidden" th:value="${response_type}"/>
+<input id="state" type="hidden" th:value="${state}"/>
 
 <script type="text/javascript">
     var un = '';
