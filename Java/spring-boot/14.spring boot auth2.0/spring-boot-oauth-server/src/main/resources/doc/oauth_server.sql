@@ -126,3 +126,4 @@ CREATE TABLE oauth_access_token (
   KEY idx_access_token (access_token),
   KEY idx_refresh_token (refresh_token)
 ) COMMENT='accessToken表';
+
