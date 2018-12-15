@@ -82,7 +82,7 @@
         </AsyncRoot>
         <AsyncLogger name="org.springframework" level="${LOG_LEVEL_SPRING}"/>
         <AsyncLogger name="org.apache.ibatis" level="${LOG_LEVEL_MYBATIS}"/>
-        <Logger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
+        <AsyncLogger name="com.glitter.spring.boot" level="${LOG_LEVEL_GLITTER}"/>
     </loggers>
 
 </configuration>
