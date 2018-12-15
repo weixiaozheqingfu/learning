@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthDeveloperRMDaoImpl implements IOauthDeveloperRMDao{
 
-    private static final String NAME_SPACE = "OauthDeveloperRM";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthDeveloperRMDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;

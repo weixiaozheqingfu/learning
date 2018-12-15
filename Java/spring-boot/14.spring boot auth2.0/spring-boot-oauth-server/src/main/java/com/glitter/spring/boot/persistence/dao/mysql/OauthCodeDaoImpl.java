@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthCodeDaoImpl implements IOauthCodeDao{
 
-    private static final String NAME_SPACE = "OauthCode";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthCodeDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;

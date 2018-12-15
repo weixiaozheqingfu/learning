@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthInterfaceEnumDaoImpl implements IOauthInterfaceEnumDao{
 
-    private static final String NAME_SPACE = "OauthInterfaceEnum";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthInterfaceEnumDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;

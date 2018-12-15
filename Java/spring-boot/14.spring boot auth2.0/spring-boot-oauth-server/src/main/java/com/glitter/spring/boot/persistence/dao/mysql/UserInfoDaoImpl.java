@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class UserInfoDaoImpl implements IUserInfoDao{
 
-    private static final String NAME_SPACE = "UserInfo";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IUserInfoDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;

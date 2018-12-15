@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthScopeEnumDaoImpl implements IOauthScopeEnumDao{
 
-    private static final String NAME_SPACE = "OauthScopeEnum";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthScopeEnumDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;

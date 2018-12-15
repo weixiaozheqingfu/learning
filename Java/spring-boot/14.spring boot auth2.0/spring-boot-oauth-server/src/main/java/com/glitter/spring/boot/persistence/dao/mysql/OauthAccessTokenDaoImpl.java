@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao{
 
-    private static final String NAME_SPACE = "OauthAccessToken";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;

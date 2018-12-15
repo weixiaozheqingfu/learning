@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="OauthDeveloperRM">
+<mapper namespace="com.glitter.spring.boot.persistence.dao.IOauthDeveloperRMDao">
     <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.OauthDeveloperRM">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="developer_id" property="developerId" jdbcType="BIGINT"/>
