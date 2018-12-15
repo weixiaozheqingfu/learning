@@ -52,6 +52,11 @@ public class OauthScopeEnumDaoImpl implements IOauthScopeEnumDao{
     }
 
     @Override
+    public List<OauthScopeEnum> getOauthScopeEnumByScopeNames(List<String> scopeNames) {
+        return sqlSessionTemplate.selectList(NAME_SPACE + ".getByScopeNames", scopeNames);
+    }
+
+    @Override
     public OauthScopeEnum getOauthScopeEnum(OauthScopeEnum oauthScopeEnum) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".get", oauthScopeEnum);
     }

@@ -23,7 +23,7 @@ public class OauthDeveloperRMAction{
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseResult create(@RequestBody OauthDeveloperRM paramBean) {
         // TODO 参数校验
-        oauthDeveloperRMService.create(paramBean);
+        oauthDeveloperRMService.create(paramBean.getDeveloperId(), paramBean.getUserId());
         return ResponseResult.success(null);
     }
 

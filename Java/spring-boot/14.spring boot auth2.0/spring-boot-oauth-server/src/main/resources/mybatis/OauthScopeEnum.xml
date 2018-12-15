@@ -122,7 +122,28 @@
         </foreach>
 	</select>
 
-	<select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthScopeEnum">
+    <select id="getByScopeNames" parameterType="java.util.ArrayList" resultMap="BaseResultMap">
+        select
+        <include refid="baseColumns"/>
+        from oauth_scope_enum
+        <where>
+            <choose>
+                <when test="list != null and list.size() > 1">
+                    and id in <foreach collection="list" item="id" index="index" open="(" separator="," close=")">  #{list[${index}]} </foreach>
+                </when>
+                <when test="list != null and list.size() == 1">
+                    and id = #{list[0]}
+                </when>
+                <otherwise>
+                    and 1!=1
+                </otherwise>
+            </choose>
+            and delete_flag = 0
+        </where>
+    </select>
+
+
+    <select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthScopeEnum">
         select <include refid="baseColumns"/> from oauth_scope_enum
         <where>
             <include refid="whereSql"/> limit 1

@@ -22,7 +22,7 @@ public class OauthClientRMAction extends BaseAction{
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseResult create(@RequestBody OauthClientRM paramBean) {
         // TODO 参数校验
-        oauthClientRMService.create(paramBean);
+        oauthClientRMService.create(paramBean.getClientId(), paramBean.getUserId());
         return ResponseResult.success(null);
     }
 
@@ -48,7 +48,7 @@ public class OauthClientRMAction extends BaseAction{
         if(null == id) {
             return ResponseResult.success(result);
         }
-        result = oauthClientRMService.getOauthClientRMById(id);
+        result = oauthClientRMService.getById(id);
         return ResponseResult.success(result);
     }
 

@@ -33,8 +33,8 @@ CREATE TABLE oauth_server_enum (
 -- 用于客户端运营平台可动态配置,这张表可以没有
 CREATE TABLE oauth_scope_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  scope_name bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围名称',
-  scope_desc bigint(20) NOT NULL DEFAULT 0 COMMENT '授权范围描述',
+  scope_name varchar(100) NOT NULL default '0' COMMENT '授权范围名称',
+  scope_desc varchar(100) NOT NULL default '0' COMMENT '授权范围描述',
   server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',

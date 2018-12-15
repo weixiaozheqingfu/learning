@@ -27,13 +27,6 @@ public class OauthCodeAction extends BaseAction{
         return ResponseResult.success(null);
     }
 
-    @RequestMapping(value = "/modifyById", method = RequestMethod.POST)
-    public ResponseResult modifyById(@RequestBody OauthCode paramBean) {
-        // TODO 参数校验
-        oauthCodeService.modifyById(paramBean);
-        return ResponseResult.success(null);
-    }
-
     @RequestMapping(value = "deleteById", method = RequestMethod.POST)
     public ResponseResult deleteById(@RequestParam Long id) {
         if(null == id) {

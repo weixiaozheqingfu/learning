@@ -29,8 +29,10 @@ public interface IOauthScopeEnumService {
      * @param id
      * @return
      */
-    OauthScopeEnum getOauthScopeEnumById(Long id);
+    OauthScopeEnum getById(Long id);
 
-    List<OauthScopeEnum> getAllOauthScopeEnums();
+    List<OauthScopeEnum> getByScopeNames(List<String> scopeNames);
+
+    List<OauthScopeEnum> getAll();
 
 }

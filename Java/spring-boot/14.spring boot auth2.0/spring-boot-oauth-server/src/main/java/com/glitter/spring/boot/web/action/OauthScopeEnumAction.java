@@ -49,7 +49,7 @@ public class OauthScopeEnumAction extends BaseAction{
         if(null == id) {
             return ResponseResult.success(result);
         }
-        result = oauthScopeEnumService.getOauthScopeEnumById(id);
+        result = oauthScopeEnumService.getById(id);
         return ResponseResult.success(result);
     }
 

@@ -76,7 +76,7 @@ public class OauthScopeEnumServiceImpl implements IOauthScopeEnumService{
      * @return
      */
     @Override
-    public OauthScopeEnum getOauthScopeEnumById(Long id) {
+    public OauthScopeEnum getById(Long id) {
         OauthScopeEnum result = null;
         if(null == id){
             return result;
@@ -86,7 +86,17 @@ public class OauthScopeEnumServiceImpl implements IOauthScopeEnumService{
     }
 
     @Override
-    public List<OauthScopeEnum> getAllOauthScopeEnums() {
+    public List<OauthScopeEnum> getByScopeNames(List<String> scopeNames) {
+        List<OauthScopeEnum> result = null;
+        if(null == scopeNames || scopeNames.size() <=0){
+            return result;
+        }
+        result = oauthScopeEnumDao.getOauthScopeEnumByScopeNames(scopeNames);
+        return result;
+    }
+
+    @Override
+    public List<OauthScopeEnum> getAll() {
         return oauthScopeEnumDao.findAllList();
     }
 }

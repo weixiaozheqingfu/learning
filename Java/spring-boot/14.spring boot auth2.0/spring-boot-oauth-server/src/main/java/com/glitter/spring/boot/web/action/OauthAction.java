@@ -81,7 +81,7 @@ public class OauthAction extends BaseAction {
         if (StringUtils.isBlank(scope)) {
             scope = "get_user_open_info";
         } else {
-            List<OauthScopeEnum> oauthScopeEnums = oauthScopeEnumService.getAllOauthScopeEnums();
+            List<OauthScopeEnum> oauthScopeEnums = oauthScopeEnumService.getAll();
             List<String> scopeNames = oauthScopeEnums.stream().map(OauthScopeEnum::getScopeName).distinct().collect(Collectors.toList());
             List<String> scopes = Arrays.asList(scope.split(","));
             if (!scopeNames.containsAll(scopes)) {
@@ -92,6 +92,10 @@ public class OauthAction extends BaseAction {
         if (StringUtils.isBlank(response_type)) {
             response_type = "code";
         }
+
+        List<OauthScopeEnum> scopes = oauthScopeEnumService.getByScopeNames(Arrays.asList(scope.split(",")));
+        model.addAttribute("scopes", scopes);
+
         model.addAttribute("clientId", clientId);
         model.addAttribute("redirect_uri", redirect_uri);
         model.addAttribute("scope", scope);
@@ -158,7 +162,7 @@ public class OauthAction extends BaseAction {
         if (StringUtils.isBlank(scope)) {
             scope = "get_user_open_info";
         } else {
-            List<OauthScopeEnum> oauthScopeEnums = oauthScopeEnumService.getAllOauthScopeEnums();
+            List<OauthScopeEnum> oauthScopeEnums = oauthScopeEnumService.getAll();
             List<String> scopeNames = oauthScopeEnums.stream().map(OauthScopeEnum::getScopeName).distinct().collect(Collectors.toList());
             List<String> scopes = Arrays.asList(scope.split(","));
             if (!scopeNames.containsAll(scopes)) {

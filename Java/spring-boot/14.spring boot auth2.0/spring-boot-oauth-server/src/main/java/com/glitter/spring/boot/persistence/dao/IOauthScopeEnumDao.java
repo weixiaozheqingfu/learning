@@ -63,6 +63,14 @@ public interface IOauthScopeEnumDao{
     List<OauthScopeEnum> getOauthScopeEnumByIds(Long[] ids);
 
     /**
+     * 按主键集合查询
+     *
+     * @param scopeNames
+     * @return
+     */
+    List<OauthScopeEnum> getOauthScopeEnumByScopeNames(List<String> scopeNames);
+
+    /**
      * 按条件查询
      *
      * @param oauthScopeEnum
