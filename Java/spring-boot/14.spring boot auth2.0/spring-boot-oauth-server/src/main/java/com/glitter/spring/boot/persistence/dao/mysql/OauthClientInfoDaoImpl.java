@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthClientInfoDaoImpl implements IOauthClientInfoDao{
 
-    private static final String NAME_SPACE = "OauthClientInfo";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthClientInfoDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;

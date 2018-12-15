@@ -15,6 +15,16 @@ public class Application {
     public static void main(String[] args){
         System.out.println("main方法开始");
         SpringApplication.run(Application.class, args);
+
+
+        for (int i = 0; i < 1; i++) {
+            logger.trace("Application.trace...................................."+i);
+            logger.debug("Application.debug...................................."+i);
+            logger.info("Application.info...................................."+i);
+            logger.warn("Application.warn...................................."+i);
+            logger.error("Application.error...................................."+i);
+        }
+
         System.out.println("main方法结束");
     }
 
