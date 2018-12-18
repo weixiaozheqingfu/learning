@@ -129,16 +129,15 @@
         <where>
             <choose>
                 <when test="list != null and list.size() > 1">
-                    and id in <foreach collection="list" item="id" index="index" open="(" separator="," close=")">  #{list[${index}]} </foreach>
+                    and scope_name in <foreach collection="list" item="id" index="index" open="(" separator="," close=")">  #{list[${index}]} </foreach>
                 </when>
                 <when test="list != null and list.size() == 1">
-                    and id = #{list[0]}
+                    and scope_name = #{list[0]}
                 </when>
                 <otherwise>
                     and 1!=1
                 </otherwise>
             </choose>
-            and delete_flag = 0
         </where>
     </select>
 

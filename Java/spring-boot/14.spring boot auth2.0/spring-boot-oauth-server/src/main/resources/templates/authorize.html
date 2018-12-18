@@ -14,10 +14,13 @@
         <table style="width:100%; margin-top:20px;">
             <tr>
                 <td style="width:55%;">
-                    <ol>
-                        <li>全选</li>
-                        <li><span th:value="${clientId}"/></li>
-                    </ol>
+                        <input type="checkbox" value="" checked="checked">
+                            全选
+                        </input>
+                        <br>
+                        <input type="checkbox" th:each="scope : ${scopes}" th:value="${scope.scopeName}" th:text="${scope.scopeDesc}" checked="checked">
+                        </input>
+                        <br>
                 </td>
                 <td>
                     <img src="http://localhost:8080/images/oauth_appbg.png" alt=""/>
