@@ -79,14 +79,16 @@
 
 <div class="cloud"></div>
 
-<input id="client_id" type="hidden" th:value="${clientId}"/>
+<input id="client_id" type="hidden" th:value="${client_id}"/>
 <input id="redirect_uri" type="hidden" th:value="${redirect_uri}"/>
 <input id="scope" type="hidden" th:value="${scope}"/>
 <input id="response_type" type="hidden" th:value="${response_type}"/>
 <input id="state" type="hidden" th:value="${state}"/>
 
-<script type="text/javascript">
-    var un = '';
+<script type="text/javascript" th:inline="javascript">
+    var domain = "http://localhost:8080";
+
+    var un = [[${userId}]];
     $(function () {
         $('#u').focus();
         $('#u,#p').keydown(function (ev) {
@@ -107,11 +109,13 @@
 
     function subform() {
         var data = {
+            client_id: $('#client_id').val(),
+            redirect_uri: $('#redirect_uri').val(),
+            scope: $('#scope').val(),
+            response_type: $('#response_type').val(),
+            state: $('#state').val(),
             u: $('#u').val(),
             p: $('#p').val(),
-            client_id: $('#client_id').val(),
-            response_type: $('#response_type').val(),
-            redirect_uri: $('#redirect_uri').val(),
             _r: (new Date()).getTime()
         };
         if (!data.u) {
@@ -122,13 +126,33 @@
             showerr('请输入登录密码。');
             return;
         }
-        $.get("?log=1", data, function (data) {
-            if (data.substr(0, 4) == 'err:') {
-                showerr(data.substr(4));
-            } else {
-                location = data;
+
+//        $.get("?log=1", data, function (data) {
+//            if (data.substr(0, 4) == 'err:') {
+//                showerr(data.substr(4));
+//            } else {
+//                location = data;
+//            }
+//        });
+
+        $.ajax({
+            type: "POST",
+            url: domain + "/oauth2/authorize",
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            data: data,
+            dataType: "json",
+            success: function (resultObj) {
+                if(resultObj.code=='0'){
+                    window.location.href=resultObj.data;
+                } else {
+                    showerr(resultObj.message);
+                }
+            },
+            error: function (message) {
+                alert(message);
             }
         });
+
     }
 
     function subform2() {
@@ -147,6 +171,9 @@
             }
         });
     }
+
+
+
 
     function cancel() {
         location = $('#redirect_uri').val();

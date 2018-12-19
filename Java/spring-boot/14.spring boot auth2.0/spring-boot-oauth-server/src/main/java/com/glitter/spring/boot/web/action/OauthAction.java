@@ -48,13 +48,13 @@ public class OauthAction extends BaseAction {
 
     @RequestMapping(value = "authorize", method = RequestMethod.GET)
     public String authorize(Model model,
-                            @RequestParam(required = false) String clientId,
+                            @RequestParam(required = false) String client_id,
                             @RequestParam(required = false) String redirect_uri,
                             @RequestParam(required = false) String scope,
                             @RequestParam(required = false) String response_type,
                             @RequestParam(required = false) String state) {
 
-        if (StringUtils.isBlank(clientId)) {
+        if (StringUtils.isBlank(client_id)) {
             model.addAttribute("errorMsg", "clientId参数错误");
             return "/error";
         }
@@ -62,7 +62,7 @@ public class OauthAction extends BaseAction {
             model.addAttribute("errorMsg", "redirect_uri参数错误");
             return "/error";
         }
-        OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(clientId);
+        OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(client_id);
         if (null == oauthClientInfo) {
             model.addAttribute("errorMsg", "clientId参数错误");
             return "/error";
@@ -93,10 +93,14 @@ public class OauthAction extends BaseAction {
             response_type = "code";
         }
 
+        // 准备scopes数据
         List<OauthScopeEnum> scopes = oauthScopeEnumService.getByScopeNames(Arrays.asList(scope.split(",")));
         model.addAttribute("scopes", scopes);
 
-        model.addAttribute("clientId", clientId);
+        // TODO 检查用户是否已处于登陆状态  如果是 则给userId赋值
+
+
+        model.addAttribute("client_id", client_id);
         model.addAttribute("redirect_uri", redirect_uri);
         model.addAttribute("scope", scope);
         model.addAttribute("response_type", response_type);
@@ -120,7 +124,7 @@ public class OauthAction extends BaseAction {
      * 本地模拟由于模拟多域名比较麻烦,所以就采用第一种方式。
      *
      * @param model
-     * @param clientId
+     * @param client_id
      * @param redirect_uri
      * @param scope
      * @param response_type
@@ -131,8 +135,8 @@ public class OauthAction extends BaseAction {
      */
     @ResponseBody
     @RequestMapping(value = "authorize", method = RequestMethod.POST)
-    public ResponseResult authorize(Model model,
-                                    @RequestParam(required = false) String clientId,
+    public ResponseResult<String> authorize(Model model,
+                                    @RequestParam(required = false) String client_id,
                                     @RequestParam(required = false) String redirect_uri,
                                     @RequestParam(required = false) String scope,
                                     @RequestParam(required = false) String response_type,
@@ -140,13 +144,13 @@ public class OauthAction extends BaseAction {
                                     @RequestParam(required = false) String u,
                                     @RequestParam(required = false) String p) {
         // 1.验证auth参数最基本的合法性
-        if (StringUtils.isBlank(clientId)) {
+        if (StringUtils.isBlank(client_id)) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
         }
         if (StringUtils.isBlank(redirect_uri)) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
         }
-        OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(clientId);
+        OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(client_id);
         if (null == oauthClientInfo) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
         }
@@ -175,7 +179,7 @@ public class OauthAction extends BaseAction {
 
         // 2.验证用户身份
         UserInfo userInfo;
-        if (StringUtils.isNotBlank(u) && !StringUtils.isBlank(p)) {
+        if (StringUtils.isNotBlank(u) && StringUtils.isNotBlank(p)) {
             userInfo = userInfoService.getUserInfoByAccount(u);
             if (null == userInfo || !userInfo.getPassword().equals(p)) {
                 throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "用户名或密码错误");
@@ -184,7 +188,7 @@ public class OauthAction extends BaseAction {
         } else {
             userInfo = (UserInfo) sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_USER);
             if (null == userInfo) {
-                throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "用户名或密码错误");
+                throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "会话已过期,请重新登陆并授权");
             }
         }
 
@@ -194,7 +198,7 @@ public class OauthAction extends BaseAction {
         if(response_type.equals("code")){
             OauthCode oauthCode = new OauthCode();
             oauthCode.setUserId(userInfo.getId());
-            oauthCode.setClientId(clientId);
+            oauthCode.setClientId(client_id);
             oauthCode.setScope(scope);
             code = oauthCodeService.create(oauthCode);
         }
