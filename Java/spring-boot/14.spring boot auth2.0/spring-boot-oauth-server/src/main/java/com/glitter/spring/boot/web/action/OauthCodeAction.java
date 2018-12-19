@@ -23,7 +23,7 @@ public class OauthCodeAction extends BaseAction{
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseResult create(@RequestBody OauthCode paramBean) {
         // TODO 参数校验
-        oauthCodeService.create(paramBean);
+        oauthCodeService.generateCode(paramBean);
         return ResponseResult.success(null);
     }
 

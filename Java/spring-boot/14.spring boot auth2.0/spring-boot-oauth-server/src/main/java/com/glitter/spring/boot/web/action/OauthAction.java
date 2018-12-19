@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -200,7 +199,7 @@ public class OauthAction extends BaseAction {
             oauthCode.setUserId(userInfo.getId());
             oauthCode.setClientId(client_id);
             oauthCode.setScope(scope);
-            code = oauthCodeService.create(oauthCode);
+            code = oauthCodeService.generateCode(oauthCode);
         }
 
         // 4.生成回调地址

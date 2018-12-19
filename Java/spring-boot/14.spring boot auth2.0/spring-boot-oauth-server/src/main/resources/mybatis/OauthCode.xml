@@ -12,7 +12,6 @@
         <result column="code" property="code" jdbcType="VARCHAR"/>
         <result column="expire_in" property="expireIn" jdbcType="BIGINT"/>
         <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP"/>
-        <result column="delete_flag" property="deleteFlag" jdbcType="BIT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -28,7 +27,6 @@
         ,code
         ,expire_in
         ,expire_time
-        ,delete_flag
         ,create_time
         ,update_time
     </sql>
@@ -63,9 +61,6 @@
 		</if>
         <if test="expireTime != null">
             and expire_time=#{expireTime}
-		</if>
-        <if test="deleteFlag != null">
-            and delete_flag=#{deleteFlag}
 		</if>
         <if test="createTime != null">
             and create_time=#{createTime}
@@ -108,9 +103,6 @@
             <if test="expireTime != null">
                 expire_time,
             </if>
-            <if test="deleteFlag != null">
-                delete_flag,
-            </if>
             <if test="createTime != null">
                 create_time,
             </if>
@@ -148,9 +140,6 @@
             </if>
             <if test="expireTime != null">
                 #{expireTime},
-            </if>
-            <if test="deleteFlag != null">
-                #{deleteFlag},
             </if>
             <if test="createTime != null">
                 #{createTime},
@@ -208,9 +197,6 @@
         </if>
         <if test="expireTime != null">
             expire_time=#{expireTime},
-        </if>
-        <if test="deleteFlag != null">
-            delete_flag=#{deleteFlag},
         </if>
         <if test="createTime != null">
             create_time=#{createTime},

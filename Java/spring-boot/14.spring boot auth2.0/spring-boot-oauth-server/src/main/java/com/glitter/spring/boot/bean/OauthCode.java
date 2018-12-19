@@ -26,8 +26,6 @@ public class OauthCode extends BaseBean {
     private Long expireIn;
     /** 预授权码过期时间 */
     private Date expireTime;
-    /** 0:未删除 1：已删除 */
-    private Boolean deleteFlag;
     /** 创建时间 */
     private Date createTime;
     /** 修改时间 */

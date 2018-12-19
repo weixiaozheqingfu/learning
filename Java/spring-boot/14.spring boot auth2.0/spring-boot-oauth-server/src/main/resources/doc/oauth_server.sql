@@ -86,6 +86,9 @@ CREATE TABLE oauth_client_r_m (
 
 -- 根据client_id和user_id查询oauth_client_resource_mapping表,如果不能查到对应资源映射数据,则新增oauth_client_resource_mapping表记录.
 -- 根据client_id查询到其所属的developer_account_id,再根据developer_account_id和user_id查询oauth_developer_resource_mapping表,如果不能查到对应资源映射数据,则新增oauth_developer_resource_mapping表记录
+-- 调用code换取accessToken方法后,一定是未过期的才可以换,换完之后,记录直接做物理删除
+-- 过期记录可以定期批量清理
+-- 另外,还是建议不使用数据库表,而是直接使用redis缓存来存储code数据,这样过期后数据直接清理,非常方便.并且读取速度非常快,这里非常适合使用redis
 CREATE TABLE oauth_code (
   id bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   user_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
@@ -97,7 +100,6 @@ CREATE TABLE oauth_code (
   code varchar(50) NOT NULL DEFAULT '' COMMENT '预授权码',
   expire_in bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '预授权码过期时长,单位秒',
   expire_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '预授权码过期时间',
-  delete_flag bit(1) NOT NULL DEFAULT 0 COMMENT '0:未删除 1：已删除',
   create_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   update_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
   PRIMARY KEY (id),

@@ -54,7 +54,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
      * @param oauthCode
      */
     @Override
-    public String create(OauthCode oauthCode) {
+    public String generateCode(OauthCode oauthCode) {
         // 1.校验参数合法性
         if (null == oauthCode) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
@@ -108,11 +108,13 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         // 5.生成code码
         String code = UUID.randomUUID().toString();
 
-        // 6.完善oauthCode对象信息
+
+        // TODO 6.验证userId和clientId是否存在未过期记录,如果存在则执行更新操作,不存在则执行创建操作
+
+        // 7.完善oauthCode对象信息
         Date now = new Date();
         oauthCode.setCreateTime(now);
         oauthCode.setUpdateTime(now);
-        oauthCode.setDeleteFlag(false);
         oauthCode.setOpenId(openId);
         oauthCode.setUnionId(unionId);
         oauthCode.setCode(code);
@@ -135,11 +137,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         if (null == id) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
         }
-        OauthCode record = new OauthCode();
-        record.setId(id);
-        record.setDeleteFlag(true);
-        record.setUpdateTime(new Date());
-        int count = oauthCodeDao.updateById(record);
+        int count = oauthCodeDao.deleteById(id);
         if (count < 1) {
             logger.error("OauthCodeServiceImpl.deleteById方法执行失败,输入参数:{}", id);
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "操作失败");

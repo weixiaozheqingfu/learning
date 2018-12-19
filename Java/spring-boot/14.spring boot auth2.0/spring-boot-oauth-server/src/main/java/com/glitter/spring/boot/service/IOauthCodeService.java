@@ -8,7 +8,7 @@ public interface IOauthCodeService {
      * 创建预授权码表
      * @param oauthCode
      */
-    String create(OauthCode oauthCode);
+    String generateCode(OauthCode oauthCode);
 
     /**
      * 根据主键删除预授权码表
