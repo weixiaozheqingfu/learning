@@ -68,7 +68,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         if (StringUtils.isBlank(oauthCode.getScope())) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,scope为空");
         }
-        if (null == userInfoDao.getUserInfoById(oauthCode.getId())) {
+        if (null == userInfoDao.getUserInfoById(oauthCode.getUserId())) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,userId非法");
         }
         OauthClientInfo oauthClientInfo = oauthClientInfoDao.getOauthClientInfoByClientId(oauthCode.getClientId());

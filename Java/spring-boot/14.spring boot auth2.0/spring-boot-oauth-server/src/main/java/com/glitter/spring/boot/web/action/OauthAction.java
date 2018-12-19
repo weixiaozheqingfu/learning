@@ -206,7 +206,7 @@ public class OauthAction extends BaseAction {
         // 4.生成回调地址
         String callbackUrl;
         try {
-            callbackUrl = URLEncoder.encode(oauthClientInfo.getRedirectUri(), "UTF-8") + "?code=" + code + "&state=" + state;
+            callbackUrl = URLDecoder.decode(oauthClientInfo.getRedirectUri(), "UTF-8") + "?code=" + code + "&state=" + state;
         } catch (UnsupportedEncodingException e) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
         }
