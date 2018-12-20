@@ -96,8 +96,10 @@ public class OauthAction extends BaseAction {
         List<OauthScopeEnum> scopes = oauthScopeEnumService.getByScopeNames(Arrays.asList(scope.split(",")));
         model.addAttribute("scopes", scopes);
 
-        // TODO 检查用户是否已处于登陆状态  如果是 则给userId赋值
-
+        // 检查用户是否已处于登陆状态
+        UserInfo userInfo = (UserInfo)sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_USER);
+        model.addAttribute("userId", null == userInfo ? null : userInfo.getId());
+        model.addAttribute("fullName", null == userInfo ? null : userInfo.getFullName());
 
         model.addAttribute("client_id", client_id);
         model.addAttribute("redirect_uri", redirect_uri);

@@ -8,7 +8,7 @@
     <link href="/images/favicon.ico" rel="SHORTCUT ICON"/>
 </head>
 <body>
-<div class="main">
+<div class="main">jjj
     <div class="logbox">
         <p><a href="http://localhost:8081" target="_blank">client_demo</a>访问你的sever_demo账号，将获得以下权限：</p>
         <table style="width:100%; margin-top:20px;">
@@ -89,6 +89,8 @@
     var domain = "http://localhost:8080";
 
     var un = [[${userId}]];
+    var fullName = [[${fullName}]];
+
     $(function () {
         $('#u').focus();
         $('#u,#p').keydown(function (ev) {
@@ -97,7 +99,7 @@
         if (un) {
             $('#tb1').hide();
             $('#tb2').show();
-            $('#b_un').html(un);
+            $('#b_un').html(fullName);
         }
     });
 
