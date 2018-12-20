@@ -227,6 +227,12 @@
         </where>
 	</select>
 
+    <select id="getByUserIdAndClient" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthCode">
+        select <include refid="baseColumns"/> from oauth_code
+        where user_id = #{userId} and client_id=#{clientId} and expire_time > #{now}
+        limit 1
+    </select>
+
 	<select id="findAllList" resultMap="BaseResultMap">
 	     select <include refid="baseColumns"/> from oauth_code
 	</select>

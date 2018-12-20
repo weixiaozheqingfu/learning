@@ -52,7 +52,7 @@ public interface IOauthCodeDao{
      * @param id
      * @return
      */
-    OauthCode getOauthCodeById(Long id);
+    OauthCode getById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,7 +60,7 @@ public interface IOauthCodeDao{
      * @param ids
      * @return
      */
-    List<OauthCode> getOauthCodeByIds(Long[] ids);
+    List<OauthCode> getByIds(Long[] ids);
 
     /**
      * 按条件查询
@@ -68,7 +68,15 @@ public interface IOauthCodeDao{
      * @param oauthCode
      * @return
      */
-    OauthCode getOauthCode(OauthCode oauthCode);
+    OauthCode get(OauthCode oauthCode);
+
+    /**
+     * 按条件查询
+     * @param userId
+     * @param clientId
+     * @return
+     */
+    OauthCode getByUserIdAndClient(Long userId, String clientId);
 
     /**
      * 查询所有记录

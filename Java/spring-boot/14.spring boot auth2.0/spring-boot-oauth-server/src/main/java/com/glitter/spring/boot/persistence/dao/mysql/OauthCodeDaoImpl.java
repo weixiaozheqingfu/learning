@@ -6,7 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class OauthCodeDaoImpl implements IOauthCodeDao{
@@ -42,18 +45,27 @@ public class OauthCodeDaoImpl implements IOauthCodeDao{
     }
 
     @Override
-    public OauthCode getOauthCodeById(Long id) {
+    public OauthCode getById(Long id) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getById", id);
     }
 
     @Override
-    public List<OauthCode> getOauthCodeByIds(Long[] ids) {
+    public List<OauthCode> getByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }
 
     @Override
-    public OauthCode getOauthCode(OauthCode oauthCode) {
+    public OauthCode get(OauthCode oauthCode) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".get", oauthCode);
+    }
+
+    @Override
+    public OauthCode getByUserIdAndClient(Long userId, String clientId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("clientId", clientId);
+        map.put("now", new Date());
+        return sqlSessionTemplate.selectOne(NAME_SPACE + ".getByUserIdAndClient", map);
     }
 
     @Override

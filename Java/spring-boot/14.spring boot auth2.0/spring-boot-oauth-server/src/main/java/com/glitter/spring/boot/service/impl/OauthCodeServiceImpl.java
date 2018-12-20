@@ -108,21 +108,34 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         // 5.生成code码
         String code = UUID.randomUUID().toString();
 
-
-        // TODO 6.验证userId和clientId是否存在未过期记录,如果存在则执行更新操作,不存在则执行创建操作
-
-        // 7.完善oauthCode对象信息
-        Date now = new Date();
-        oauthCode.setCreateTime(now);
-        oauthCode.setUpdateTime(now);
-        oauthCode.setOpenId(openId);
-        oauthCode.setUnionId(unionId);
-        oauthCode.setCode(code);
-        oauthCode.setInterfaceUri(interfaceUri);
-        oauthCode.setExpireIn(60L);
-        oauthCode.setExpireTime(new Date(now.getTime() + oauthCode.getExpireIn() * 60L));
-        oauthCodeDao.insert(oauthCode);
-
+        // 6.查询当前userId用户对clientId客户端是否存在有效的未过期的code码
+        OauthCode oauthCodeDb = oauthCodeDao.getByUserIdAndClient(oauthCode.getUserId(), oauthCode.getClientId());
+        if(null == oauthCodeDb){
+            // 6.创建oauthCode
+            Date now = new Date();
+            oauthCode.setOpenId(openId);
+            oauthCode.setUnionId(unionId);
+            oauthCode.setCode(code);
+            oauthCode.setInterfaceUri(interfaceUri);
+            oauthCode.setCreateTime(now);
+            oauthCode.setUpdateTime(now);
+            oauthCode.setExpireIn(60L);
+            oauthCode.setExpireTime(new Date(now.getTime() + oauthCode.getExpireIn() * 1000L));
+            oauthCodeDao.insert(oauthCode);
+        } else {
+            // 7.更新oauthCode
+            Date now = new Date();
+            OauthCode record = new OauthCode();
+            record.setId(oauthCodeDb.getId());
+            record.setUserId(oauthCode.getUserId());
+            record.setClientId(oauthCode.getClientId());
+            record.setScope(oauthCode.getScope());
+            record.setInterfaceUri(interfaceUri);
+            record.setUpdateTime(now);
+            record.setExpireIn(60L);
+            record.setExpireTime(new Date(now.getTime() + record.getExpireIn() * 1000L));
+            oauthCodeDao.updateById(record);
+        }
         return code;
     }
 
@@ -156,7 +169,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         if (null == id) {
             return result;
         }
-        result = oauthCodeDao.getOauthCodeById(id);
+        result = oauthCodeDao.getById(id);
         return result;
     }
 
