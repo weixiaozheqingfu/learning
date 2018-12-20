@@ -44,14 +44,4 @@ public class OauthAccessTokenAction extends BaseAction{
         return ResponseResult.success(null);
     }
 
-    @RequestMapping(value = "getOauthAccessTokenById", method = RequestMethod.POST)
-    public ResponseResult<OauthAccessToken> getOauthAccessTokenById(@RequestParam Long id) {
-        OauthAccessToken result = null;
-        if(null == id) {
-            return ResponseResult.success(result);
-        }
-        result = oauthAccessTokenService.getOauthAccessTokenById(id);
-        return ResponseResult.success(result);
-    }
-
 }

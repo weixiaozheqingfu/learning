@@ -1,17 +1,11 @@
 package com.glitter.spring.boot.web.action;
 
-import com.glitter.spring.boot.bean.OauthClientInfo;
-import com.glitter.spring.boot.bean.OauthCode;
-import com.glitter.spring.boot.bean.OauthScopeEnum;
-import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.bean.*;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
-import com.glitter.spring.boot.service.IOauthClientInfoService;
-import com.glitter.spring.boot.service.IOauthCodeService;
-import com.glitter.spring.boot.service.IOauthScopeEnumService;
-import com.glitter.spring.boot.service.IUserInfoService;
+import com.glitter.spring.boot.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -45,6 +41,12 @@ public class OauthAction extends BaseAction {
     @Autowired
     private IOauthScopeEnumService oauthScopeEnumService;
 
+    @Autowired
+    private IAccessTokenService accessTokenService;
+
+    /**
+       示例: http://localhost:8080/oauth2/authorize?client_id=1001&redirect_uri=https://gitee.com/auth/csdn/callback&state=sdf8gswer9t89fdb8s9fg8r
+     */
     @RequestMapping(value = "authorize", method = RequestMethod.GET)
     public String authorize(Model model,
                             @RequestParam(required = false) String client_id,
@@ -212,6 +214,62 @@ public class OauthAction extends BaseAction {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
         }
         return ResponseResult.success(callbackUrl);
+    }
+
+
+    /**
+       请求示例:
+       http://localhost:8080/oauth2/access_token?client_id=1001&client_secret=123456&redirect_uri=https://gitee.com/auth/csdn/callback&code=sdf8gsweb8s9fg8r&grant_type=authorization_code
+
+       正确返回样例：
+       {
+            "access_token":"ACCESS_TOKEN",
+            "token_type":"bearer",
+            "expires_in":7200,
+            "refresh_token":"REFRESH_TOKEN",
+            "scope":"SCOPE",
+            "openid":"OPENID"
+        }
+
+        错误返回样例：
+        {
+            "errcode":40029,
+            "errmsg":"invalid code"
+        }
+     */
+    @ResponseBody
+    @RequestMapping(value = "access_token", method = RequestMethod.GET)
+    public Map<String, Object> getAccessToken(@RequestParam(required = false) String client_id,
+                                              @RequestParam(required = false) String client_secret,
+                                              @RequestParam(required = false) String redirect_uri,
+                                              @RequestParam(required = false) String code,
+                                              @RequestParam(required = false) String grant_type) {
+        Map resultMap = new HashMap<>();
+        Map errorMap = new HashMap<>();
+        try {
+            // 调用code换取accessToken接口
+            // grant_type的不同会有不同的实现类,可以使用工厂模式,这里演示的是grant_type=authorization_code授权码模式根据code换取accessToken的情况.
+            AccessTokenInfo accessTokenInfo = accessTokenService.getAccessTokenInfo(client_id, client_secret, redirect_uri, code, grant_type);
+            if(null == accessTokenInfo){
+                errorMap.put("errcode", CoreConstants.REQUEST_PROGRAM_ERROR_CODE);
+                errorMap.put("errmsg", "系统异常");
+                return errorMap;
+            }
+
+            resultMap.put("access_token", accessTokenInfo.getAccess_token());
+            resultMap.put("token_type", accessTokenInfo.getToken_type());
+            resultMap.put("expires_in", accessTokenInfo.getExpires_in());
+            resultMap.put("refresh_token", accessTokenInfo.getRefresh_token());
+            resultMap.put("scope", accessTokenInfo.getScope());
+            resultMap.put("openid", accessTokenInfo.getOpenid());
+
+            return resultMap;
+        } catch (Exception e) {
+            BusinessException ex = (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            errorMap.put("errcode", ex.getCode());
+            errorMap.put("errmsg", ex.getMessage());
+            return errorMap;
+        }
     }
 
 }

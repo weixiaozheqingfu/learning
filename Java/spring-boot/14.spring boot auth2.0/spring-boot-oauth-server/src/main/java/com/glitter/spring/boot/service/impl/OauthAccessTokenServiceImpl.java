@@ -38,7 +38,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     }
 
     /**
-     * 修改accessToken表; InnoDB free: 488448 kB
+     * 修改accessToken表
      * @param oauthAccessToken
      */
     @Override
@@ -52,7 +52,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     }
 
     /**
-     * 根据主键删除accessToken表; InnoDB free: 488448 kB
+     * 根据主键删除accessToken
      * @param id
      */
     @Override
@@ -71,19 +71,6 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         }
     }
 
-    /**
-     * 根据主键获取accessToken表; InnoDB free: 488448 kB
-     * @param id
-     * @return
-     */
-    @Override
-    public OauthAccessToken getOauthAccessTokenById(Long id) {
-        OauthAccessToken result = null;
-        if(null == id){
-            return result;
-        }
-        result = oauthAccessTokenDao.getOauthAccessTokenById(id);
-        return result;
-    }
+
 
 }
