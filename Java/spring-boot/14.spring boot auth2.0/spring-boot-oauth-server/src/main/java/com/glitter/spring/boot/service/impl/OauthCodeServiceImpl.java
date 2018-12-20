@@ -131,6 +131,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
             record.setClientId(oauthCode.getClientId());
             record.setScope(oauthCode.getScope());
             record.setInterfaceUri(interfaceUri);
+            record.setCode(code);
             record.setUpdateTime(now);
             record.setExpireIn(60L);
             record.setExpireTime(new Date(now.getTime() + record.getExpireIn() * 1000L));
