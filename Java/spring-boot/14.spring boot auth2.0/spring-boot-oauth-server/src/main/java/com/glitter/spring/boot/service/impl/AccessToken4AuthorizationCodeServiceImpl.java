@@ -5,7 +5,9 @@ import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.bean.OauthCode;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import com.glitter.spring.boot.service.IAccessTokenService;
+import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import com.glitter.spring.boot.service.IOauthClientInfoService;
 import com.glitter.spring.boot.service.IOauthCodeService;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,9 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenSer
 
     @Autowired
     private IOauthClientInfoService oauthClientInfoService;
+
+    @Autowired
+    private IOauthAccessTokenDao oauthAccessTokenDao;
 
 
     /**
@@ -90,6 +95,7 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenSer
         oauthAccessToken.setDeleteFlag(false);
         oauthAccessToken.setCreateTime(now);
         oauthAccessToken.setUpdateTime(now);
+        oauthAccessTokenDao.insert(oauthAccessToken);
 
         // 5.封装返回数据
         accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
