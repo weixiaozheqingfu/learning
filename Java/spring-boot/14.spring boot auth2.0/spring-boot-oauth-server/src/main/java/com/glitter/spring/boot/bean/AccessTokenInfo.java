@@ -12,7 +12,7 @@ public class AccessTokenInfo extends BaseBean {
     private String token_type;
 
     /** 过期时间,单位为秒 */
-    private Integer expires_in;
+    private Long expires_in;
 
     /** 更新令牌 */
     private String refresh_token;

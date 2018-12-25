@@ -1,17 +1,33 @@
 package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.bean.AccessTokenInfo;
+import com.glitter.spring.boot.bean.OauthAccessToken;
+import com.glitter.spring.boot.bean.OauthClientInfo;
+import com.glitter.spring.boot.bean.OauthCode;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IAccessTokenService;
+import com.glitter.spring.boot.service.IOauthClientInfoService;
+import com.glitter.spring.boot.service.IOauthCodeService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
+import java.util.UUID;
 
 @Service
 public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccessToken4AuthorizationCodeServiceImpl.class);
+
+    @Autowired
+    private IOauthCodeService oauthCodeService;
+
+    @Autowired
+    private IOauthClientInfoService oauthClientInfoService;
+
 
     /**
      * 获取accessToken信息
@@ -42,12 +58,46 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenSer
         if (StringUtils.isBlank(grant_type)) {
             throw new BusinessException("40033", "grant_type参数为空");
         }
-        accessTokenInfo.setAccess_token("112344");
-        accessTokenInfo.setScope("afg");
-        accessTokenInfo.setExpires_in(7200);
-        accessTokenInfo.setRefresh_token("afg5415af1gas5");
-        accessTokenInfo.setToken_type("bearer");
-        accessTokenInfo.setOpenid("1");
+
+        // 2.验证客户端身份
+        OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(client_id);
+        if(null == oauthClientInfo || !client_secret.equals(oauthClientInfo.getClientSecret())){
+            throw new BusinessException("40034", "系统异常");
+        }
+
+        // 3.验证客户端持有的code码
+        OauthCode oauthCode = oauthCodeService.getOauthCodeByCode(code);
+        if(null == oauthClientInfo || !client_id.equals(oauthCode.getClientId())){
+            throw new BusinessException("40035", "系统异常");
+        }
+
+        // 4.code换取accessToken
+        Date now = new Date();
+        OauthAccessToken oauthAccessToken = new OauthAccessToken();
+        oauthAccessToken.setUserId(oauthCode.getUserId());
+        oauthAccessToken.setOpenId(oauthCode.getOpenId());
+        oauthAccessToken.setUnionId(oauthCode.getUnionId());
+        oauthAccessToken.setClientId(oauthCode.getClientId());
+        oauthAccessToken.setScope(oauthCode.getScope());
+        oauthAccessToken.setInterfaceUri(oauthCode.getInterfaceUri());
+        oauthAccessToken.setTokenType("bearer");
+        oauthAccessToken.setAccessToken(UUID.randomUUID().toString().replace("-",""));
+        oauthAccessToken.setAccessTokenExpireIn(60L);
+        oauthAccessToken.setAccessTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getAccessTokenExpireIn() * 1000L));
+        oauthAccessToken.setRefreshToken(UUID.randomUUID().toString().replace("-",""));
+        oauthAccessToken.setRefreshTokenExpireIn(60 * 60 * 24 * 2L);
+        oauthAccessToken.setRefreshTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getRefreshTokenExpireIn() * 1000L));
+        oauthAccessToken.setDeleteFlag(false);
+        oauthAccessToken.setCreateTime(now);
+        oauthAccessToken.setUpdateTime(now);
+
+        // 5.封装返回数据
+        accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
+        accessTokenInfo.setScope(oauthAccessToken.getScope());
+        accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
+        accessTokenInfo.setRefresh_token(oauthAccessToken.getRefreshToken());
+        accessTokenInfo.setToken_type(oauthAccessToken.getTokenType());
+        accessTokenInfo.setOpenid(oauthAccessToken.getOpenId());
         return accessTokenInfo;
     }
 

@@ -174,4 +174,16 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         return result;
     }
 
+    @Override
+    public OauthCode getOauthCodeByCode(String code) {
+        OauthCode result = null;
+        if (StringUtils.isBlank(code)) {
+            return result;
+        }
+        OauthCode record = new OauthCode();
+        record.setCode(code);
+        result = oauthCodeDao.get(record);
+        return result;
+    }
+
 }
