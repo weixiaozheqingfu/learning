@@ -72,7 +72,7 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenSer
 
         // 3.验证客户端持有的code码
         OauthCode oauthCode = oauthCodeService.getOauthCodeByCode(code);
-        if(null == oauthClientInfo || !client_id.equals(oauthCode.getClientId())){
+        if(null == oauthCode || !client_id.equals(oauthCode.getClientId())){
             throw new BusinessException("40035", "系统异常");
         }
 
