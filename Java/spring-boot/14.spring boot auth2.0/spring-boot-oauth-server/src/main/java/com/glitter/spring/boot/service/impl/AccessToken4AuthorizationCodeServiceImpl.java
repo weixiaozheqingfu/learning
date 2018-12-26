@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.AccessTokenInfo;
 import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.bean.OauthClientInfo;
@@ -7,7 +8,6 @@ import com.glitter.spring.boot.bean.OauthCode;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import com.glitter.spring.boot.service.IAccessTokenService;
-import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import com.glitter.spring.boot.service.IOauthClientInfoService;
 import com.glitter.spring.boot.service.IOauthCodeService;
 import org.apache.commons.lang3.StringUtils;
@@ -72,13 +72,14 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenSer
 
         // 3.验证客户端持有的code码是否存在
         OauthCode oauthCode = oauthCodeService.getOauthCodeByCode(code);
+        logger.info("AccessToken4AuthorizationCodeServiceImpl.getAccessTokenInfo方法,oauthCode对象:{}", JSONObject.toJSONString(oauthCode));
         if(null == oauthCode || !client_id.equals(oauthCode.getClientId())){
             throw new BusinessException("40035", "code码不存在");
         }
 
         // 4.验证客户端持有的code码是否过期
         if(System.currentTimeMillis() > oauthCode.getExpireTime().getTime()){
-            throw new BusinessException("40035", "code码已过期");
+            throw new BusinessException("40036", "code码已过期");
         }
 
         // 5.code换取accessToken
@@ -102,13 +103,19 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenSer
         oauthAccessToken.setUpdateTime(now);
         oauthAccessTokenDao.insert(oauthAccessToken);
 
-        // 6.封装返回数据
+        // 6.删除code码
+        oauthCodeService.deleteByCode(code);
+
+        // 7.封装返回数据
         accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
         accessTokenInfo.setScope(oauthAccessToken.getScope());
         accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
         accessTokenInfo.setRefresh_token(oauthAccessToken.getRefreshToken());
         accessTokenInfo.setToken_type(oauthAccessToken.getTokenType());
         accessTokenInfo.setOpenid(oauthAccessToken.getOpenId());
+
+        // 记录日志 很重要 方便问题追溯
+        logger.info("AccessToken4AuthorizationCodeServiceImpl.getAccessTokenInfo方法,oauthCode对象:{},accessTokenInfo对象:{}", JSONObject.toJSONString(oauthCode),JSONObject.toJSONString(accessTokenInfo));
         return accessTokenInfo;
     }
 

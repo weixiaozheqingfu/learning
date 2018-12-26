@@ -22,6 +22,8 @@ public interface IOauthCodeDao{
     */
     int deleteById(Long id);
 
+    int deleteByCode(String code);
+
     /**
     * 根据主键集合删除
     *

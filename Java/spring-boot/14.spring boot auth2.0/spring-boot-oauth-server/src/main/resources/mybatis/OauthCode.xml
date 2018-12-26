@@ -154,6 +154,10 @@
         delete from oauth_code where id =#{id}
     </delete>
 
+    <delete id="deleteByCode">
+        delete from oauth_code where code =#{code}
+    </delete>
+
     <delete id="deleteByIds">
         delete from oauth_code where id in
         <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">

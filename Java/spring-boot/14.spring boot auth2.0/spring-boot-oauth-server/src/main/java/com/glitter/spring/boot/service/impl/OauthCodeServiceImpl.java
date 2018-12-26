@@ -158,6 +158,18 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         }
     }
 
+    @Override
+    public void deleteByCode(String code) {
+        if (null == code) {
+            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
+        }
+        int count = oauthCodeDao.deleteByCode(code);
+        if (count < 1) {
+            logger.error("OauthCodeServiceImpl.deleteByCode方法执行失败,输入参数:{}", code);
+            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "操作失败");
+        }
+    }
+
     /**
      * 根据主键获取预授权码
      *

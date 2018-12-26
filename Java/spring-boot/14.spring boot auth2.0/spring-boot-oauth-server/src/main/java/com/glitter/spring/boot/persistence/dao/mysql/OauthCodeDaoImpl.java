@@ -30,6 +30,11 @@ public class OauthCodeDaoImpl implements IOauthCodeDao{
     }
 
     @Override
+    public int deleteByCode(String code) {
+        return sqlSessionTemplate.delete(NAME_SPACE + ".deleteByCode", code);
+    }
+
+    @Override
     public int deleteByIds(Long[] ids) {
         return sqlSessionTemplate.delete(NAME_SPACE + ".deleteByIds", ids);
     }
