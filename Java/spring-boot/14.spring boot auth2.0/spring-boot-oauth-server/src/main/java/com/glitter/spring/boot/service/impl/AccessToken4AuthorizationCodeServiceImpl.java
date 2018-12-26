@@ -67,13 +67,13 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenSer
         // 2.验证客户端身份
         OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(client_id);
         if(null == oauthClientInfo || !client_secret.equals(oauthClientInfo.getClientSecret())){
-            throw new BusinessException("40034", "系统异常");
+            throw new BusinessException("40034", "客户端非法");
         }
 
         // 3.验证客户端持有的code码
         OauthCode oauthCode = oauthCodeService.getOauthCodeByCode(code);
         if(null == oauthCode || !client_id.equals(oauthCode.getClientId())){
-            throw new BusinessException("40035", "系统异常");
+            throw new BusinessException("40035", "code码错误");
         }
 
         // 4.code换取accessToken
