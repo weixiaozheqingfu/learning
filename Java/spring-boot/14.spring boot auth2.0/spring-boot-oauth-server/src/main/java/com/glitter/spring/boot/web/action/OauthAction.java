@@ -254,7 +254,7 @@ public class OauthAction extends BaseAction {
         try {
             // 调用code换取accessToken接口
             // grant_type的不同会有不同的实现类,可以使用工厂模式,这里演示的是grant_type=authorization_code授权码模式根据code换取accessToken的情况.
-            AccessTokenInfo accessTokenInfo = accessTokenService.getAccessTokenInfo(client_id, client_secret, redirect_uri, code, grant_type);
+            AccessTokenOuter accessTokenInfo = accessTokenService.getAccessTokenInfo(client_id, client_secret, redirect_uri, code, grant_type);
             if(null == accessTokenInfo){
                 errorMap.put("errcode", CoreConstants.REQUEST_PROGRAM_ERROR_CODE);
                 errorMap.put("errmsg", "系统异常");

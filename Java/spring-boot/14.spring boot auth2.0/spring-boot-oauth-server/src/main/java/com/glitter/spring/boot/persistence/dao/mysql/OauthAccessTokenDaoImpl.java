@@ -42,17 +42,17 @@ public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao{
     }
 
     @Override
-    public OauthAccessToken getOauthAccessTokenById(Long id) {
+    public OauthAccessToken getById(Long id) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getById", id);
     }
 
     @Override
-    public List<OauthAccessToken> getOauthAccessTokenByIds(Long[] ids) {
+    public List<OauthAccessToken> getByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }
 
     @Override
-    public OauthAccessToken getOauthAccessToken(OauthAccessToken oauthAccessToken) {
+    public OauthAccessToken get(OauthAccessToken oauthAccessToken) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".get", oauthAccessToken);
     }
 
