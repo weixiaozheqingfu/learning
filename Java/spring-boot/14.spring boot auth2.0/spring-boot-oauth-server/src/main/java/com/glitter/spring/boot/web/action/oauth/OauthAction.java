@@ -281,4 +281,43 @@ public class OauthAction extends BaseAction {
         }
     }
 
+
+    /**
+     * 检验授权凭证（access_token）是否有效
+     *
+       正确返回样例：
+       {
+            "errcode":0,
+            "errmsg":"ok"
+       }
+
+       错误返回样例：
+       {
+            "errcode":40003,
+            "errmsg":"invalid openid"
+       }
+     *
+     * @param access_token
+     * @param openid
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "auth", method = RequestMethod.GET)
+    public Map<String, Object> auth(@RequestParam(required = false) String access_token,
+                                    @RequestParam(required = false) String openid) {
+        // TODO
+        return null;
+    }
+
+
+    // TODO 该方法也可以考虑合并到access_token方法中，作为access_token方法的一种情况。
+    @ResponseBody
+    @RequestMapping(value = "refresh_token", method = RequestMethod.GET)
+    public Map<String, Object> refresh_token(@RequestParam(required = false) String clientId,
+                                             @RequestParam(required = false) String refresh_token,
+                                             @RequestParam(required = false) String grant_type) {
+        // TODO
+        return null;
+    }
+
 }
