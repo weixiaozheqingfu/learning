@@ -1,4 +1,4 @@
-package com.glitter.spring.boot.web.action;
+package com.glitter.spring.boot.web.action.oauth;
 
 import com.glitter.spring.boot.bean.*;
 import com.glitter.spring.boot.common.ResponseResult;
@@ -6,13 +6,17 @@ import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.*;
+import com.glitter.spring.boot.web.action.BaseAction;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
