@@ -9,6 +9,7 @@ public class ContextManager {
         ResponseContext.remove();
         JsessionIdCookieContext.remove();
         SessionContext.remove();
+        AccessTokenInnerContext.remove();
     }
 
 }

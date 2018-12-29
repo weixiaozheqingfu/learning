@@ -2,6 +2,8 @@ package com.glitter.spring.boot.web.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.AccessTokenInner;
+import com.glitter.spring.boot.context.AccessTokenInnerContext;
+import com.glitter.spring.boot.context.ContextManager;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import org.apache.commons.lang3.StringUtils;
@@ -49,7 +51,7 @@ public class OauthInterceptor implements HandlerInterceptor {
         logger.info("OauthInterceptor.preHandle输入参数:openid:{}",openid);
 
         AccessTokenInner accessTokenInner = oauthAccessTokenService.validateAccessToken(access_token);
-        logger.info("OauthInterceptor.preHandle方法:accessTokenInner:{}", JSONObject.toJSONString(access_token));
+        logger.info("OauthInterceptor.preHandle方法:accessTokenInner:{}", JSONObject.toJSONString(accessTokenInner));
 
         // 如果openid是非必传项的话,其实接口就直接使用accessTokenInner.getOpenId()即可,就看如何设计了,本例是需要传openid的,那就要做校验
         if (!openid.equals(accessTokenInner.getOpenId())) {
@@ -60,7 +62,9 @@ public class OauthInterceptor implements HandlerInterceptor {
             throw new BusinessException("60034", "接口访问异常,无接口访问权限");
         }
 
-        // TODO 考虑openid和userId应该需要放到threadLocal中
+        // 如果openid是非必传项的话,资源接口就支持从AccessTokenInnerContext中取openid和userid
+        AccessTokenInnerContext.set(accessTokenInner);
+        logger.info("OauthInterceptor.preHandle方法:客户端:[{}],请求[{}]接口,授权人:[{}],access_token:[{}]", accessTokenInner.getClientId(), requestURI, accessTokenInner.getOpenId(),access_token);
 
         return true;
     }
@@ -72,7 +76,7 @@ public class OauthInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-
+        ContextManager.removeAllContext();
     }
 
 }
