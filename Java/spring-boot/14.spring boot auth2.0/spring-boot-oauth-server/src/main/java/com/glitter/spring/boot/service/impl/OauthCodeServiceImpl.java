@@ -13,10 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,14 +73,20 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,userId非法");
         }
         List<OauthScopeEnum> oauthScopeEnums = oauthScopeEnumDao.findAllList();
-        List<String> scopeNames = oauthScopeEnums.stream().map(OauthScopeEnum::getScopeName).distinct().collect(Collectors.toList());
+        Map<String,OauthScopeEnum> oauthScopeEnumsMap = oauthScopeEnums.stream().collect(Collectors.toMap((key -> key.getScopeName()), (value -> value)));
         List<String> scopes = Arrays.asList(oauthCode.getScope().split(","));
-        if (!scopeNames.containsAll(scopes)) {
-            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,scope非法");
+        for (int i = 0; i < scopes.size(); i++) {
+            OauthScopeEnum oauthScopeEnum = oauthScopeEnumsMap.get(scopes.get(i));
+            if (null == oauthScopeEnum) {
+                throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,scope非法");
+            }
+            if (!"grant_type".equals(oauthScopeEnum.getGrantType())) {
+                throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,scope非法");
+            }
         }
 
         // 2.获取用户在该客户端的openId
-        String openId = "";
+        String openId;
         OauthClientRM oauthClientRMDb = oauthClientRMService.getByClientIdAndUserId(oauthCode.getClientId(), oauthCode.getUserId());
         if(null == oauthClientRMDb){
             openId = oauthClientRMService.create(oauthCode.getClientId(), oauthCode.getUserId());
@@ -92,7 +95,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         }
 
         // 3.获取用户在该客户端所属开发账号的unionId
-        String unionId = "";
+        String unionId;
         OauthDeveloperRM oauthDeveloperRM = oauthDeveloperRMService.getByDeveloperIdAndUserId(oauthClientInfo.getDeveloperId(), oauthCode.getUserId());
         if(null == oauthDeveloperRM){
             unionId = oauthDeveloperRMService.create(oauthClientInfo.getDeveloperId(), oauthCode.getUserId());

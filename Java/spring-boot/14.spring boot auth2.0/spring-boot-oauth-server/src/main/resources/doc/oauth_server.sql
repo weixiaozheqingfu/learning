@@ -20,6 +20,7 @@ CREATE TABLE oauth_scope_enum (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   scope_name varchar(100) NOT NULL DEFAULT '' COMMENT '授权范围名称',
   scope_desc varchar(100) NOT NULL DEFAULT '' COMMENT '授权范围描述',
+  grant_type varchar(50) NOT NULL DEFAULT '' COMMENT '授权模式,表明在当前的scope_name适用于哪种授权模式',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
@@ -99,9 +100,9 @@ CREATE TABLE oauth_code (
   interface_uri varchar(200) NOT NULL DEFAULT '' COMMENT '接口地址,授权多个接口地址用逗号（,）分隔',
   code varchar(50) NOT NULL DEFAULT '' COMMENT '预授权码',
   expire_in bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '预授权码过期时长,单位秒',
-  expire_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '预授权码过期时间',
-  create_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  update_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  expire_time datetime NOT NULL COMMENT '预授权码过期时间',
+  create_time datetime NOT NULL COMMENT '创建时间',
+  update_time datetime NOT NULL COMMENT '修改时间',
   PRIMARY KEY (id),
   KEY idx_code (code)
 ) COMMENT='预授权码表';
@@ -117,13 +118,13 @@ CREATE TABLE oauth_access_token (
   token_type varchar(10) NOT NULL DEFAULT '' COMMENT 'access_token类型,bearer类型或mac类型',
   access_token varchar(50) NOT NULL DEFAULT '' COMMENT 'access_token',
   access_token_expire_in bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'access_token过期时长,单位秒',
-  access_token_expire_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'access_token过期时间',
+  access_token_expire_time datetime NOT NULL  COMMENT 'access_token过期时间',
   refresh_token varchar(50) NOT NULL DEFAULT '' COMMENT '刷新token',
   refresh_token_expire_in bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'refresh_token过期时长,单位秒',
-  refresh_token_expire_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT 'access_token过期时间',
+  refresh_token_expire_time datetime NOT NULL  COMMENT 'access_token过期时间',
   delete_flag bit(1) NOT NULL DEFAULT 0 COMMENT '0:未删除 1：已删除',
-  create_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  update_time datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  create_time datetime NOT NULL  COMMENT '创建时间',
+  update_time datetime NOT NULL  COMMENT '修改时间',
   PRIMARY KEY (id),
   KEY idx_access_token (access_token),
   KEY idx_refresh_token (refresh_token)

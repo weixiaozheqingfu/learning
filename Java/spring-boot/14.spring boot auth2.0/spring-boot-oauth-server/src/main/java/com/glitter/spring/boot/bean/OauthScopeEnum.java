@@ -11,6 +11,8 @@ public class OauthScopeEnum extends BaseBean {
     private String scopeName;
     /** 授权范围描述 */
     private String scopeDesc;
+    /** 授权类型 */
+    private String grantType;
     /** 创建时间 */
     private Date createTime;
     /** 更新时间 */
