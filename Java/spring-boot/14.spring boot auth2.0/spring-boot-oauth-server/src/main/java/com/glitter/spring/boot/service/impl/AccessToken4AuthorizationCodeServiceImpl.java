@@ -7,7 +7,7 @@ import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.bean.OauthCode;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
-import com.glitter.spring.boot.service.IAccessTokenService;
+import com.glitter.spring.boot.service.IAccessToken4AuthorizationCodeService;
 import com.glitter.spring.boot.service.IOauthClientInfoService;
 import com.glitter.spring.boot.service.IOauthCodeService;
 import org.apache.commons.lang3.StringUtils;
@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Service
-public class AccessToken4AuthorizationCodeServiceImpl implements IAccessTokenService {
+public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4AuthorizationCodeService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccessToken4AuthorizationCodeServiceImpl.class);
 

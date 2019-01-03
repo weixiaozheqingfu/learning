@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.bean.*;
+import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.persistence.dao.*;
 import com.glitter.spring.boot.service.IOauthClientRMService;
 import com.glitter.spring.boot.service.IOauthCodeService;
@@ -46,7 +47,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
     IOauthClientRMService oauthClientRMService;
 
     /**
-     * 创建预授权码
+     * 授权码模式 创建预授权码
      *
      * @param oauthCode
      */
@@ -80,7 +81,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
             if (null == oauthScopeEnum) {
                 throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,scope非法");
             }
-            if (!"grant_type".equals(oauthScopeEnum.getGrantType())) {
+            if (!GlitterConstants.OAUTH_GRANT_TYPE_AUTHORIZATION_CODE.equals(oauthScopeEnum.getGrantType())) {
                 throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,scope非法");
             }
         }
