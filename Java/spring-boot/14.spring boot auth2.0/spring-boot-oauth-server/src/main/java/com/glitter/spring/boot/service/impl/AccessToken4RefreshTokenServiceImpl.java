@@ -85,8 +85,6 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
         oauthAccessToken.setAccessTokenExpireIn(60L);
         oauthAccessToken.setAccessTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getAccessTokenExpireIn() * 1000L));
         oauthAccessToken.setRefreshToken(UUID.randomUUID().toString().replace("-",""));
-        oauthAccessToken.setRefreshTokenExpireIn(60 * 60 * 24 * 2L);
-        oauthAccessToken.setRefreshTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getRefreshTokenExpireIn() * 1000L));
         oauthAccessToken.setUpdateTime(now);
         oauthAccessTokenDao.updateById(oauthAccessToken);
 

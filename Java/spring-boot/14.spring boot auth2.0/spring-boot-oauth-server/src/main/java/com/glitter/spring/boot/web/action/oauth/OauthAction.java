@@ -292,6 +292,11 @@ public class OauthAction extends BaseAction {
 
     /**
      * 检验授权凭证（access_token）是否有效
+     *
+     * 其实client_id参数和openid参数可以不传
+     * 因为只是一个有效性验证而已,传不传都行,传的话,相对更严格,但也只是掩耳盗铃,因为如果access_token被泄露了,client_id和openid通常也不保,所以不传也没问题,传了就给点安慰.
+     * 因为获取access_token的过程是https通讯,只有合法的客户端才会持有access_token,除非客户端主动泄露access_token或者没有保护好被攻击了,那都是属于客户端自己的安全范畴了
+     *
      * <p>
      * 正确返回样例：
      * {
@@ -311,12 +316,15 @@ public class OauthAction extends BaseAction {
      */
     @ResponseBody
     @RequestMapping(value = "auth", method = RequestMethod.GET)
-    public Map<String, Object> auth(@RequestParam(required = false) String access_token,
+    public Map<String, Object> auth(@RequestParam(required = false) String client_id,
+                                    @RequestParam(required = false) String access_token,
                                     @RequestParam(required = false) String openid) {
         // TODO
         return null;
     }
 
+
+    // TODO 解除授权接口
 
     /**
      * 正常情况下应该在整个授权服务器中总共支持5种获取accessToken的模式,并且都是调用access_token方法即可,只是grant_type参数值不同,会走不同的模式,
