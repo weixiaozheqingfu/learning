@@ -86,29 +86,59 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
             throw new BusinessException("40036", "code码已过期");
         }
 
-        // TODO 验证用户对该客户端是否存在授权记录,如果存在记录,并且refresh_token未过期,则进行更新操作
-        // TODO 如果不存在记录,或者存在记录,但refresh_token已过期,则进行新增操作
+        // 验证用户对该客户端是否存在授权记录,如果存在记录,并且refresh_token未过期,则进行更新操作
+        // 如果不存在记录,或者存在记录,但refresh_token已过期,则进行新增操作
+        boolean insertFlag = true;
+        OauthAccessToken record = new OauthAccessToken();
+        record.setClientId(oauthCode.getClientId());
+        record.setUserId(oauthCode.getUserId());
+        OauthAccessToken oauthAccessTokenDb = oauthAccessTokenDao.get(record);
+        // 记录存在
+        if (null != oauthAccessTokenDb) {
+            // refresh_token已过期
+            if(System.currentTimeMillis() > oauthAccessTokenDb.getRefreshTokenExpireTime().getTime()){
+                insertFlag = true;
+            } else {
+                insertFlag = false;
+            }
+        } else {
+            insertFlag = true;
+        }
 
         // 5.code换取accessToken
-        Date now = new Date();
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
-        oauthAccessToken.setUserId(oauthCode.getUserId());
-        oauthAccessToken.setOpenId(oauthCode.getOpenId());
-        oauthAccessToken.setUnionId(oauthCode.getUnionId());
-        oauthAccessToken.setClientId(oauthCode.getClientId());
-        oauthAccessToken.setScope(oauthCode.getScope());
-        oauthAccessToken.setInterfaceUri(oauthCode.getInterfaceUri());
-        oauthAccessToken.setTokenType("bearer");
-        oauthAccessToken.setAccessToken(UUID.randomUUID().toString().replace("-",""));
-        oauthAccessToken.setAccessTokenExpireIn(60L);
-        oauthAccessToken.setAccessTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getAccessTokenExpireIn() * 1000L));
-        oauthAccessToken.setRefreshToken(UUID.randomUUID().toString().replace("-",""));
-        oauthAccessToken.setRefreshTokenExpireIn(60 * 60 * 24 * 2L);
-        oauthAccessToken.setRefreshTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getRefreshTokenExpireIn() * 1000L));
-        oauthAccessToken.setDeleteFlag(false);
-        oauthAccessToken.setCreateTime(now);
-        oauthAccessToken.setUpdateTime(now);
-        oauthAccessTokenDao.insert(oauthAccessToken);
+        Date now = new Date();
+        if (insertFlag) {
+            oauthAccessToken.setUserId(oauthCode.getUserId());
+            oauthAccessToken.setOpenId(oauthCode.getOpenId());
+            oauthAccessToken.setUnionId(oauthCode.getUnionId());
+            oauthAccessToken.setClientId(oauthCode.getClientId());
+            oauthAccessToken.setScope(oauthCode.getScope());
+            oauthAccessToken.setInterfaceUri(oauthCode.getInterfaceUri());
+            oauthAccessToken.setTokenType("bearer");
+            oauthAccessToken.setAccessToken(UUID.randomUUID().toString().replace("-", ""));
+            oauthAccessToken.setAccessTokenExpireIn(60L);
+            oauthAccessToken.setAccessTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getAccessTokenExpireIn() * 1000L));
+            oauthAccessToken.setRefreshToken(UUID.randomUUID().toString().replace("-", ""));
+            oauthAccessToken.setRefreshTokenExpireIn(60 * 60 * 24 * 2L);
+            oauthAccessToken.setRefreshTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getRefreshTokenExpireIn() * 1000L));
+            oauthAccessToken.setDeleteFlag(false);
+            oauthAccessToken.setCreateTime(now);
+            oauthAccessToken.setUpdateTime(now);
+            oauthAccessTokenDao.insert(oauthAccessToken);
+        } else {
+            oauthAccessToken.setId(oauthAccessTokenDb.getId());
+            oauthAccessToken.setScope(oauthCode.getScope());
+            oauthAccessToken.setInterfaceUri(oauthCode.getInterfaceUri());
+            oauthAccessToken.setAccessToken(UUID.randomUUID().toString().replace("-", ""));
+            oauthAccessToken.setAccessTokenExpireIn(60L);
+            oauthAccessToken.setAccessTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getAccessTokenExpireIn() * 1000L));
+            oauthAccessToken.setRefreshToken(UUID.randomUUID().toString().replace("-", ""));
+            oauthAccessToken.setRefreshTokenExpireIn(60 * 60 * 24 * 2L);
+            oauthAccessToken.setRefreshTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getRefreshTokenExpireIn() * 1000L));
+            oauthAccessToken.setUpdateTime(now);
+            oauthAccessTokenDao.updateById(oauthAccessToken);
+        }
 
         // 6.删除code码
         oauthCodeService.deleteByCode(code);
