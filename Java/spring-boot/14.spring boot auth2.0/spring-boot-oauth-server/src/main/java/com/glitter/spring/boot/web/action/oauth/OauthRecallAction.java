@@ -38,7 +38,7 @@ public class OauthRecallAction extends BaseAction {
             return result;
         }
 
-        // TODO
+        // TODO 专门的service
         return result;
     }
 
@@ -52,7 +52,7 @@ public class OauthRecallAction extends BaseAction {
         if (StringUtils.isBlank(id)) {
             throw new BusinessException("-1", "参数异常");
         }
-        // TODO
+        // TODO 专门的service
         return result;
     }
 }
