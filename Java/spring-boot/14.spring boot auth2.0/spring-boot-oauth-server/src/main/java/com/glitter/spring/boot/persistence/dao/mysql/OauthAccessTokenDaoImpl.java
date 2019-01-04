@@ -47,6 +47,11 @@ public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao{
     }
 
     @Override
+    public OauthAccessToken getByRefreshToken(String refreshToken) {
+        return sqlSessionTemplate.selectOne(NAME_SPACE + ".getByRefreshToken", refreshToken);
+    }
+
+    @Override
     public List<OauthAccessToken> getByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }

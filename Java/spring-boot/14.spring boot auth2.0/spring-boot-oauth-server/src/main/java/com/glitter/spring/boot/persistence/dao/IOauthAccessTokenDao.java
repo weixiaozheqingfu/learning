@@ -54,6 +54,8 @@ public interface IOauthAccessTokenDao{
      */
     OauthAccessToken getById(Long id);
 
+    OauthAccessToken getByRefreshToken(String refreshToken);
+
     /**
      * 按主键集合查询
      *

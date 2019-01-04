@@ -12,7 +12,6 @@ public interface IOauthCodeService {
 
     OauthCode getOauthCodeById(Long id);
 
-
     OauthCode getOauthCodeByCode(String code);
 
 }

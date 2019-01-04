@@ -282,6 +282,10 @@
 	    select <include refid="baseColumns"/> from oauth_access_token where id =#{id}
 	</select>
 
+    <select id="getByRefreshToken" resultMap="BaseResultMap">
+        select <include refid="baseColumns"/> from oauth_access_token where refresh_token=#{refreshToken}
+    </select>
+
     <select id="getByIds" resultMap="BaseResultMap">
 	    select <include refid="baseColumns"/> from oauth_access_token
 	    where id in

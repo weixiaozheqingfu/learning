@@ -48,6 +48,9 @@ public class OauthAction extends BaseAction {
     @Autowired
     private IAccessToken4AuthorizationCodeService accessToken4AuthorizationCodeService;
 
+    @Autowired
+    private IAccessToken4RefreshTokenService accessToken4RefreshTokenService;
+
     /**
      * 示例: http://localhost:8080/oauth2/authorize?client_id=1001&redirect_uri=https://gitee.com/auth/csdn/callback&state=sdf8gswer9t89fdb8s9fg8r
      */
@@ -353,23 +356,50 @@ public class OauthAction extends BaseAction {
      * 而至于简化模式,上面两点也提到了并不安全,我实在没想到会有一段客户端代码没有对应的服务器端,只能走简化模式而不能走授权码模式的情况,在我看来简化模式根本就应该废弃,都走标准的授权码模式就好了。
      * <p>
      * 上面说了这么多,回归一下主题,按照上面的分析,其实我们还是只需要三个方法就好了,即authorize(GET授权页),authorize(POST授权页提交,授权码模式下使用),access_token这三个方法,
-     * 但是这里我不想这么设计,因为真正对我们游泳的获取access_token的模式只有三种授权码模式\客户端模式\更新令牌模式,其中更新令牌模式可以自立门户了,不多说了,这里其实就剩下授权码模式\更新令牌模式这两种模式了,
+     * 但是这里我不想这么设计,因为真正对我们有用的获取access_token的模式只有三种授权码模式\客户端模式\更新令牌模式,其中更新令牌模式可以自立门户了,不多说了,这里其实就剩下授权码模式\更新令牌模式这两种模式了,
      * 这种情况下,为了方便和明确,其实我们可以将这两种模式分别用两个方法来做,而不是继续共用access_token这一个方法.
      * 其实就连微信的对外开放平台也是这么做的,并且微信也只支持授权码这一种模式外加更新令牌模式.微信的access_token专指授权码模式换取的access_token.
      * 我们为什么不呢？
      *
-     * @param clientId
+     * @param client_id
      * @param refresh_token
      * @param grant_type
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "refresh_token", method = RequestMethod.GET)
-    public Map<String, Object> refresh_token(@RequestParam(required = false) String clientId,
+    public Map<String, Object> refresh_token(@RequestParam(required = false) String client_id,
                                              @RequestParam(required = false) String refresh_token,
                                              @RequestParam(required = false) String grant_type) {
-        // TODO
-        return null;
+        Map resultMap = new HashMap<>();
+        Map errorMap = new HashMap<>();
+        try {
+            if (!GlitterConstants.OAUTH_GRANT_TYPE_REFRESH_TOKEN.equals(grant_type)) {
+                errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
+                errorMap.put("errmsg", "grant_type参数非法");
+                return errorMap;
+            }
+
+            AccessTokenOuter accessTokenInfo = accessToken4RefreshTokenService.getAccessTokenInfo(client_id, refresh_token, grant_type);
+            if (null == accessTokenInfo) {
+                errorMap.put("errcode", CoreConstants.REQUEST_PROGRAM_ERROR_CODE);
+                errorMap.put("errmsg", "系统异常");
+                return errorMap;
+            }
+            resultMap.put("access_token", accessTokenInfo.getAccess_token());
+            resultMap.put("token_type", accessTokenInfo.getToken_type());
+            resultMap.put("expires_in", accessTokenInfo.getExpires_in());
+            resultMap.put("refresh_token", accessTokenInfo.getRefresh_token());
+            resultMap.put("scope", accessTokenInfo.getScope());
+            resultMap.put("openid", accessTokenInfo.getOpenid());
+
+            return resultMap;
+        } catch (Exception e) {
+            BusinessException ex = (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            errorMap.put("errcode", ex.getCode());
+            errorMap.put("errmsg", ex.getMessage());
+            return errorMap;
+        }
     }
 
 }
