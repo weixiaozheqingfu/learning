@@ -86,6 +86,9 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
             throw new BusinessException("40036", "code码已过期");
         }
 
+        // TODO 验证用户对该客户端是否存在授权记录,如果存在记录,并且refresh_token未过期,则进行更新操作
+        // TODO 如果不存在记录,或者存在记录,但refresh_token已过期,则进行新增操作
+
         // 5.code换取accessToken
         Date now = new Date();
         OauthAccessToken oauthAccessToken = new OauthAccessToken();

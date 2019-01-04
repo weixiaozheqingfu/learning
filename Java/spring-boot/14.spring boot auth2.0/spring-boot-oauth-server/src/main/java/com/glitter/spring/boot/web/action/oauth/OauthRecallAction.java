@@ -39,6 +39,7 @@ public class OauthRecallAction extends BaseAction {
         }
 
         // TODO 专门的service
+        // TODO 查询用户已授权的且refreshToken未过期的授权记录
         return result;
     }
 
@@ -52,7 +53,7 @@ public class OauthRecallAction extends BaseAction {
         if (StringUtils.isBlank(id)) {
             throw new BusinessException("-1", "参数异常");
         }
-        // TODO 专门的service
+        // TODO 专门的service delete操作
         return result;
     }
 }

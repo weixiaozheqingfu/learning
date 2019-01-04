@@ -107,6 +107,9 @@ CREATE TABLE oauth_code (
   KEY idx_code (code)
 ) COMMENT='预授权码表';
 
+
+-- 最好的做法当然是使用redis,使用库表也行,不太好,对于refresh_token_expire_time已经过期的记录,需要定时清理.
+-- 保证每个用户针对某一个客户端只有一条refresh_token未过期的记录.如果是redis,根本没有这些复杂情况,过期自动删除就好了。
 CREATE TABLE oauth_access_token (
   id bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   user_id bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
