@@ -1,19 +1,17 @@
 package com.glitter.spring.boot.service;
 
 import com.glitter.spring.boot.bean.AccessTokenInner;
+import com.glitter.spring.boot.bean.OauthAccessToken;
 
 public interface IOauthAccessTokenService {
 
 
     /**
-     * 验证accessToken
+     * 内部验证accessToken
      */
     AccessTokenInner validateAccessToken(String accessToken);
 
-    /**
-     * 根据主键删除accessToken
-     * @param id
-     */
-    void deleteById(Long id);
+
+    OauthAccessToken getOauthAccessToken(String accssToken);
 
 }

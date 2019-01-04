@@ -34,16 +34,19 @@ public class OauthAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(OauthAction.class);
 
     @Autowired
+    private IUserInfoService userInfoService;
+
+    @Autowired
     private IOauthClientInfoService oauthClientInfoService;
 
     @Autowired
-    private IUserInfoService userInfoService;
+    private IOauthScopeEnumService oauthScopeEnumService;
 
     @Autowired
     private IOauthCodeService oauthCodeService;
 
     @Autowired
-    private IOauthScopeEnumService oauthScopeEnumService;
+    private IOauthAccessTokenService oauthAccessTokenService;
 
     @Autowired
     private IAccessToken4AuthorizationCodeService accessToken4AuthorizationCodeService;
@@ -319,10 +322,55 @@ public class OauthAction extends BaseAction {
     public Map<String, Object> auth(@RequestParam(required = false) String client_id,
                                     @RequestParam(required = false) String access_token,
                                     @RequestParam(required = false) String openid) {
-        // TODO
-        return null;
+        Map resultMap = new HashMap<>();
+        Map errorMap = new HashMap<>();
+        try {
+            if (StringUtils.isBlank(client_id)) {
+                errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
+                errorMap.put("errmsg", "client_id参数为空");
+                return errorMap;
+            }
+            if (StringUtils.isBlank(access_token)) {
+                errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
+                errorMap.put("errmsg", "access_token参数为空");
+                return errorMap;
+            }
+            if (StringUtils.isBlank(openid)) {
+                errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
+                errorMap.put("errmsg", "openid参数为空");
+                return errorMap;
+            }
+            OauthAccessToken oauthAccessToken = oauthAccessTokenService.getOauthAccessToken(access_token);
+            if (null == oauthAccessToken) {
+                errorMap.put("errcode", "600031");
+                errorMap.put("errmsg", "access_token invalid");
+                return errorMap;
+            }
+            if (!client_id.equals(oauthAccessToken.getClientId())) {
+                errorMap.put("errcode", "600032");
+                errorMap.put("errmsg", "access_token invalid");
+                return errorMap;
+            }
+            if (!openid.equals(oauthAccessToken.getOpenId())) {
+                errorMap.put("errcode", "600033");
+                errorMap.put("errmsg", "access_token invalid");
+                return errorMap;
+            }
+            if(System.currentTimeMillis() > oauthAccessToken.getRefreshTokenExpireTime().getTime()){
+                errorMap.put("errcode", "600034");
+                errorMap.put("errmsg", "access_token已过期");
+                return errorMap;
+            }
+            errorMap.put("errcode", "0");
+            errorMap.put("errmsg", "ok");
+            return resultMap;
+        } catch (Exception e) {
+            BusinessException ex = (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            errorMap.put("errcode", ex.getCode());
+            errorMap.put("errmsg", ex.getMessage());
+            return errorMap;
+        }
     }
-
 
     // TODO 解除授权接口
 
