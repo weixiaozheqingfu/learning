@@ -372,7 +372,6 @@ public class OauthAction extends BaseAction {
         }
     }
 
-    // TODO 解除授权接口
 
     /**
      * 正常情况下应该在整个授权服务器中总共支持5种获取accessToken的模式,并且都是调用access_token方法即可,只是grant_type参数值不同,会走不同的模式,
