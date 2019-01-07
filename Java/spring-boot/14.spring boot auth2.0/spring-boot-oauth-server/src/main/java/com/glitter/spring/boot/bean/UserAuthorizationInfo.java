@@ -14,6 +14,6 @@ public class UserAuthorizationInfo extends BaseBean {
     private String clientName;
 
     /** 客户端权限 */
-    private List<String> scopeName;
+    private List<String> scopeNames;
  
 }
