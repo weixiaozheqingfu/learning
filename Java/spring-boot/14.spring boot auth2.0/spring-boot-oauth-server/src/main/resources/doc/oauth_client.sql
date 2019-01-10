@@ -64,7 +64,7 @@ CREATE TABLE oauth_client_base_config (
   client_id varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台分配的客户端id',
   client_secret varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台分配的客户端密码',
   redirect_uri varchar(200) NOT NULL DEFAULT '' COMMENT '客户端应用回调地址',
-  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina等)',
+  server_type varchar(50) NOT NULL DEFAULT '' COMMENT '第三方auth服务平台类型(如qq,wechart,sina,csdn,github等)',
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
