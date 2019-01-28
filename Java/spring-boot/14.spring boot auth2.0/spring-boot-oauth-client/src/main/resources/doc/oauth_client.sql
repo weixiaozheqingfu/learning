@@ -45,7 +45,7 @@ CREATE TABLE oauth_access_token (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   open_id varchar(100) NOT NULL DEFAULT '' COMMENT '用户对外开放id,对当前开发者帐号唯一',
   union_id varchar(100) NOT NULL DEFAULT '' COMMENT '用户统一标识。针对一个开放平台开发者帐号下的应用，同一用户的unionid是唯一的。',
-  access_token varchar(50) NOT NULL DEFAULT '' COMMENT 'access_token',
+  access_token varchar(50) NOT NULL DEFAULT '' COMMENT 'access_token'
   expire_in bigint(20) NOT NULL DEFAULT 0 COMMENT 'access_token过期时间',
   refresh_token varchar(20) NOT NULL DEFAULT '' COMMENT 'refresh_token',
   scope varchar(200) NOT NULL DEFAULT '' COMMENT '授权作用域,授权多个作用域用逗号（,）分隔',
@@ -54,7 +54,7 @@ CREATE TABLE oauth_access_token (
   create_time datetime DEFAULT NULL COMMENT '创建时间',
   update_time datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (id)
-) COMMENT='auth认证信息表,也是三方账户表';
+) COMMENT='access_token表';
 
 CREATE TABLE account_binding (
   id bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
