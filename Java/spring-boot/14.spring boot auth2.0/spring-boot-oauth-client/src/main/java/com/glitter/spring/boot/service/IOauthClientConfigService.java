@@ -1,20 +1,21 @@
 package com.glitter.spring.boot.service;
 
-import com.glitter.spring.boot.bean.OauthClientBaseConfig;
 
-public interface IOauthClientBaseConfigService {
+import com.glitter.spring.boot.bean.OauthClientConfig;
+
+public interface IOauthClientConfigService {
 
     /**
      * 创建auth客户端基本信息配置表; InnoDB free: 488448 kB
-     * @param oauthClientBaseConfig
+     * @param oauthClientConfig
      */
-    void create(OauthClientBaseConfig oauthClientBaseConfig);
+    void create(OauthClientConfig oauthClientConfig);
 
     /**
      * 修改auth客户端基本信息配置表; InnoDB free: 488448 kB
-     * @param oauthClientBaseConfig
+     * @param oauthClientConfig
      */
-    void modifyById(OauthClientBaseConfig oauthClientBaseConfig);
+    void modifyById(OauthClientConfig oauthClientConfig);
 
     /**
      * 根据主键删除auth客户端基本信息配置表; InnoDB free: 488448 kB
@@ -27,6 +28,6 @@ public interface IOauthClientBaseConfigService {
      * @param id
      * @return
      */
-    OauthClientBaseConfig getOauthClientBaseConfigById(Long id);
+    OauthClientConfig getOauthClientConfigById(Long id);
 
 }

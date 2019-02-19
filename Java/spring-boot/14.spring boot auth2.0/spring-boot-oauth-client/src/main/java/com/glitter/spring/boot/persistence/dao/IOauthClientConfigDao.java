@@ -1,17 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.OauthServerEnum;
+import com.glitter.spring.boot.bean.OauthClientConfig;
+
 import java.util.List;
 
-public interface IOauthServerEnumDao{
+public interface IOauthClientConfigDao{
 
     /**
     * 插入操作
     *
-    * @param oauthServerEnum
+    * @param oauthClientConfig
     * @return
     */
-    int insert(OauthServerEnum oauthServerEnum);
+    int insert(OauthClientConfig oauthClientConfig);
 
     /**
     * 根据主键删除
@@ -32,18 +33,18 @@ public interface IOauthServerEnumDao{
     /**
     * 根据条件删除
     *
-    * @param oauthServerEnum
+    * @param oauthClientConfig
     * @return
     */
-    int delete(OauthServerEnum oauthServerEnum);
+    int delete(OauthClientConfig oauthClientConfig);
 
     /**
     * 根据主键更新
     *
-    * @param oauthServerEnum
+    * @param oauthClientConfig
     * @return
     */
-    int updateById(OauthServerEnum oauthServerEnum);
+    int updateById(OauthClientConfig oauthClientConfig);
 
     /**
      * 按主键查询
@@ -51,7 +52,7 @@ public interface IOauthServerEnumDao{
      * @param id
      * @return
      */
-    OauthServerEnum getOauthServerEnumById(Long id);
+    OauthClientConfig getOauthClientConfigById(Long id);
 
     /**
      * 按主键集合查询
@@ -59,37 +60,37 @@ public interface IOauthServerEnumDao{
      * @param ids
      * @return
      */
-    List<OauthServerEnum> getOauthServerEnumByIds(Long[] ids);
+    List<OauthClientConfig> getOauthClientConfigByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param oauthServerEnum
+     * @param oauthClientConfig
      * @return
      */
-    OauthServerEnum getOauthServerEnum(OauthServerEnum oauthServerEnum);
+    OauthClientConfig getOauthClientConfig(OauthClientConfig oauthClientConfig);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<OauthServerEnum> findAllList();
+    List<OauthClientConfig> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param oauthServerEnum
+     * @param oauthClientConfig
      * @return
      */
-    List<OauthServerEnum> findList(OauthServerEnum oauthServerEnum);
+    List<OauthClientConfig> findList(OauthClientConfig oauthClientConfig);
 
     /**
      * 按条件获取数量
      *
-     * @param oauthServerEnum
+     * @param oauthClientConfig
      * @return
      */
-    int getCount(OauthServerEnum oauthServerEnum);
+    int getCount(OauthClientConfig oauthClientConfig);
 
 }

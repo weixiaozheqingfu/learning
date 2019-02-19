@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="UserInfo">
-    <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.UserInfo">
+    <resultMap id="BaseResultMap" type="com.syswin.systoon.crm.bean.UserInfo">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result column="account" property="account" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
@@ -90,7 +90,7 @@
 		</if>
     </sql>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.glitter.spring.boot.bean.UserInfo">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.syswin.systoon.crm.bean.UserInfo">
         insert into user_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -205,14 +205,14 @@
         </foreach>
 	</delete>
 
-    <delete id="delete" parameterType="com.glitter.spring.boot.bean.UserInfo">
+    <delete id="delete" parameterType="com.syswin.systoon.crm.bean.UserInfo">
         delete from user_info
         <where>
             <include refid="whereSql"/>
         </where>
     </delete>
 
-    <update id="updateById" parameterType="com.glitter.spring.boot.bean.UserInfo">
+    <update id="updateById" parameterType="com.syswin.systoon.crm.bean.UserInfo">
         update user_info  set
         <trim suffixOverrides=",">
         <if test="account != null ">
@@ -276,7 +276,7 @@
         </foreach>
 	</select>
 
-	<select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.UserInfo">
+	<select id="get" resultMap="BaseResultMap" parameterType="com.syswin.systoon.crm.bean.UserInfo">
         select <include refid="baseColumns"/> from user_info
         <where>
             <include refid="whereSql"/> limit 1
@@ -287,14 +287,14 @@
 	     select <include refid="baseColumns"/> from user_info
 	</select>
 
-	<select id="findList"  parameterType="com.glitter.spring.boot.bean.UserInfo" resultMap="BaseResultMap">
+	<select id="findList"  parameterType="com.syswin.systoon.crm.bean.UserInfo" resultMap="BaseResultMap">
         select <include refid="baseColumns"/> from user_info
         <where>
             <include refid="whereSql"/>
         </where>
 	</select>
 
-	<select id="getCount"  parameterType="com.glitter.spring.boot.bean.UserInfo" resultType="java.lang.Integer">
+	<select id="getCount"  parameterType="com.syswin.systoon.crm.bean.UserInfo" resultType="java.lang.Integer">
         select count(1) from user_info
         <where>
             <include refid="whereSql"/>

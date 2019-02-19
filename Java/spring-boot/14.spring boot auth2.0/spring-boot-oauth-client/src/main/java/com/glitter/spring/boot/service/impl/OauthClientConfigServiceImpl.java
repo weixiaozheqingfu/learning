@@ -1,10 +1,10 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.glitter.spring.boot.service.IOauthClientBaseConfigService;
-import com.glitter.spring.boot.bean.OauthClientBaseConfig;
-import com.glitter.spring.boot.persistence.dao.IOauthClientBaseConfigDao;
+import com.glitter.spring.boot.bean.OauthClientConfig;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.persistence.dao.IOauthClientConfigDao;
+import com.glitter.spring.boot.service.IOauthClientConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,41 +13,41 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class OauthClientBaseConfigServiceImpl implements IOauthClientBaseConfigService{
+public class OauthClientConfigServiceImpl implements IOauthClientConfigService {
 
-    private static final Logger logger = LoggerFactory.getLogger(OauthClientBaseConfigServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(OauthClientConfigServiceImpl.class);
 
     @Autowired
-    IOauthClientBaseConfigDao oauthClientBaseConfigDao;
+    IOauthClientConfigDao oauthClientConfigDao;
 
     /**
      * 创建auth客户端基本信息配置表; InnoDB free: 488448 kB
-     * @param oauthClientBaseConfig
+     * @param oauthClientConfig
      */
     @Override
-    public void create(OauthClientBaseConfig oauthClientBaseConfig) {
-        if(null == oauthClientBaseConfig){
+    public void create(OauthClientConfig oauthClientConfig) {
+        if(null == oauthClientConfig){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS,"输入参数为空");
         }
         // TODO 参数校验
         Date now = new Date();
-        oauthClientBaseConfig.setCreateTime(now);
-        oauthClientBaseConfig.setUpdateTime(now);
-        oauthClientBaseConfigDao.insert(oauthClientBaseConfig);
+        oauthClientConfig.setCreateTime(now);
+        oauthClientConfig.setUpdateTime(now);
+        oauthClientConfigDao.insert(oauthClientConfig);
     }
 
     /**
      * 修改auth客户端基本信息配置表; InnoDB free: 488448 kB
-     * @param oauthClientBaseConfig
+     * @param oauthClientConfig
      */
     @Override
-    public void modifyById(OauthClientBaseConfig oauthClientBaseConfig) {
-        if(null == oauthClientBaseConfig){
+    public void modifyById(OauthClientConfig oauthClientConfig) {
+        if(null == oauthClientConfig){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
         }
         // TODO 参数校验
-        oauthClientBaseConfig.setUpdateTime(new Date());
-        oauthClientBaseConfigDao.updateById(oauthClientBaseConfig);
+        oauthClientConfig.setUpdateTime(new Date());
+        oauthClientConfigDao.updateById(oauthClientConfig);
     }
 
     /**
@@ -59,12 +59,12 @@ public class OauthClientBaseConfigServiceImpl implements IOauthClientBaseConfigS
         if(null == id){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
         }
-        OauthClientBaseConfig record = new OauthClientBaseConfig();
+        OauthClientConfig record = new OauthClientConfig();
         record.setId(id);
         record.setUpdateTime(new Date());
-        int count = oauthClientBaseConfigDao.updateById(record);
+        int count = oauthClientConfigDao.updateById(record);
         if(count < 1){
-            logger.error("OauthClientBaseConfigServiceImpl.deleteById方法执行失败,输入参数:{}",id);
+            logger.error("OauthClientConfigServiceImpl.deleteById方法执行失败,输入参数:{}",id);
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "操作失败");
         }
     }
@@ -75,12 +75,12 @@ public class OauthClientBaseConfigServiceImpl implements IOauthClientBaseConfigS
      * @return
      */
     @Override
-    public OauthClientBaseConfig getOauthClientBaseConfigById(Long id) {
-        OauthClientBaseConfig result = null;
+    public OauthClientConfig getOauthClientConfigById(Long id) {
+        OauthClientConfig result = null;
         if(null == id){
             return result;
         }
-        result = oauthClientBaseConfigDao.getOauthClientBaseConfigById(id);
+        result = oauthClientConfigDao.getOauthClientConfigById(id);
         return result;
     }
 

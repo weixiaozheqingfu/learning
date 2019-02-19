@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.persistence.dao;
 
 import com.glitter.spring.boot.bean.UserInfo;
+
 import java.util.List;
 
 public interface IUserInfoDao{

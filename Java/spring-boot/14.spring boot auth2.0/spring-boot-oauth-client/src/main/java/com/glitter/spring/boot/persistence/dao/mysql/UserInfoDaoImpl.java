@@ -1,14 +1,15 @@
 package com.glitter.spring.boot.persistence.dao.mysql;
 
+import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
 import org.springframework.stereotype.Repository;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.glitter.spring.boot.persistence.dao.IUserInfoDao;
-import com.glitter.spring.boot.bean.UserInfo;
+
 import java.util.List;
 
 @Repository
-public class UserInfoDaoImpl implements IUserInfoDao{
+public class UserInfoDaoImpl implements IUserInfoDao {
 
     private static final String NAME_SPACE = "UserInfo";
 

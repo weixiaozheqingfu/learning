@@ -1,10 +1,10 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import com.glitter.spring.boot.bean.OauthAccessToken;
-import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
+import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
+public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
 
     private static final Logger logger = LoggerFactory.getLogger(OauthAccessTokenServiceImpl.class);
 
@@ -21,7 +21,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     IOauthAccessTokenDao oauthAccessTokenDao;
 
     /**
-     * 创建auth认证信息表,也是三方账户表; InnoDB free: 488448 kB
+     * 创建access_token表; InnoDB free: 488448 kB
      * @param oauthAccessToken
      */
     @Override
@@ -37,7 +37,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     }
 
     /**
-     * 修改auth认证信息表,也是三方账户表; InnoDB free: 488448 kB
+     * 修改access_token表; InnoDB free: 488448 kB
      * @param oauthAccessToken
      */
     @Override
@@ -51,7 +51,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     }
 
     /**
-     * 根据主键删除auth认证信息表,也是三方账户表; InnoDB free: 488448 kB
+     * 根据主键删除access_token表; InnoDB free: 488448 kB
      * @param id
      */
     @Override
@@ -70,7 +70,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     }
 
     /**
-     * 根据主键获取auth认证信息表,也是三方账户表; InnoDB free: 488448 kB
+     * 根据主键获取access_token表; InnoDB free: 488448 kB
      * @param id
      * @return
      */

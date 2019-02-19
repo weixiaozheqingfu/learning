@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.service;
 
+
 import com.glitter.spring.boot.bean.AccountBinding;
 
 public interface IAccountBindingService {

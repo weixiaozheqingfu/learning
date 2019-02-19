@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.persistence.dao;
 
 import com.glitter.spring.boot.bean.AccountBinding;
+
 import java.util.List;
 
 public interface IAccountBindingDao{

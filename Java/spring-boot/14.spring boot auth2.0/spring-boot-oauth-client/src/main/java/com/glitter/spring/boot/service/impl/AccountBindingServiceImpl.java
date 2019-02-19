@@ -1,10 +1,10 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.glitter.spring.boot.service.IAccountBindingService;
 import com.glitter.spring.boot.bean.AccountBinding;
-import com.glitter.spring.boot.persistence.dao.IAccountBindingDao;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.persistence.dao.IAccountBindingDao;
+import com.glitter.spring.boot.service.IAccountBindingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class AccountBindingServiceImpl implements IAccountBindingService{
+public class AccountBindingServiceImpl implements IAccountBindingService {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountBindingServiceImpl.class);
 

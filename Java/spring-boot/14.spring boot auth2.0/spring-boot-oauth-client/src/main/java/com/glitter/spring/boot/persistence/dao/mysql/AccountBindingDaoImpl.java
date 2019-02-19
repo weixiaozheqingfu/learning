@@ -1,14 +1,16 @@
 package com.glitter.spring.boot.persistence.dao.mysql;
 
+import com.glitter.spring.boot.bean.AccountBinding;
+import com.glitter.spring.boot.persistence.dao.IAccountBindingDao;
 import org.springframework.stereotype.Repository;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.glitter.spring.boot.persistence.dao.IAccountBindingDao;
-import com.glitter.spring.boot.bean.AccountBinding;
+
 import java.util.List;
 
+
 @Repository
-public class AccountBindingDaoImpl implements IAccountBindingDao{
+public class AccountBindingDaoImpl implements IAccountBindingDao {
 
     private static final String NAME_SPACE = "AccountBinding";
 

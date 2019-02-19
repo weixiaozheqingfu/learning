@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.bean;
 
 import lombok.Data;
+
 import java.util.Date;
 
 @Data
@@ -10,6 +11,8 @@ public class AccountBinding extends BaseBean {
     private Long id;
     /** 用户表id */
     private Long userId;
+    /** 账号 */
+    private String account;
     /** 用户对外开放id,对当前开发者帐号唯一 */
     private String openId;
     /** 用户统一标识。针对一个开放平台开发者帐号下的应用，同一用户的unionid是唯一的。不一定所有第三方都有此字段. */

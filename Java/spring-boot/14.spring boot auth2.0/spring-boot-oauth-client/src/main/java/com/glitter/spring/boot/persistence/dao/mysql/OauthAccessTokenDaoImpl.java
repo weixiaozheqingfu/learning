@@ -1,14 +1,15 @@
 package com.glitter.spring.boot.persistence.dao.mysql;
 
+import com.glitter.spring.boot.bean.OauthAccessToken;
+import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import org.springframework.stereotype.Repository;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
-import com.glitter.spring.boot.bean.OauthAccessToken;
+
 import java.util.List;
 
 @Repository
-public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao{
+public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao {
 
     private static final String NAME_SPACE = "OauthAccessToken";
 
