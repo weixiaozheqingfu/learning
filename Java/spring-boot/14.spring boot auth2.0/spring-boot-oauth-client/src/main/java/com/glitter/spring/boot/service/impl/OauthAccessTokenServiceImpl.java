@@ -80,7 +80,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
         if(null == id){
             return result;
         }
-        result = oauthAccessTokenDao.getOauthAccessTokenById(id);
+        result = oauthAccessTokenDao.getById(id);
         return result;
     }
 

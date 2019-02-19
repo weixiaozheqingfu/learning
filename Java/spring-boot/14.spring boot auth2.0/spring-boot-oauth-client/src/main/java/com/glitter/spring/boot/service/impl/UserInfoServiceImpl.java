@@ -80,7 +80,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
         if(null == id){
             return result;
         }
-        result = userInfoDao.getUserInfoById(id);
+        result = userInfoDao.getById(id);
         return result;
     }
 

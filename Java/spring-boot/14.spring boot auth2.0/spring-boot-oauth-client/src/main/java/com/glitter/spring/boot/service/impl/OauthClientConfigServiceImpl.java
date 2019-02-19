@@ -80,7 +80,7 @@ public class OauthClientConfigServiceImpl implements IOauthClientConfigService {
         if(null == id){
             return result;
         }
-        result = oauthClientConfigDao.getOauthClientConfigById(id);
+        result = oauthClientConfigDao.getById(id);
         return result;
     }
 

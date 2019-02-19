@@ -80,7 +80,7 @@ public class AccountBindingServiceImpl implements IAccountBindingService {
         if(null == id){
             return result;
         }
-        result = accountBindingDao.getAccountBindingById(id);
+        result = accountBindingDao.getById(id);
         return result;
     }
 
