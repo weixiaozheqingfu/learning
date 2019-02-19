@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public class AccountBindingDaoImpl implements IAccountBindingDao {
 
-    private static final String NAME_SPACE = "AccountBinding";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IAccountBindingDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;
@@ -43,12 +43,12 @@ public class AccountBindingDaoImpl implements IAccountBindingDao {
     }
 
     @Override
-    public AccountBinding getAccountBindingById(Long id) {
+    public AccountBinding getById(Long id) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getById", id);
     }
 
     @Override
-    public List<AccountBinding> getAccountBindingByIds(Long[] ids) {
+    public List<AccountBinding> getByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }
 

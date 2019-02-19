@@ -52,7 +52,7 @@ public interface IAccountBindingDao{
      * @param id
      * @return
      */
-    AccountBinding getAccountBindingById(Long id);
+    AccountBinding getById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,7 +60,7 @@ public interface IAccountBindingDao{
      * @param ids
      * @return
      */
-    List<AccountBinding> getAccountBindingByIds(Long[] ids);
+    List<AccountBinding> getByIds(Long[] ids);
 
     /**
      * 按条件查询

@@ -52,7 +52,7 @@ public interface IOauthClientConfigDao{
      * @param id
      * @return
      */
-    OauthClientConfig getOauthClientConfigById(Long id);
+    OauthClientConfig getById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,7 +60,7 @@ public interface IOauthClientConfigDao{
      * @param ids
      * @return
      */
-    List<OauthClientConfig> getOauthClientConfigByIds(Long[] ids);
+    List<OauthClientConfig> getByIds(Long[] ids);
 
     /**
      * 按条件查询

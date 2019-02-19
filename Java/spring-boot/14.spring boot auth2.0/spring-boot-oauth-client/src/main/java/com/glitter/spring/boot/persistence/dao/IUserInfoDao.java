@@ -52,7 +52,7 @@ public interface IUserInfoDao{
      * @param id
      * @return
      */
-    UserInfo getUserInfoById(Long id);
+    UserInfo getById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,7 +60,7 @@ public interface IUserInfoDao{
      * @param ids
      * @return
      */
-    List<UserInfo> getUserInfoByIds(Long[] ids);
+    List<UserInfo> getByIds(Long[] ids);
 
     /**
      * 按条件查询

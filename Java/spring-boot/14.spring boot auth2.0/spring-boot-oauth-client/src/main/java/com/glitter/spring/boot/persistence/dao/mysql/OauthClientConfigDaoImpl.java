@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthClientConfigDaoImpl implements IOauthClientConfigDao {
 
-    private static final String NAME_SPACE = "OauthClientConfig";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthClientConfigDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;
@@ -42,12 +42,12 @@ public class OauthClientConfigDaoImpl implements IOauthClientConfigDao {
     }
 
     @Override
-    public OauthClientConfig getOauthClientConfigById(Long id) {
+    public OauthClientConfig getById(Long id) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getById", id);
     }
 
     @Override
-    public List<OauthClientConfig> getOauthClientConfigByIds(Long[] ids) {
+    public List<OauthClientConfig> getByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }
 

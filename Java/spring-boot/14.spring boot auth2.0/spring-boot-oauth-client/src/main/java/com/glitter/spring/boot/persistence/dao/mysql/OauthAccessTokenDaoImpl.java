@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao {
 
-    private static final String NAME_SPACE = "OauthAccessToken";
+    private static final String NAME_SPACE = "com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao";
 
     @Autowired
     SqlSessionTemplate sqlSessionTemplate;
@@ -42,12 +42,12 @@ public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao {
     }
 
     @Override
-    public OauthAccessToken getOauthAccessTokenById(Long id) {
+    public OauthAccessToken getById(Long id) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getById", id);
     }
 
     @Override
-    public List<OauthAccessToken> getOauthAccessTokenByIds(Long[] ids) {
+    public List<OauthAccessToken> getByIds(Long[] ids) {
         return sqlSessionTemplate.selectList(NAME_SPACE + ".getByIds", ids);
     }
 

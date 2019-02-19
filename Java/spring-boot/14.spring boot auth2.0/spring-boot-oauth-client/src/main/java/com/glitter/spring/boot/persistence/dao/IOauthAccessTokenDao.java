@@ -52,7 +52,7 @@ public interface IOauthAccessTokenDao{
      * @param id
      * @return
      */
-    OauthAccessToken getOauthAccessTokenById(Long id);
+    OauthAccessToken getById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,7 +60,7 @@ public interface IOauthAccessTokenDao{
      * @param ids
      * @return
      */
-    List<OauthAccessToken> getOauthAccessTokenByIds(Long[] ids);
+    List<OauthAccessToken> getByIds(Long[] ids);
 
     /**
      * 按条件查询
