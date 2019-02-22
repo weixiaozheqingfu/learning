@@ -62,8 +62,11 @@ public class WebLogAspect {
         } catch (Exception e) {
             // 这里捕获到的是before方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
-            // 自己的异常建议不抛
-//            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            // 自己的异常建议也要抛出,不然尤其是service层的aop，涉及到事务,如果aop的方法执行逻辑有异常,并且aop中也有数据库操作，那么就涉及到事务了，
+            // 比如这里的before自己执行异常了，如果抛出自己的一次，那么目标方法就不会执行，而如果自己不抛出异常，则会继续执行目标方法，而before方法本身的逻辑实际已经报错了
+            // 如果before中有数据库操作且失败了，而目标方法中的数据库操作却成功了，很明显事务就会出问题。
+            // after方法和afterReturning方法同样的道理。
+            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
@@ -80,8 +83,7 @@ public class WebLogAspect {
         } catch (Exception e) {
             // 这里捕获到的是after方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
-            // 自己的异常建议不抛
-//            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
@@ -98,8 +100,7 @@ public class WebLogAspect {
         } catch (Exception e) {
             // 这里捕获到的是afterReturning方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
-            // 自己的异常建议不抛
-//            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
