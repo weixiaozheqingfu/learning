@@ -62,7 +62,8 @@ public class WebLogAspect {
         } catch (Exception e) {
             // 这里捕获到的是before方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
-            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            // 自己的异常建议不抛
+//            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
@@ -79,7 +80,8 @@ public class WebLogAspect {
         } catch (Exception e) {
             // 这里捕获到的是after方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
-            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            // 自己的异常建议不抛
+//            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
@@ -96,7 +98,8 @@ public class WebLogAspect {
         } catch (Exception e) {
             // 这里捕获到的是afterReturning方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
-            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
+            // 自己的异常建议不抛
+//            throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
     }
 
