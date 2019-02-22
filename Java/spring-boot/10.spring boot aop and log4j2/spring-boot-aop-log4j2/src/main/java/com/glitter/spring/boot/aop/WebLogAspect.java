@@ -39,15 +39,15 @@ public class WebLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution(public * com.glitter.spring.boot.web..*(..)) and @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    @Pointcut("execution(public * com.glitter.spring.boot.web..*(..)) && @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void webLogAspectPointcut(){}
 
     @Before("webLogAspectPointcut()")
     public void before(JoinPoint joinPoint) throws Throwable {
         try {
-            // if(1==1){
-            //    throw new BusinessException("-2","before出错了");
-            // }
+//            if(1==1){
+//                throw new BusinessException("-2","before出错了");
+//            }
             logger.info("web log before begin....................................................................");
             RequestLogInfo requestLogInfo = null == RequestLogInfoContext.get() ? new RequestLogInfo() : RequestLogInfoContext.get();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
@@ -56,7 +56,11 @@ public class WebLogAspect {
                 RequestLogInfoContext.set(requestLogInfo);
             }
             logger.info("web log before end,输入参数:{}", JSONObject.toJSONString(requestLogInfo));
+//            if(1==1){
+//                throw new BusinessException("-2","before出错了");
+//            }
         } catch (Exception e) {
+            // 这里捕获到的是before方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
@@ -73,6 +77,7 @@ public class WebLogAspect {
             }
             logger.info("web log after end....................................................................");
         } catch (Exception e) {
+            // 这里捕获到的是after方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
@@ -89,6 +94,7 @@ public class WebLogAspect {
             }
             logger.info("web log afterReturning end,输出参数:{}", JSONObject.toJSONString(responseLogInfo));
         } catch (Exception e) {
+            // 这里捕获到的是afterReturning方法自己内部执行报的异常,与目标方法无关
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
         }
@@ -114,11 +120,11 @@ public class WebLogAspect {
                 logger.error("web log afterThrowing end,目标方法运行异常:{}", JSONObject.toJSONString(responseLogInfo));
             }
 
-            // if(1==1){
-            //    throw new BusinessException("-2","出错了");
-            // }
+//             if(1==1){
+//                throw new BusinessException("-2","出错了");
+//             }
         } catch (Exception e) {
-            // afterThrowing方法自己执行期异常只在此记录即可.
+            // 这里捕获到的是afterThrowing方法自己内部执行报的异常,与目标方法异常无关。目标方法的异常ex会自动抛出去。前提是这里不要抛自己的e异常,否则会替代ex抛出e.
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), e, RequestLogInfoContext.get()));
             // afterThrowing方法自己执行期如果有异常不往外抛,要让代码抛出去目标方法的异常,否则,我的抛的异常会覆盖掉目标方法的异常.用户看到的就是afterThrowing方法的异常,afterThrowing方法自己执行期异常只在此记录即可.
             // throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
@@ -236,6 +242,7 @@ public class WebLogAspect {
         }
         result = new LinkedHashMap<>();
         for (int i = 0; i < paramValues.length; i++) {
+            System.out.println(i + ":" + paramValues[i].getClass());
             if(paramValues[i] instanceof ServletRequest) { continue; }
             if(paramValues[i] instanceof HttpServletRequest) { continue; }
             if(paramValues[i] instanceof ServletResponse) { continue; }

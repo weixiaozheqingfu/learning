@@ -64,7 +64,7 @@ public class TemplateUtil {
     public static String getInParams(String className, String methodName, Object... arguments) {
         String result = "";
         try {
-            if(null == arguments){
+            if(null == arguments || arguments.length <=0){
                 result += "系统异常日志:"+className+"."+methodName+"()方法执行异常,输入参数依次为:null";
                 return result;
             }

@@ -35,7 +35,7 @@ public class ServiceLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(ServiceLogAspect.class);
 
-    @Pointcut("execution(public * com.glitter.spring.boot.service..*(..)) and @annotation(org.springframework.stereotype.Service)")
+    @Pointcut("execution(public * com.glitter.spring.boot.service..*(..)) && @annotation(org.springframework.stereotype.Service)")
     public void serviceLogAspectPointcut(){}
 
     @Before("serviceLogAspectPointcut()")
@@ -156,6 +156,7 @@ public class ServiceLogAspect {
         }
         result = new LinkedHashMap<>();
         for (int i = 0; i < paramValues.length; i++) {
+            System.out.println(i + ":" + paramValues[i].getClass());
             if(paramValues[i] instanceof ServletRequest) { continue; }
             if(paramValues[i] instanceof HttpServletRequest) { continue; }
             if(paramValues[i] instanceof ServletResponse) { continue; }
