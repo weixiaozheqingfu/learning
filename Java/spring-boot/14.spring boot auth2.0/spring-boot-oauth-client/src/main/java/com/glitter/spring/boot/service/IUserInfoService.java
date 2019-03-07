@@ -29,4 +29,6 @@ public interface IUserInfoService {
      */
     UserInfo getUserInfoById(Long id);
 
+    UserInfo getByAccount(String account);
+
 }

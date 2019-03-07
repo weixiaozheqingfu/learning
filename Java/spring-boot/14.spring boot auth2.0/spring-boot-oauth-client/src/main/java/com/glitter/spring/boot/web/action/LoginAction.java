@@ -96,10 +96,9 @@ public class LoginAction extends BaseAction {
         }
 
         // 4.验证用户名密码
-        UserInfo userInfo = null;
-        //UserInfo userInfo = userInfoService.getByAccount(paramBean.getAccount());
-        //if(null == userInfo){ throw new BusinessException("-1","用户名或密码错误"); }
-        //if (!pwd.equals(userInfo.getPassword())) { throw new BusinessException("-1", "用户名或密码错误"); }
+        UserInfo userInfo = userInfoService.getByAccount(paramBean.getAccount());
+        if(null == userInfo){ throw new BusinessException("-1","用户名或密码错误"); }
+        if (!pwd.equals(userInfo.getPassword())) { throw new BusinessException("-1", "用户名或密码错误"); }
 
         // 5.记录用户登录会话信息
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);

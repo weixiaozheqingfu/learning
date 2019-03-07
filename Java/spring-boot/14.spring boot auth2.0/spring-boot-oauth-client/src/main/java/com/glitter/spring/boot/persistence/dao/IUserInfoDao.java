@@ -68,7 +68,7 @@ public interface IUserInfoDao{
      * @param userInfo
      * @return
      */
-    UserInfo getUserInfo(UserInfo userInfo);
+    UserInfo get(UserInfo userInfo);
 
     /**
      * 查询所有记录

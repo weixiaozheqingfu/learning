@@ -1,7 +1,7 @@
 spring:
     datasource:
         driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://127.0.0.1:3306/demo_client
+        url: jdbc:mysql://127.0.0.1:3306/oauth_client
         username: root
         password: root
         hikari.maxLifetime: 1765000

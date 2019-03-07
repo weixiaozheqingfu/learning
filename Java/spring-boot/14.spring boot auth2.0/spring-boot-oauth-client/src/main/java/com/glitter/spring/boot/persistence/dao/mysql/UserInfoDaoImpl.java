@@ -52,7 +52,7 @@ public class UserInfoDaoImpl implements IUserInfoDao {
     }
 
     @Override
-    public UserInfo getUserInfo(UserInfo userInfo) {
+    public UserInfo get(UserInfo userInfo) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".get", userInfo);
     }
 

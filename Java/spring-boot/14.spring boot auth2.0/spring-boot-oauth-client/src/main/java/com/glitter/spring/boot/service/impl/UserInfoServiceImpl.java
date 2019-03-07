@@ -84,4 +84,12 @@ public class UserInfoServiceImpl implements IUserInfoService{
         return result;
     }
 
+    @Override
+    public UserInfo getByAccount(String account) {
+        UserInfo record = new UserInfo();
+        record.setAccount(account);
+        UserInfo userInfo = userInfoDao.get(record);
+        return userInfo;
+    }
+
 }

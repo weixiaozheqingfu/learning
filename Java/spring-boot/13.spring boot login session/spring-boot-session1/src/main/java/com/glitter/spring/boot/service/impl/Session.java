@@ -101,7 +101,7 @@ public class Session implements ISession,Serializable {
 
     @Override
     public void setAttribute(String key, Object value) {
-        if(StringUtils.isBlank(key)){ return; }
+        if(StringUtils.isBlank(key) || null == value){ return; }
 
         String mkey = "sessionAttr:" + key;
         this.attributes.put(key, value);
