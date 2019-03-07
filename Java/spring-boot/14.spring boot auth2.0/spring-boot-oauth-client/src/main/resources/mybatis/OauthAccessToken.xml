@@ -65,7 +65,7 @@
 		</if>
     </sql>
 
-    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.syswin.systoon.crm.bean.OauthAccessToken">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
         insert into oauth_access_token
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -150,14 +150,14 @@
         </foreach>
 	</delete>
 
-    <delete id="delete" parameterType="com.syswin.systoon.crm.bean.OauthAccessToken">
+    <delete id="delete" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
         delete from oauth_access_token
         <where>
             <include refid="whereSql"/>
         </where>
     </delete>
 
-    <update id="updateById" parameterType="com.syswin.systoon.crm.bean.OauthAccessToken">
+    <update id="updateById" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
         update oauth_access_token  set
         <trim suffixOverrides=",">
         <if test="openId != null ">
@@ -206,7 +206,7 @@
         </foreach>
 	</select>
 
-	<select id="get" resultMap="BaseResultMap" parameterType="com.syswin.systoon.crm.bean.OauthAccessToken">
+	<select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
         select <include refid="baseColumns"/> from oauth_access_token
         <where>
             <include refid="whereSql"/> limit 1
@@ -217,14 +217,14 @@
 	     select <include refid="baseColumns"/> from oauth_access_token
 	</select>
 
-	<select id="findList"  parameterType="com.syswin.systoon.crm.bean.OauthAccessToken" resultMap="BaseResultMap">
+	<select id="findList"  parameterType="com.glitter.spring.boot.bean.OauthAccessToken" resultMap="BaseResultMap">
         select <include refid="baseColumns"/> from oauth_access_token
         <where>
             <include refid="whereSql"/>
         </where>
 	</select>
 
-	<select id="getCount"  parameterType="com.syswin.systoon.crm.bean.OauthAccessToken" resultType="java.lang.Integer">
+	<select id="getCount"  parameterType="com.glitter.spring.boot.bean.OauthAccessToken" resultType="java.lang.Integer">
         select count(1) from oauth_access_token
         <where>
             <include refid="whereSql"/>

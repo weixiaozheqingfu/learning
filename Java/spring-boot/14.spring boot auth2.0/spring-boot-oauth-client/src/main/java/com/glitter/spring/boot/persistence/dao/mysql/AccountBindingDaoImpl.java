@@ -53,7 +53,7 @@ public class AccountBindingDaoImpl implements IAccountBindingDao {
     }
 
     @Override
-    public AccountBinding getAccountBinding(AccountBinding accountBinding) {
+    public AccountBinding get(AccountBinding accountBinding) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".get", accountBinding);
     }
 

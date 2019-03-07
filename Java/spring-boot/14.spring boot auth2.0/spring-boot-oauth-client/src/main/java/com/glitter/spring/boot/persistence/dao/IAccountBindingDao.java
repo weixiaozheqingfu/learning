@@ -68,7 +68,7 @@ public interface IAccountBindingDao{
      * @param accountBinding
      * @return
      */
-    AccountBinding getAccountBinding(AccountBinding accountBinding);
+    AccountBinding get(AccountBinding accountBinding);
 
     /**
      * 查询所有记录
