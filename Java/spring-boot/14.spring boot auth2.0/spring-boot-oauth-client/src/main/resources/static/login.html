@@ -82,26 +82,38 @@
                 });
                 return resultStr;
             }
-
-
         });
+
     </script>
 </head>
 <body>
-<div id="myDiv"></div>
-<form name="loginFrom">
-    帐号:
-    <input type="text" name="account" id="account" size="18" height="28px" value="" /><br>
-    密码:
-    <input type="password" name="password" id="password" size="18" height="28px" value="" /><br>
-    验证码:
-    <input type="text" name="graphCaptcha" id="graphCaptcha" size="18" height="28px" value="" /><img id="captcha" width="100px" src="" >
-    <!--
-    验证码1:
-    <input type="text" name="graphCaptcha1" size="18" value="" /><img id="captcha1" width="100px" src="http://localhost:8081/login/getLoginGraphCaptcha"><br>
-    -->
-    <input type="button" name="submitBtn" id="submitBtn" value="登陆" />
+<div id="myDiv">
+    <form name="loginFrom">
+        帐号:
+        <input type="text" name="account" id="account" size="18" height="28px" value="" /><br>
+        密码:
+        <input type="password" name="password" id="password" size="18" height="28px" value="" /><br>
+        验证码:
+        <input type="text" name="graphCaptcha" id="graphCaptcha" size="18" height="28px" value="" /><img id="captcha" width="100px" src="" >
+        <!--
+        验证码1:
+        <input type="text" name="graphCaptcha1" size="18" value="" /><img id="captcha1" width="100px" src="http://localhost:8081/login/getLoginGraphCaptcha"><br>
+        -->
+        <input type="button" name="submitBtn" id="submitBtn" value="登陆" />
+    </form>
+</div>
 
-</form>
+
+<div id="thirdLogin">
+        <p></p>
+        <span>使用第三方平台登陆:</span>
+        <br/>
+        <a href="http://localhost:8081/auth/wechat">微信</a>
+        <br/>
+        <a href="http://localhost:8081/auth/csdn">csdn</a>
+        <br/>
+        <a href="http://localhost:8081/auth/oauth_server">oauth_server</a>
+</div>
+
 </body>
 </html>
