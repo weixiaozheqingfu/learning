@@ -9,14 +9,14 @@ public interface IAuthService {
      * 生成state值
      * @return
      */
-    String generateState(AuthStateInfo authStateInfo);
+    String generateState(String serverType);
 
     /**
      * 验证state
      * @param state
-     * @param authStateInfo
+     * @param serverType
      * @return
      */
-    boolean validateState(String state, AuthStateInfo authStateInfo);
+    boolean validateState(String state, String serverType);
 
 }

@@ -27,50 +27,38 @@ public class AuthServiceImpl implements IAuthService {
     /**
      * 生成state值
      *
-     * @param authStateInfo
+     * @param serverType
      * @return
      */
     @Override
-    public String generateState(AuthStateInfo authStateInfo) {
+    public String generateState(String serverType) {
         String uuid = UUID.randomUUID().toString().replace("-","");
         String key = cacheKeyManager.getAuthStateKey(uuid);
-        commonCache.add(key, JSONObject.toJSONString(authStateInfo), cacheKeyManager.getAuthStateKeyExpireTime());
+        commonCache.add(key, serverType, cacheKeyManager.getAuthStateKeyExpireTime());
         return uuid;
     }
 
     /**
      * 验证state
      * @param state
-     * @param authStateInfo
+     * @param serverType
      * @return
      */
     @Override
-    public boolean validateState(String state, AuthStateInfo authStateInfo) {
-        boolean result = false;
-
-        if (StringUtils.isBlank(authStateInfo.getClientId())) {
-            return result;
-        }
-        if (StringUtils.isBlank(authStateInfo.getRedirectUri())) {
-            return result;
+    public boolean validateState(String state, String serverType) {
+        if (StringUtils.isBlank(serverType)) {
+            return false;
         }
 
         String key = cacheKeyManager.getAuthStateKey(state);
-        AuthStateInfo authStateInfoRedis = commonCache.get(key);
-        if (null == authStateInfoRedis) {
-            return result;
+        String serverTypeRedis = commonCache.get(key);
+        if (StringUtils.isBlank(serverTypeRedis)) {
+            return false;
         }
-        if(!authStateInfo.getClientId().equals(authStateInfoRedis.getClientId())){
-            return result;
+        if(!serverType.equals(serverTypeRedis)){
+            return false;
         }
-        if(!authStateInfo.getRedirectUri().equals(authStateInfoRedis.getRedirectUri())){
-            return result;
-        }
-        if(!authStateInfo.getScope().equals(authStateInfoRedis.getScope())){
-            return result;
-        }
-
-        result = true;
-        return result;
+        commonCache.del(key);
+        return true;
     }
 }
