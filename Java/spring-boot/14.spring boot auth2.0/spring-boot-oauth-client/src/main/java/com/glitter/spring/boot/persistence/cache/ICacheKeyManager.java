@@ -17,4 +17,8 @@ public interface ICacheKeyManager {
 
     Long getLimitMultiLoginKeyExpireTime();
 
+    String getAuthStateKey(String uuid);
+
+    Long getAuthStateKeyExpireTime();
+
 }

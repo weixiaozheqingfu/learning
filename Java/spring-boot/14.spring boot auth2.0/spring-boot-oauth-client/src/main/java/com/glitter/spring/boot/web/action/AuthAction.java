@@ -1,12 +1,16 @@
 package com.glitter.spring.boot.web.action;
 
-import com.glitter.spring.boot.service.IUserInfoService;
+import com.glitter.spring.boot.bean.AuthStateInfo;
+import com.glitter.spring.boot.bean.OauthClientConfig;
+import com.glitter.spring.boot.service.IAuthService;
+import com.glitter.spring.boot.service.IOauthClientConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -18,7 +22,10 @@ public class AuthAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(AuthAction.class);
 
     @Autowired
-    private IUserInfoService userInfoService;
+    private IOauthClientConfigService oauthClientConfigService;
+
+    @Autowired
+    private IAuthService authService;
 
     /**
      * 重定向到wechat授权页
@@ -45,6 +52,28 @@ public class AuthAction extends BaseAction {
     @RequestMapping(value = "oauth_server", method = RequestMethod.GET)
     public void oauth_server(HttpServletResponse response) throws IOException {
         response.sendRedirect("http://www.baidu.com");
+        OauthClientConfig oauthClientConfig = oauthClientConfigService.getOauthClientConfigByServerType("oauth_server");
+        AuthStateInfo authStateInfo = new AuthStateInfo();
+        authStateInfo.setClientId(oauthClientConfig.getClientId());
+        authStateInfo.setRedirectUri(oauthClientConfig.getRedirectUri());
+        authStateInfo.setScope(oauthClientConfig.getScope());
+
+        String client_id = oauthClientConfig.getClientId();
+        String redirect_uri = oauthClientConfig.getRedirectUri();
+        String scope = oauthClientConfig.getScope();
+        String response_type = "code";
+        String state = authService.generateState(authStateInfo);
+
+        StringBuffer url = new StringBuffer("http://localhost:8080/oauth2/authorize");
+        url.append("?");
+        url.append("client_id=" + client_id);
+        url.append("redirect_uri=" + redirect_uri);
+        url.append("scope=" + scope);
+        url.append("response_type=" + response_type);
+        url.append("state=" + state);
+
+        response.sendRedirect(url.toString());
     }
+
 }
 

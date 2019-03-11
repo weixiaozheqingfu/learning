@@ -30,4 +30,11 @@ public interface IOauthClientConfigService {
      */
     OauthClientConfig getOauthClientConfigById(Long id);
 
+    /**
+     * 根据服务端类型获取对应的应用配置信息
+     * @param serverType
+     * @return
+     */
+    OauthClientConfig getOauthClientConfigByServerType(String serverType);
+
 }

@@ -5,6 +5,7 @@ import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.dao.IOauthClientConfigDao;
 import com.glitter.spring.boot.service.IOauthClientConfigService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,4 +85,21 @@ public class OauthClientConfigServiceImpl implements IOauthClientConfigService {
         return result;
     }
 
+    /**
+     * 根据服务端类型获取对应的应用配置信息
+     *
+     * @param serverType
+     * @return
+     */
+    @Override
+    public OauthClientConfig getOauthClientConfigByServerType(String serverType) {
+        OauthClientConfig result = null;
+        if(StringUtils.isBlank(serverType)){
+            return result;
+        }
+        OauthClientConfig record = new OauthClientConfig();
+        record.setServerType(serverType);
+        result = oauthClientConfigDao.getOauthClientConfig(record);
+        return result;
+    }
 }
