@@ -1,11 +1,24 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="js/jsencrypt.min.js"></script>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
 
     <script type="text/javascript">
         $(function(){
+
+            function getQueryString(name) {
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if(r!=null)return  unescape(r[2]);
+                return null;
+            }
+
+            var errorMsg = getQueryString("code");
+            if(errorMsg && errorMsg == -1000){
+                $("#errorMsgSpan").text("连接失败，请重试！");
+            }
+
             var domain = "http://localhost:8081";
             // var domain = "http://limengjun.com/demo";
 
@@ -88,6 +101,7 @@
 </head>
 <body>
 <div id="myDiv">
+    <span id="errorMsgSpan" style="color: red;"></span><br>
     <form name="loginFrom">
         帐号:
         <input type="text" name="account" id="account" size="18" height="28px" value="" /><br>

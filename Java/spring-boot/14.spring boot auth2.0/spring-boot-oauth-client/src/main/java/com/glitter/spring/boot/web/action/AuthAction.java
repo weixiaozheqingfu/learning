@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -94,16 +95,20 @@ public class AuthAction extends BaseAction {
      * @return
      */
     @RequestMapping(value = "oauth_server/callback", method = RequestMethod.GET)
-    public void oauth_server_callback(@RequestParam String code, @RequestParam String state) throws IOException {
+    public String oauth_server_callback(@RequestParam String code, @RequestParam String state) throws IOException {
         boolean stateStatus = authService.validateState(state, "oauth_server");
         if (!stateStatus) {
             // TODO  属于恶意请求,重定向到登陆页面,并提示连接失败,请重试.
+            return "redirect:http://localhost:8081/login.html?code=-1000";
         }
         // TODO 获取accessToken,获取用户信息
+
 
         // TODO 验证三方登陆用户是否已经绑定了用户账户,如果没有绑定,则重定向到绑定页面(可以新注册账号并绑定,或者绑定已有账号),
         // TODO 如果已经绑定,则建立登陆会话,并重定向到首页
 
+
+        return null;
 
         // 后续,登陆会话是独立的,与accessToken无关,如果只是借用第三方平台做第三方登陆,到此就为止了,
         // 如果说,应用中某些功能还要获取用户在第三方平台中的授权可访问的数据,那么就需要通过accessToken来获取数据即可,accessToken如果过期就使用refreshToken来换,但这也和当前的登陆会话没有任何关系.一码是一码.
