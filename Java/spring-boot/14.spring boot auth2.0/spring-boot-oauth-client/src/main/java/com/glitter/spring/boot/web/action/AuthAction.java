@@ -98,7 +98,7 @@ public class AuthAction extends BaseAction {
     public String oauth_server_callback(@RequestParam String code, @RequestParam String state) throws IOException {
         boolean stateStatus = authService.validateState(state, "oauth_server");
         if (!stateStatus) {
-            // TODO  属于恶意请求,重定向到登陆页面,并提示连接失败,请重试.
+            // 属于恶意请求,重定向到登陆页面,并提示连接失败,请重试.
             return "redirect:http://localhost:8081/login.html?code=-1000";
         }
         // TODO 获取accessToken,获取用户信息
