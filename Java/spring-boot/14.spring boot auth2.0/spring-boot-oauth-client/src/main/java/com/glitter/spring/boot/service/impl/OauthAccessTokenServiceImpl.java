@@ -29,7 +29,6 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
         if(null == oauthAccessToken){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS,"输入参数为空");
         }
-        // TODO 参数校验
         Date now = new Date();
         oauthAccessToken.setCreateTime(now);
         oauthAccessToken.setUpdateTime(now);

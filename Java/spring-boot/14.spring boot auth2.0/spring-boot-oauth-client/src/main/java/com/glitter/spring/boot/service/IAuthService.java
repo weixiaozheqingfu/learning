@@ -1,8 +1,6 @@
 package com.glitter.spring.boot.service;
 
 
-import com.glitter.spring.boot.bean.AuthStateInfo;
-
 public interface IAuthService {
 
     /**

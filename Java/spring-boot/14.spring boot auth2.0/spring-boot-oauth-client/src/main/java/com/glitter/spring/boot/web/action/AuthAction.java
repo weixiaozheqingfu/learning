@@ -1,20 +1,25 @@
 package com.glitter.spring.boot.web.action;
 
-import com.glitter.spring.boot.bean.AuthStateInfo;
+import com.alibaba.fastjson.JSONObject;
+import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.bean.OauthClientConfig;
+import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
+import com.glitter.spring.boot.persistence.remote.IAuthRemote;
 import com.glitter.spring.boot.service.IAuthService;
+import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import com.glitter.spring.boot.service.IOauthClientConfigService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/auth")
@@ -27,6 +32,12 @@ public class AuthAction extends BaseAction {
 
     @Autowired
     private IAuthService authService;
+
+    @Autowired
+    private IAuthRemote authRemote;
+
+    @Autowired
+    private IOauthAccessTokenService oauthAccessTokenService;
 
     /**
      * 重定向到wechat授权页
@@ -97,11 +108,55 @@ public class AuthAction extends BaseAction {
     @RequestMapping(value = "oauth_server/callback", method = RequestMethod.GET)
     public String oauth_server_callback(@RequestParam String code, @RequestParam String state) throws IOException {
         boolean stateStatus = authService.validateState(state, "oauth_server");
+
+        // 1.属于恶意请求,重定向到登陆页面,并提示连接失败,请重试.
         if (!stateStatus) {
-            // 属于恶意请求,重定向到登陆页面,并提示连接失败,请重试.
             return "redirect:http://localhost:8081/login.html?code=-1000";
         }
-        // TODO 获取accessToken,获取用户信息
+
+        // 2.获取accessToken,获取用户信息,看返回accessToken时返回的openid是否够用,如果够用,就不用再去请求获取用户信息接口了。
+        OauthClientConfig oauthClientConfig = oauthClientConfigService.getOauthClientConfigByServerType("oauth_server");
+
+        String client_id = oauthClientConfig.getClientId();
+        String client_secret = oauthClientConfig.getClientSecret();
+        String redirect_uri = oauthClientConfig.getRedirectUri();
+        String grant_type= "authorization_code";
+
+        Map map = null;
+        try {
+            map = authRemote.getOauthServerAccessToken(client_id, client_secret, redirect_uri, code, grant_type);
+            logger.info("map:" + JSONObject.toJSONString(map));
+        } catch (Exception e) {
+            logger.error(JSONObject.toJSONString(e));
+            return "redirect:http://localhost:8081/login.html?code=-1001";
+        }
+        if (null == map) {
+            return "redirect:http://localhost:8081/login.html?code=-1002";
+        }
+        if (null != map.get("errcode")) {
+            return "redirect:http://localhost:8081/login.html?code=-1003";
+        }
+        String access_token = (String)map.get("access_token");
+        String token_type = (String)map.get("token_type");
+        String expires_in = (String)map.get("expires_in");
+        String refresh_token = (String)map.get("refresh_token");
+        String scope = (String)map.get("scope");
+        String openid = (String)map.get("openid");
+        // 其他字段这里不一一判断了
+        if (StringUtils.isBlank(access_token)) {
+            return "redirect:http://localhost:8081/login.html?code=-1004";
+        }
+
+        // 3.accessToken入库 上面代码应该放入service中
+        OauthAccessToken oauthAccessToken = new OauthAccessToken();
+        oauthAccessToken.setOpenId(openid);
+        oauthAccessToken.setAccessToken(access_token);
+        oauthAccessToken.setExpireIn(StringUtils.isBlank(expires_in) ? null : Long.valueOf(expires_in));
+        oauthAccessToken.setRefreshToken(refresh_token);
+        oauthAccessToken.setScope(scope);
+        oauthAccessToken.setServerType("oauth_server");
+        oauthAccessTokenService.create(oauthAccessToken);
+
 
 
         // TODO 验证三方登陆用户是否已经绑定了用户账户,如果没有绑定,则重定向到绑定页面(可以新注册账号并绑定,或者绑定已有账号),
