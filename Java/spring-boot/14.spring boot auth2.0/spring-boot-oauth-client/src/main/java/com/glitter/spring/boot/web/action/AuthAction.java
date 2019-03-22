@@ -147,7 +147,7 @@ public class AuthAction extends BaseAction {
             return "redirect:http://localhost:8081/login.html?code=-1004";
         }
 
-        // 3.accessToken入库 上面代码应该放入service中
+        // 3.accessToken入库
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         oauthAccessToken.setOpenId(openid);
         oauthAccessToken.setAccessToken(access_token);

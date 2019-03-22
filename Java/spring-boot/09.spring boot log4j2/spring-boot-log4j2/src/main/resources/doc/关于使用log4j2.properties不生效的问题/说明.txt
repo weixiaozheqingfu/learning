@@ -1,0 +1,32 @@
+1.要想打印sql日志。
+
+不需要下面的这些配置。
+logger.sql.name=com.syswin.systoon
+logger.sql.level=TRACE
+logger.sql.additivity=false
+logger.sql.appenderRef.console.ref=ConsoleAppender
+logger.sql.appenderRef.file.ref=FileAppender
+
+logger.mybatis.name=org.apache.ibatis
+logger.mybatis.level=DEBUG
+logger.mybatis.additivity=false
+logger.mybatis.appenderRef.console.ref=ConsoleAppender
+logger.mybatis.appenderRef.file.ref=FileAppender
+
+
+2.需要项目本身的类的日志级别是debug级别即可，如果想看sql的返回值的话，则项目本身的类的日志级别是trace即可。
+  因为mybatis的sql日志打印是代理了一层，级别是所在类的日志级别控制的。
+
+
+3.如果使用手动指定命名空间，则需要使用接口全路径才行，否则sql日志不输出。
+private static final String NAME_SPACE = "com.syswin.systoon.crm.persistence.dao.IOppBaseDao";
+
+<mapper namespace="com.syswin.systoon.crm.persistence.dao.IOppBaseDao">
+
+同时接口的方法名要与mapper文件中的方法名称一致。
+
+OppBase getOppBaseById(Long id);
+
+<select id="getOppBaseById" resultMap="BaseResultMap">
+	    select <include refid="baseColumns"/> from opp_base_model where id =#{id}
+	</select>
