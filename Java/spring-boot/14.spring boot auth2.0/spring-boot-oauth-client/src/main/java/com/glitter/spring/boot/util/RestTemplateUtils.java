@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class RestTemplateUtils {
     private static final Logger logger = LoggerFactory.getLogger(RestTemplateUtils.class);
 
-    @Autowired
+    @Qualifier("restTemplate")
     private RestTemplate restTemplate;
 
 
