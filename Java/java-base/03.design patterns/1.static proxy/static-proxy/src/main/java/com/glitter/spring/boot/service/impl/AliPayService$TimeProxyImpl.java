@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.service.impl;
 
-public class WeChatPayService$ProxyImpl extends WeChatPayServiceImpl {
+public class AliPayService$TimeProxyImpl extends AliPayServiceImpl {
 
     @Override
     public void pay(Long money) {

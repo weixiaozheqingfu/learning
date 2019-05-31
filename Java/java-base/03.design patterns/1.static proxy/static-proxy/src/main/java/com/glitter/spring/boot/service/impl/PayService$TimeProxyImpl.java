@@ -2,11 +2,11 @@ package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.service.IPayService;
 
-public class PayService$Proxy2Impl implements IPayService {
+public class PayService$TimeProxyImpl implements IPayService {
 
     IPayService payService;
 
-    public PayService$Proxy2Impl(IPayService payService) {
+    public PayService$TimeProxyImpl(IPayService payService) {
         this.payService = payService;
     }
 
