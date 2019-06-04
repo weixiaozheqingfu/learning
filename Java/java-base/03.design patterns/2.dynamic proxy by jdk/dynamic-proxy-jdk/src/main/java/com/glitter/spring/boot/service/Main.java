@@ -24,13 +24,13 @@ public class Main extends AliPayServiceImpl {
 
     public static void main(String[] args){
         TimeProxyInvocationHandler h = new TimeProxyInvocationHandler();
-        IPayService payService$proxy = (IPayService) Proxy.newProxyInstance(Main.class.getClassLoader(), new Class[]{IPayService.class}, h);
+        // 第一个参数,只要是普通类加载器就可以了
+        IPayService payService$proxy = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h);
         // 其实代理对象就是把接口的所有方法都重新实现了一把,动态生成一个代理类的class类字节码文件并通过classLoader加载到jvm虚拟机内存中,进而生成代理对象实例
         // 这个代理对象实际上就是在每个接口方法中都只调用h.invoke()方法而已,在h.invoke()方法中可以做任何事情。h.invoke()方法其实就是代理方法了，可以做任何事情
-        // 可以在调用实际对象前后做任何事情，当然，如果你愿意，你都可以不调用实际对象的方法。不过那样就有点耍流氓了啊。
+        // 可以在调用实际对象方法的前后做任何事情，当然，如果你愿意，你都可以不调用实际对象的方法。不过那样就有点耍流氓了啊。
         payService$proxy.pay(50L);
-
-        createProxyClassFile("payService$proxy$Proxy", new Class[]{IPayService.class});
+        createProxyClassFile("payService$proxy", new Class[]{IPayService.class});
     }
 
 

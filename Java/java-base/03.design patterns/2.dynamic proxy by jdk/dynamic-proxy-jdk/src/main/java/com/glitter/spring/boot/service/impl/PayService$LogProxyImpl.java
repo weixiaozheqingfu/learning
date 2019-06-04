@@ -17,4 +17,9 @@ public class PayService$LogProxyImpl implements IPayService {
         System.out.println(payService.getClass().getName() + ".pay方法执行完毕");
     }
 
+    @Override
+    public Long accept(Long money) {
+        return null;
+    }
+
 }

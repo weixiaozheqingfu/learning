@@ -6,6 +6,16 @@ import java.util.Random;
 
 public class AliPayServiceImpl implements IPayService {
 
+    private boolean flag;
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
     @Override
     public void pay(Long money) {
         try {
@@ -14,6 +24,12 @@ public class AliPayServiceImpl implements IPayService {
 
         }
         System.out.println("AliPayServiceImpl.pay方法执行,支付"+money+"元......");
+    }
+
+    @Override
+    public Long accept(Long money) {
+        System.out.println("AliPayServiceImpl.accept方法执行,收款"+money+"元......");
+        return money;
     }
 
 }

@@ -4,4 +4,6 @@ public interface IPayService {
 
     void pay(Long money);
 
+    Long accept(Long money);
+
 }
