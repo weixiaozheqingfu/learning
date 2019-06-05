@@ -2,7 +2,6 @@ package com.glitter.spring.boot.service;
 
 import com.glitter.spring.boot.service.impl.AliPayServiceImpl;
 import com.glitter.spring.boot.service.impl.WeChatPayServiceImpl;
-import com.glitter.spring.boot.service.proxy.TimeProxyInvocationHandler1;
 import com.glitter.spring.boot.service.proxy.TimeProxyInvocationHandler2;
 import sun.misc.ProxyGenerator;
 
@@ -19,19 +18,8 @@ public class Main2 extends AliPayServiceImpl {
         weChatPayService.setFlag(true);
         InvocationHandler h2 = new TimeProxyInvocationHandler2(weChatPayService);
         IPayService payService$proxy2 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h2);
-        payService$proxy2.accept(50L);
-
-
-        Boolean flag = Proxy.isProxyClass(payService$proxy2.getClass());
-//        InvocationHandler h22 = null;
-//        if (flag) {
-//            h22 = Proxy.getInvocationHandler(payService$proxy2);
-//        } else {
-//            h22 = new TimeProxyInvocationHandler2(weChatPayService);
-//        }
 
         InvocationHandler h22 = new TimeProxyInvocationHandler2(payService$proxy2);
-
 
         IPayService payService$proxy22 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h22);
         payService$proxy22.pay(60L);
