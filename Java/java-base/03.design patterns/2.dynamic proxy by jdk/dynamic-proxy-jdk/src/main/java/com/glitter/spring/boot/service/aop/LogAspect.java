@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Aspect
+@Order(1)
 public class LogAspect{
 
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);

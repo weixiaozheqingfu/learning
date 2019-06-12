@@ -1,19 +1,24 @@
 package com.glitter.spring.boot.service;
 
+
 import com.glitter.spring.boot.service.impl.AliPayServiceImpl;
 import com.glitter.spring.boot.service.impl.WeChatPayServiceImpl;
 import com.glitter.spring.boot.service.proxy.TimeProxyInvocationHandler2;
+import com.glitter.spring.boot.util.ClassUtil;
+import com.glitter.spring.boot.util.ClassUtilLimengjun;
 import sun.misc.ProxyGenerator;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
+import java.util.List;
 
 public class Main3 extends AliPayServiceImpl {
 
-    /** 这个main方法中的代码逻辑实际上应该是一个创建代理对象的工厂bean */
+    /** 这个main方法中的代码逻辑实际上应该是一个创建代理对象的工厂bean,将来有了工厂模式,此处可以演变为工厂模式,只要传入一个目标对象,就可以返回一个代理对象 */
     public static void main(String[] args){
         // 传入目标对象
 
@@ -29,17 +34,23 @@ public class Main3 extends AliPayServiceImpl {
         // 遍历完毕后，就可以拿到最终的代理对象了。
 
 
+
         WeChatPayServiceImpl weChatPayService = new WeChatPayServiceImpl();
-        weChatPayService.setFlag(true);
-        InvocationHandler h2 = new TimeProxyInvocationHandler2(weChatPayService);
-        IPayService payService$proxy2 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h2);
+        Boolean targetIsPublic = ClassUtilLimengjun.isPublicClass(weChatPayService);
+        List<String> targetMethodNames = ClassUtilLimengjun.getPublicMethodNames(weChatPayService);
 
-        InvocationHandler h22 = new TimeProxyInvocationHandler2(payService$proxy2);
 
-        IPayService payService$proxy22 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h22);
-        payService$proxy22.pay(60L);
 
-        createProxyClassFile("payService$proxy2", new Class[]{IPayService.class});
+//        weChatPayService.setFlag(true);
+//        InvocationHandler h2 = new TimeProxyInvocationHandler2(weChatPayService);
+//        IPayService payService$proxy2 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h2);
+//
+//        InvocationHandler h22 = new TimeProxyInvocationHandler2(payService$proxy2);
+//
+//        IPayService payService$proxy22 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h22);
+//        payService$proxy22.pay(60L);
+//
+//        createProxyClassFile("payService$proxy2", new Class[]{IPayService.class});
 
 
 

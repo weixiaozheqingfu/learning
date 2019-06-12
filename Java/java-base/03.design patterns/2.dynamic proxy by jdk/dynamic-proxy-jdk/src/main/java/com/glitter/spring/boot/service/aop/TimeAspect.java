@@ -4,6 +4,8 @@ import com.glitter.spring.boot.service.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Aspect
+@Order(2)
 public class TimeAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(TimeAspect.class);
