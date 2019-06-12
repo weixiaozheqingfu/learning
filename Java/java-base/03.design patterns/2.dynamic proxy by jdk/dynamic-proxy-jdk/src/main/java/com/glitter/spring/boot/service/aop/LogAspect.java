@@ -31,7 +31,7 @@ public class LogAspect{
         logger.info("DemoAspect1.afterReturning,ret:{}.................................",ret);
     }
 
-    @AfterThrowing(pointcut = "accept()", throwing = "ex")
+    @AfterThrowing(pointcut = "accept", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex) throws Exception {
         logger.info("DemoAspect1.afterThrowing,ex:{}...............................................................",ex);
     }

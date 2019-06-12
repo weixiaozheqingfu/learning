@@ -4,6 +4,8 @@ package com.glitter.spring.boot.service;
 import com.glitter.spring.boot.service.impl.AliPayServiceImpl;
 import com.glitter.spring.boot.service.impl.WeChatPayServiceImpl;
 import com.glitter.spring.boot.service.proxy.TimeProxyInvocationHandler2;
+import com.glitter.spring.boot.util.AspectInfo;
+import com.glitter.spring.boot.util.AspectInfoUtil;
 import com.glitter.spring.boot.util.ClassUtil;
 import com.glitter.spring.boot.util.ClassUtilLimengjun;
 import sun.misc.ProxyGenerator;
@@ -19,7 +21,7 @@ import java.util.List;
 public class Main3 extends AliPayServiceImpl {
 
     /** 这个main方法中的代码逻辑实际上应该是一个创建代理对象的工厂bean,将来有了工厂模式,此处可以演变为工厂模式,只要传入一个目标对象,就可以返回一个代理对象 */
-    public static void main(String[] args){
+    public static void main(String[] args) throws ClassNotFoundException {
         // 传入目标对象
 
         // 获取目标对象的类声明信息和方法信息等关系到aop切面中可能用于判断该类以及该类的方法是否执行切面的规则。
@@ -39,7 +41,8 @@ public class Main3 extends AliPayServiceImpl {
         Boolean targetIsPublic = ClassUtilLimengjun.isPublicClass(weChatPayService);
         List<String> targetMethodNames = ClassUtilLimengjun.getPublicMethodNames(weChatPayService);
 
-
+        List<AspectInfo> aspectInfos = AspectInfoUtil.getAspectInfos();
+        // TODO
 
 //        weChatPayService.setFlag(true);
 //        InvocationHandler h2 = new TimeProxyInvocationHandler2(weChatPayService);
