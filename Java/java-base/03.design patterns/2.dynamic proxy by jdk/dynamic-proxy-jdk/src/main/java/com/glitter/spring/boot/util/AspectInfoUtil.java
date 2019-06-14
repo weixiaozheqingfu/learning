@@ -29,6 +29,8 @@ public class AspectInfoUtil {
         // 遍历classNames,提取AspectInfo信息
         for (int i = 0; i < classNames.size(); i++) {
             AspectInfo aspectInfo = new AspectInfo();
+            aspectInfo.setAspectName(classNames.get(i));
+
             Class c = Class.forName(classNames.get(i));
             Method[] ms = c.getMethods();
             for (Method m : ms) {

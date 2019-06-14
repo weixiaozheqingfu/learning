@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.service.proxy;
 
+import com.glitter.spring.boot.service.aop.JoinPoint;
 import com.glitter.spring.boot.util.AspectInfo;
 import com.glitter.spring.boot.util.ClassUtilLimengjun;
 import org.slf4j.Logger;
@@ -24,37 +25,42 @@ public class ProxyInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        // TODO 将null替换为JoinPoint对象
+        JoinPoint joinPoint = new JoinPoint(this.target, method, args);
 
-        List<String> targetMethodNames = ClassUtilLimengjun.getPublicMethodNames(target);
         Object aspect = Class.forName(aspectInfo.getAspectName()).newInstance();
         Object result = null;
         try {
-            if (targetMethodNames.contains(aspectInfo.getBefore())) {
+            if (method.getName().contains(aspectInfo.getBefore())) {
                 Method beforeMethod = ClassUtilLimengjun.getMethod(aspect, "before");
-                beforeMethod.invoke(aspect, null);
+                Object[] beforeArgs = new Object[]{joinPoint};
+                beforeMethod.invoke(aspect, beforeArgs);
             }
 
-            if (targetMethodNames.contains(aspectInfo.getAround())) {
+            if (method.getName().contains(aspectInfo.getAround())) {
                 Method aroundMethod = ClassUtilLimengjun.getMethod(aspect, "around");
-                result = aroundMethod.invoke(aspect, null);
+                Object[] aroundArgs = new Object[]{joinPoint};
+                result = aroundMethod.invoke(aspect, aroundArgs);
             } else {
                 result = method.invoke(target, args);
             }
 
-            if(targetMethodNames.contains(aspectInfo.getAfter())){
+            if(method.getName().contains(aspectInfo.getAfter())){
                 Method afterMethod = ClassUtilLimengjun.getMethod(aspect, "after");
-                afterMethod.invoke(aspect, null);
+                Object[] afterArgs = new Object[]{joinPoint};
+                afterMethod.invoke(aspect, afterArgs);
             }
 
-            if(targetMethodNames.contains(aspectInfo.getAfterReturning())){
+            if(method.getName().contains(aspectInfo.getAfterReturning())){
                 Method afterReturningMethod = ClassUtilLimengjun.getMethod(aspect, "afterReturning");
-                afterReturningMethod.invoke(aspect, null, null);
+                Object[] afterReturningArgs = new Object[]{joinPoint,result};
+                afterReturningMethod.invoke(aspect, afterReturningArgs);
             }
         } catch (Exception e) {
-            if(targetMethodNames.contains(aspectInfo.getAfterThrowing())){
+            e.printStackTrace();
+            if(method.getName().contains(aspectInfo.getAfterThrowing())){
                 Method afterThrowingMethod = ClassUtilLimengjun.getMethod(aspect, "afterThrowing");
-                afterThrowingMethod.invoke(aspect, null, e);
+                Object[] afterThrowingArgs = new Object[]{joinPoint,e};
+                afterThrowingMethod.invoke(aspect, afterThrowingArgs);
             }
         }
         return result;

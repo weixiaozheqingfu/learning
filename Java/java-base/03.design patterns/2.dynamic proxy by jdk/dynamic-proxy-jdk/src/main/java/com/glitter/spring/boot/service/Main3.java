@@ -20,24 +20,10 @@ public class Main3 extends AliPayServiceImpl {
 
 
     public static void main(String[] args) throws ClassNotFoundException {
-
-
         Object target = new WeChatPayServiceImpl();
         IPayService payService = Main3.getProxyInstance(target);
         payService.pay(20L);
-
-//        weChatPayService.setFlag(true);
-//        InvocationHandler h2 = new TimeProxyInvocationHandler2(weChatPayService);
-//        IPayService payService$proxy2 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h2);
-//
-//        InvocationHandler h22 = new TimeProxyInvocationHandler2(payService$proxy2);
-//
-//        IPayService payService$proxy22 = (IPayService) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class[]{IPayService.class}, h22);
-//        payService$proxy22.pay(60L);
-//
-//        createProxyClassFile("payService$proxy2", new Class[]{IPayService.class});
-
-
+        payService.accept(30L);
     }
 
 

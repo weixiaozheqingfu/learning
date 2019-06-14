@@ -11,6 +11,12 @@ public class JoinPoint {
 
     private Object[] args;
 
+    public JoinPoint(Object target, Method method, Object[] args) {
+        this.target = target;
+        this.method = method;
+        this.args = args;
+    }
+
 
     Object proceed() throws InvocationTargetException, IllegalAccessException {
         return this.method.invoke(this.target, this.args);

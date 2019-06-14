@@ -12,28 +12,32 @@ public class LogAspect{
 
     @Before(pointcut = "accept")
     public void before(JoinPoint joinPoint) throws Throwable {
-
+        logger.debug("LogAspect.before.......................................");
     }
 
     @Around(pointcut = "accept")
     public Object around (JoinPoint joinPoint) throws Throwable {
+        logger.debug("LogAspect.around开始.......................................");
         Object result = joinPoint.proceed();
+        logger.debug("LogAspect.around完毕.......................................");
+        logger.debug("LogAspect.around结果......................................." + result.toString());
         return result;
     }
 
     @After(pointcut = "accept")
     public void after(JoinPoint joinPoint) throws Throwable {
-
+        logger.debug("LogAspect.after.......................................");
     }
 
     @AfterReturning(pointcut = "accept", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
-        logger.info("DemoAspect1.afterReturning,ret:{}.................................",ret);
+        logger.debug("LogAspect.afterReturning.......................................");
+        logger.debug("LogAspect.afterReturning.ret......................................." + ret.toString());
     }
 
     @AfterThrowing(pointcut = "accept", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex) throws Exception {
-        logger.info("DemoAspect1.afterThrowing,ex:{}...............................................................",ex);
+        logger.debug("LogAspect.afterThrowing.ex......................................." + ex.toString());
     }
 
 }
