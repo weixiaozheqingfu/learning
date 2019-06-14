@@ -1,13 +1,11 @@
 package com.glitter.spring.boot.service.proxy;
 
-import com.glitter.spring.boot.service.impl.WeChatPayServiceImpl;
 import com.glitter.spring.boot.util.AspectInfo;
 import com.glitter.spring.boot.util.ClassUtilLimengjun;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -26,6 +24,8 @@ public class ProxyInvocationHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        // TODO 将null替换为JoinPoint对象
+
         List<String> targetMethodNames = ClassUtilLimengjun.getPublicMethodNames(target);
         Object aspect = Class.forName(aspectInfo.getAspectName()).newInstance();
         Object result = null;
