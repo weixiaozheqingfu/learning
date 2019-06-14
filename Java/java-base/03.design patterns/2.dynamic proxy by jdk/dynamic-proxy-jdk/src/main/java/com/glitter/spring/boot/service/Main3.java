@@ -46,7 +46,6 @@ public class Main3 extends AliPayServiceImpl {
         List<String> targetMethodNames = ClassUtilLimengjun.getPublicMethodNames(target);
 
         List<AspectInfo> aspectInfos = AspectInfoUtil.getAspectInfos();
-        // TODO
         for (int i = 0; i < aspectInfos.size(); i++) {
             boolean isPointCut = Main3.isPointCut(targetMethodNames, aspectInfos.get(i));
             if (isPointCut) {

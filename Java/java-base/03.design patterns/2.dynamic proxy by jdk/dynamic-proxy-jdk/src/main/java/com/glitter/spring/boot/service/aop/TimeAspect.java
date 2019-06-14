@@ -37,7 +37,7 @@ public class TimeAspect {
 
     @AfterThrowing(pointcut = "accept", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Exception ex) throws Exception {
-        logger.debug("TimeAspect.afterThrowing.ex......................................." + ex.toString());
+        logger.debug("TimeAspect.afterThrowing.ex......................................." + ex.getMessage());
     }
 
 }

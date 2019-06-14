@@ -33,7 +33,7 @@ public class WeChatPayServiceImpl implements IPayService {
     @Override
     public Long accept(Long money) {
         logger.info("WeChatPayServiceImpl.accept方法执行,收款"+money+"元......");
-        return money;
+        return null;
     }
 
 
