@@ -28,4 +28,20 @@ public class ClassUtilLimengjun {
         return result;
     }
 
+    /**
+     *
+     * @param obj
+     * @param methodName
+     * @return
+     */
+    public static Method getMethod(Object obj, String methodName){
+        Class c = obj.getClass();
+        Method [] ms = c.getDeclaredMethods();
+        for (Method m : ms) {
+            if (m.getName().equals(methodName)) {
+                return m;
+            }
+        }
+        return null;
+    }
 }
