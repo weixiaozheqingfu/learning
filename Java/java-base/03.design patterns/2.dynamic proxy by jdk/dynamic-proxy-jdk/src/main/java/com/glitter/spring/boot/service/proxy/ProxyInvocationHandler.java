@@ -52,7 +52,6 @@ public class ProxyInvocationHandler implements InvocationHandler {
 
             if(method.getName().contains(aspectInfo.getAfterReturning())){
                 Method afterReturningMethod = ClassUtilLimengjun.getMethod(aspect, "afterReturning");
-                // TODO 返回值result结果如果是null时会报错,这个需要继续调试一下
                 Object[] afterReturningArgs = new Object[]{joinPoint,result};
                 afterReturningMethod.invoke(aspect, afterReturningArgs);
             }

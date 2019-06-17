@@ -20,7 +20,7 @@ public class LogAspect{
         logger.debug("LogAspect.around开始.......................................");
         Object result = joinPoint.proceed();
         logger.debug("LogAspect.around完毕.......................................");
-        logger.debug("LogAspect.around结果......................................." + result.toString());
+        logger.debug("LogAspect.around结果......................................." + result);
         return result;
     }
 
@@ -32,7 +32,7 @@ public class LogAspect{
     @AfterReturning(pointcut = "accept", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) throws Throwable {
         logger.debug("LogAspect.afterReturning.......................................");
-        logger.debug("LogAspect.afterReturning.ret......................................." + ret.toString());
+        logger.debug("LogAspect.afterReturning.ret......................................." + ret);
     }
 
     @AfterThrowing(pointcut = "accept", throwing = "ex")
