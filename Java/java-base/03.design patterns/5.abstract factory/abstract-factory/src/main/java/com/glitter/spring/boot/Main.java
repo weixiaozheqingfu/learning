@@ -22,27 +22,41 @@ import com.glitter.spring.boot.service.MouseService;
 public class Main {
 
     public static void main(String[] args){
-        // PcServiceFactoryProducer可以设计为单例模式,或者getPcServiceFactory方法设置为static静态方法,会更好
+//        PcServiceFactoryProducer可以设计为单例模式,或者getPcServiceFactory方法设置为static静态方法,会更好
+//        PcServiceFactoryProducer pcServiceFactoryProducer = new PcServiceFactoryProducer();
+//
+//        PcServiceAbstractFactory hpPcServiceFactory = pcServiceFactoryProducer.getPcServiceFactory("hp");
+//        KeyboardService hpKeyboardService = hpPcServiceFactory.getKeyboardServiceInstance();
+//        hpKeyboardService.input("写字");
+//        MouseService hpMouseService = hpPcServiceFactory.getMouseServiceInstance();
+//        hpMouseService.click();
+//
+//        PcServiceAbstractFactory dellPcServiceFactory = pcServiceFactoryProducer.getPcServiceFactory("dell");
+//        KeyboardService dellKeyboardService = dellPcServiceFactory.getKeyboardServiceInstance();
+//        dellKeyboardService.input("写字");
+//        MouseService dellMouseService = dellPcServiceFactory.getMouseServiceInstance();
+//        dellMouseService.click();
+//
+//        PcServiceAbstractFactory huaweiPcServiceFactory = pcServiceFactoryProducer.getPcServiceFactory("huawei");
+//        KeyboardService huaweiKeyboardService = huaweiPcServiceFactory.getKeyboardServiceInstance();
+//        huaweiKeyboardService.input("写字");
+//        MouseService huaweiMouseService = huaweiPcServiceFactory.getMouseServiceInstance();
+//        huaweiMouseService.click();
+
+
+//        PcServiceAbstractFactory pcServiceFactory = getPcServiceFactory("hp");
+//        PcServiceAbstractFactory pcServiceFactory = getPcServiceFactory("dell");
+        PcServiceAbstractFactory pcServiceFactory = getPcServiceFactory("huawei");
+        KeyboardService keyboardService = pcServiceFactory.getKeyboardServiceInstance();
+        keyboardService.input("写字");
+        MouseService mouseService = pcServiceFactory.getMouseServiceInstance();
+        mouseService.click();
+    }
+
+    private static PcServiceAbstractFactory getPcServiceFactory(String pcType) {
         PcServiceFactoryProducer pcServiceFactoryProducer = new PcServiceFactoryProducer();
-
-        PcServiceAbstractFactory hpPcServiceFactory = pcServiceFactoryProducer.getPcServiceFactory("hp");
-        KeyboardService hpKeyboardService = hpPcServiceFactory.getKeyboardServiceInstance();
-        hpKeyboardService.input("写字");
-        MouseService hpMouseService = hpPcServiceFactory.getMouseServiceInstance();
-        hpMouseService.click();
-
-        PcServiceAbstractFactory dellPcServiceFactory = pcServiceFactoryProducer.getPcServiceFactory("dell");
-        KeyboardService dellKeyboardService = dellPcServiceFactory.getKeyboardServiceInstance();
-        dellKeyboardService.input("写字");
-        MouseService dellMouseService = dellPcServiceFactory.getMouseServiceInstance();
-        dellMouseService.click();
-
-        PcServiceAbstractFactory huaweiPcServiceFactory = pcServiceFactoryProducer.getPcServiceFactory("huawei");
-        KeyboardService huaweiKeyboardService = huaweiPcServiceFactory.getKeyboardServiceInstance();
-        huaweiKeyboardService.input("写字");
-        MouseService huaweiMouseService = huaweiPcServiceFactory.getMouseServiceInstance();
-        huaweiMouseService.click();
-
+        PcServiceAbstractFactory pcServiceFactory = pcServiceFactoryProducer.getPcServiceFactory(pcType);
+        return pcServiceFactory;
     }
 
 }
