@@ -1,7 +1,9 @@
 package com.glitter.spring.boot.service.impl.huawei;
 
 import com.glitter.spring.boot.service.KeyboardService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class HuaweiKeyboardServiceImpl implements KeyboardService {
 
     @Override

@@ -2,19 +2,25 @@ package com.glitter.spring.boot.factory;
 
 import com.glitter.spring.boot.service.KeyboardService;
 import com.glitter.spring.boot.service.MouseService;
-import com.glitter.spring.boot.service.impl.dell.DellKeyboardServiceImpl;
-import com.glitter.spring.boot.service.impl.dell.DellMouseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DellPcServiceFactory extends PcServiceAbstractFactory{
+
+    @Autowired
+    MouseService dellMouseServiceImpl;
+    @Autowired
+    KeyboardService dellKeyboardServiceImpl;
 
     @Override
     public MouseService getMouseServiceInstance() {
-        return new DellMouseServiceImpl();
+        return dellMouseServiceImpl;
     }
 
     @Override
     public KeyboardService getKeyboardServiceInstance() {
-        return new DellKeyboardServiceImpl();
+        return dellKeyboardServiceImpl;
     }
 
 }

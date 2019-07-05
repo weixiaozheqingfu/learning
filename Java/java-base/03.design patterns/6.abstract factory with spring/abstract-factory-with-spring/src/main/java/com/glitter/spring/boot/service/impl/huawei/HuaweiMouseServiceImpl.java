@@ -1,7 +1,9 @@
 package com.glitter.spring.boot.service.impl.huawei;
 
 import com.glitter.spring.boot.service.MouseService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class HuaweiMouseServiceImpl implements MouseService{
 
     @Override
