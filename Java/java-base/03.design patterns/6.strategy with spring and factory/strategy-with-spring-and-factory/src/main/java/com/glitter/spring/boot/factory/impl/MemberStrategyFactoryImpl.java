@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * 凡是涉及到不同的会员级别会有不同计算的情况,都在该接口中定义方法
- */
 @Component
 public class MemberStrategyFactoryImpl implements MemberStrategyFactory,InitializingBean {
 
