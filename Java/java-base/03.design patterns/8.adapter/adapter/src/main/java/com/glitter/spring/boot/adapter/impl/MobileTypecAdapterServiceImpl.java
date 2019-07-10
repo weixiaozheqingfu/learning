@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.adapter.impl;
 
-import com.glitter.spring.boot.adapter.TypecService;
+import com.glitter.spring.boot.adapter.TypecAdapterService;
 import com.glitter.spring.boot.service.MobileTypecService;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * typec接口的typec转换器,用于对接外部设备接口是typec接口的外部设备
  */
 @Service
-public class MobileTypecAdapterServiceImpl implements TypecService {
+public class MobileTypecAdapterServiceImpl implements TypecAdapterService {
 
     MobileTypecService mobileTypecService;
 

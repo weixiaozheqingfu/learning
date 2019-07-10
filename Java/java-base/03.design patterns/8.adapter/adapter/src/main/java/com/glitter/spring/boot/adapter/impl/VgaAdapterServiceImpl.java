@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.adapter.impl;
 
-import com.glitter.spring.boot.adapter.TypecService;
+import com.glitter.spring.boot.adapter.TypecAdapterService;
 import com.glitter.spring.boot.service.VgaService;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  * typec接口的vga转换器,用于对接外部设备接口是vga接口的外部设备
  */
 @Service
-public class VgaAdapterServiceImpl implements TypecService {
+public class VgaAdapterServiceImpl implements TypecAdapterService {
 
     VgaService vgaService;
 

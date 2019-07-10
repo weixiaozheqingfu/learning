@@ -1,7 +1,7 @@
 package com.glitter.spring.boot;
 
 
-import com.glitter.spring.boot.adapter.TypecService;
+import com.glitter.spring.boot.adapter.TypecAdapterService;
 import com.glitter.spring.boot.adapter.impl.HdmiAdapterServiceImpl;
 import com.glitter.spring.boot.adapter.impl.VgaAdapterServiceImpl;
 import com.glitter.spring.boot.service.HdmiService;
@@ -20,7 +20,7 @@ public class SingletonTest {
     @Test
     public void HdmiAdapterTest() {
         HdmiService hdmiService = new HdmiServiceImpl();
-        TypecService typecService = new HdmiAdapterServiceImpl(hdmiService);
+        TypecAdapterService typecService = new HdmiAdapterServiceImpl(hdmiService);
         typecService.input("hello world");
         typecService.input("haha");
     }
@@ -28,7 +28,7 @@ public class SingletonTest {
     @Test
     public void VgaAdapterTest() {
         VgaService vgaService = new VgaServiceImpl();
-        TypecService typecService = new VgaAdapterServiceImpl(vgaService);
+        TypecAdapterService typecService = new VgaAdapterServiceImpl(vgaService);
         typecService.input("hello world");
         typecService.input("haha");
     }

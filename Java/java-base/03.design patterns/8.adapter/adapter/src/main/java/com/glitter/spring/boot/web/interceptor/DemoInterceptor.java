@@ -15,7 +15,7 @@ public class DemoInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object obj) throws Exception {
         System.out.println("DemoInterceptor preHandle...............................................");
-        return true;
+        return false;
     }
 
     /**
