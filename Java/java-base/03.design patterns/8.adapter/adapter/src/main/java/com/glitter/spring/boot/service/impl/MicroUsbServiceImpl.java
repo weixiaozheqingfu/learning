@@ -1,14 +1,12 @@
 package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.service.MicroUsbService;
-import org.springframework.stereotype.Service;
 
 
 /**
  * typec接口的microUsb转换器,用于对接外部设备接口是microUsb接口的外部设备
  */
-@Service
-public class MicroServiceImpl implements MicroUsbService {
+public class MicroUsbServiceImpl implements MicroUsbService {
 
     /**
      * 可以将外设的数据传输给电脑

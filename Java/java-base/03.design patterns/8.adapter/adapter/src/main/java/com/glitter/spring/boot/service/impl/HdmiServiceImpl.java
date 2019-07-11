@@ -1,13 +1,11 @@
 package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.service.HdmiService;
-import org.springframework.stereotype.Service;
 
 
 /**
  * typec接口的hdmi转换器,用于对接外部设备接口是hdmi接口的外部设备
  */
-@Service
 public class HdmiServiceImpl implements HdmiService {
 
     /**
