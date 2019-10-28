@@ -52,7 +52,7 @@ public class OauthAction extends BaseAction {
 
     /**
      * 该方法为客户端应用访问，客户端应用访问该方法时应以重定向方式访问（前端重定向或后端重定向均可，将浏览器资源执行授权中心的授权资源页面，即本地址）
-     * 示例: http://localhost:8080/oauth2/authorize?client_id=1001&redirect_uri=https://gitee.com/auth/csdn/callback&state=sdf8gswer9t89fdb8s9fg8r
+     * 示例: http://localhost:8080/oauth2/authorize?client_id=1001&redirect_uri=http://localhost:8081/auth/sso/callback&state=sdf8gswer9t89fdb8s9fg8r
      */
     @RequestMapping(value = "authorize", method = RequestMethod.GET)
     public String authorize(Model model,

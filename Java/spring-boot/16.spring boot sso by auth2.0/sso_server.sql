@@ -29,6 +29,9 @@ CREATE TABLE `oauth_client_info` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户端信息表';
 
+INSERT INTO `oauth_client_info` VALUES (1, '1001', '123456', 'sso_client1', 'http://localhost:8081/auth/sso/callback', 'http://localhost:8081/auth/sso/logout', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
+INSERT INTO `oauth_client_info` VALUES (2, '1002', '654321', 'sso_client2', 'http://localhost:8082/auth/sso/callback', 'http://localhost:8082/auth/sso/logout', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
+
 -- 该表仅仅作为一种象征性的结果,不予创建,使用redis缓存会话代替本表。
 CREATE TABLE `session_info` (
   `id` bigint(20) NOT NULL auto_increment COMMENT '主键',

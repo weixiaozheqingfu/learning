@@ -10,7 +10,7 @@
 <body>
 <div class="main">jjj
     <div class="logbox">
-        <p><a href="http://localhost:8081" target="_blank">client_demo</a>访问你的sever_demo账号，将获得以下权限：</p>
+        <p><a href="http://localhost:8081" target="_blank">clientN</a>访问你的sso账号，将获得以下权限：</p>
         <table style="width:100%; margin-top:20px;">
             <tr>
                 <td style="width:55%;">
@@ -26,11 +26,11 @@
                     <img src="http://localhost:8080/images/oauth_appbg.png" alt=""/>
                 </td>
                 <td style="width:35%;">
-                    client_demo
+                    clientN
                 </td>
             </tr>
         </table>
-        <p>授权后表明你已同意 <a href="https://connect.qq.com/devuser.html?agreement#/">server_demo登录服务协议</a></p>
+        <p>授权后表明你已同意 <a href="https://connect.qq.com/devuser.html?agreement#/">sso_server登录服务协议</a></p>
 
         <div class="line"></div>
         <table cellspacing="6" style="width:98%;">
@@ -148,7 +148,7 @@
         // 提交授权
         $.ajax({
             type: "POST",
-            url: domain + "/oauth2/authorize",
+            url: domain + "/oauth2/login",
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             data: data,
             dataType: "json",
@@ -179,7 +179,7 @@
 
         $.ajax({
             type: "POST",
-            url: domain + "/oauth2/authorize",
+            url: domain + "/oauth2/login",
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             data: data,
             dataType: "json",
