@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.glitter.spring.boot.persistence.dao.IAccountBindingDao">
+    <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.AccountBinding">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
+        <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
+        <result column="server_type" property="serverType" jdbcType="VARCHAR"/>
+        <result column="bind_time" property="bindTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="baseColumns">
+        id
+        ,user_id
+        ,account
+        ,open_id
+        ,union_id
+        ,server_type
+        ,bind_time
+        ,create_time
+        ,update_time
+    </sql>
+
+    <sql id="whereSql">
+        <if test="id != null">
+            and id=#{id}
+		</if>
+        <if test="userId != null">
+            and user_id=#{userId}
+		</if>
+        <if test="account != null ">
+            and account=#{account}
+		</if>
+        <if test="openId != null ">
+            and open_id=#{openId}
+		</if>
+        <if test="unionId != null ">
+            and union_id=#{unionId}
+		</if>
+        <if test="serverType != null ">
+            and server_type=#{serverType}
+		</if>
+        <if test="bindTime != null">
+            and bind_time=#{bindTime}
+		</if>
+        <if test="createTime != null">
+            and create_time=#{createTime}
+		</if>
+        <if test="updateTime != null">
+            and update_time=#{updateTime}
+		</if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.glitter.spring.boot.bean.AccountBinding">
+        insert into account_binding
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="account != null ">
+                account,
+            </if>
+            <if test="openId != null ">
+                open_id,
+            </if>
+            <if test="unionId != null ">
+                union_id,
+            </if>
+            <if test="serverType != null ">
+                server_type,
+            </if>
+            <if test="bindTime != null">
+                bind_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="account != null ">
+                #{account},
+            </if>
+            <if test="openId != null ">
+                #{openId},
+            </if>
+            <if test="unionId != null ">
+                #{unionId},
+            </if>
+            <if test="serverType != null ">
+                #{serverType},
+            </if>
+            <if test="bindTime != null">
+                #{bindTime},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+		</trim>
+    </insert>
+
+    <delete id="deleteById">
+        delete from account_binding where id =#{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from account_binding where id in
+        <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</delete>
+
+    <delete id="delete" parameterType="com.glitter.spring.boot.bean.AccountBinding">
+        delete from account_binding
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </delete>
+
+    <update id="updateById" parameterType="com.glitter.spring.boot.bean.AccountBinding">
+        update account_binding  set
+        <trim suffixOverrides=",">
+        <if test="userId != null">
+            user_id=#{userId},
+        </if>
+        <if test="account != null ">
+            account=#{account},
+        </if>
+        <if test="openId != null ">
+            open_id=#{openId},
+        </if>
+        <if test="unionId != null ">
+            union_id=#{unionId},
+        </if>
+        <if test="serverType != null ">
+            server_type=#{serverType},
+        </if>
+        <if test="bindTime != null">
+            bind_time=#{bindTime},
+        </if>
+        <if test="createTime != null">
+            create_time=#{createTime},
+        </if>
+        <if test="updateTime != null">
+            update_time=#{updateTime},
+        </if>
+        </trim>
+        where id =#{id}
+	</update>
+
+    <select id="getById" resultMap="BaseResultMap">
+	    select <include refid="baseColumns"/> from account_binding where id =#{id}
+	</select>
+
+    <select id="getByIds" resultMap="BaseResultMap">
+	    select <include refid="baseColumns"/> from account_binding
+	    where id in
+	    <foreach collection="array" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+	</select>
+
+	<select id="get" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.AccountBinding">
+        select <include refid="baseColumns"/> from account_binding
+        <where>
+            <include refid="whereSql"/> limit 1
+        </where>
+	</select>
+
+	<select id="findAllList" resultMap="BaseResultMap">
+	     select <include refid="baseColumns"/> from account_binding
+	</select>
+
+	<select id="findList"  parameterType="com.glitter.spring.boot.bean.AccountBinding" resultMap="BaseResultMap">
+        select <include refid="baseColumns"/> from account_binding
+        <where>
+            <include refid="whereSql"/>
+        </where>
+	</select>
+
+	<select id="getCount"  parameterType="com.glitter.spring.boot.bean.AccountBinding" resultType="java.lang.Integer">
+        select count(1) from account_binding
+        <where>
+            <include refid="whereSql"/>
+        </where>
+    </select>
+
+</mapper>
