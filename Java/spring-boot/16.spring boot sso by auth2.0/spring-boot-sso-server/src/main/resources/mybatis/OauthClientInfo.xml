@@ -7,7 +7,7 @@
         <result column="client_secret" property="clientSecret" jdbcType="VARCHAR"/>
         <result column="client_name" property="clientName" jdbcType="VARCHAR"/>
         <result column="redirect_uri" property="redirectUri" jdbcType="VARCHAR"/>
-        <result column="developer_id" property="developerId" jdbcType="BIGINT"/>
+        <result column="logout_uri" property="logoutUri" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -18,7 +18,7 @@
         ,client_secret
         ,client_name
         ,redirect_uri
-        ,developer_id
+        ,logout_uri
         ,create_time
         ,update_time
     </sql>
@@ -39,8 +39,8 @@
         <if test="redirectUri != null ">
             and redirect_uri=#{redirectUri}
 		</if>
-        <if test="developerId != null ">
-            and developer_id=#{developerId}
+        <if test="logoutUri != null ">
+            and logout_uri=#{logoutUri}
 		</if>
         <if test="createTime != null">
             and create_time=#{createTime}
@@ -68,8 +68,8 @@
             <if test="redirectUri != null ">
                 redirect_uri,
             </if>
-            <if test="developerId != null ">
-                developer_id,
+            <if test="logoutUri != null ">
+                logout_uri,
             </if>
             <if test="createTime != null">
                 create_time,
@@ -94,8 +94,8 @@
             <if test="redirectUri != null ">
                 #{redirectUri},
             </if>
-            <if test="developerId != null ">
-                #{developerId},
+            <if test="logoutUri != null ">
+                #{logoutUri},
             </if>
             <if test="createTime != null">
                 #{createTime},
@@ -139,8 +139,8 @@
         <if test="redirectUri != null ">
             redirect_uri=#{redirectUri},
         </if>
-        <if test="developerId != null ">
-            developer_id=#{developerId},
+        <if test="logoutUri != null ">
+            logout_uri=#{logoutUri},
         </if>
         <if test="createTime != null">
             create_time=#{createTime},

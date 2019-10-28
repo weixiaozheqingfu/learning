@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/oauth2")
-public class UserInfoAction1 extends BaseAction{
+public class UserInfoAction extends BaseAction{
 
-    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction1.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
 
     @Autowired
     private IUserInfoService userInfoService;

@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.bean;
 
 import lombok.Data;
+
 import java.util.Date;
 
 @Data
@@ -16,8 +17,8 @@ public class OauthClientInfo extends BaseBean {
     private String clientName;
     /** 客户端应用回调地址 */
     private String redirectUri;
-    /** 客户端应用所属开发者账号 */
-    private Long developerId;
+    /** 客户端应用注销登录地址 */
+    private String logoutUri;
     /** 创建时间 */
     private Date createTime;
     /** 更新时间 */

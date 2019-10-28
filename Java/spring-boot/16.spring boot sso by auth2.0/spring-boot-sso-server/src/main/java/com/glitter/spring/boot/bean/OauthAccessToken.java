@@ -9,12 +9,10 @@ public class OauthAccessToken extends BaseBean {
 
     /** 主键ID */
     private Long id;
+    /** jsessionid */
+    private Long jsessionId;
     /** 用户id */
     private Long userId;
-    /** 用户对外开放id,对当前开发者帐号唯一 */
-    private String openId;
-    /** 用户统一标识。针对一个开放平台开发者帐号下的应用，同一用户的unionid是唯一的。 */
-    private String unionId;
     /** 应用id */
     private String clientId;
     /** 授权作用域,授权多个作用域用逗号（,）分隔 */

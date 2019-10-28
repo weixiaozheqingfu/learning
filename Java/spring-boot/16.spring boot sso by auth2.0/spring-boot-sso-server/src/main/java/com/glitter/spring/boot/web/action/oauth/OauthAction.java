@@ -39,9 +39,6 @@ public class OauthAction extends BaseAction {
     private IOauthClientInfoService oauthClientInfoService;
 
     @Autowired
-    private IOauthScopeEnumService oauthScopeEnumService;
-
-    @Autowired
     private IOauthCodeService oauthCodeService;
 
     @Autowired
@@ -158,6 +155,9 @@ public class OauthAction extends BaseAction {
         }
         if (StringUtils.isBlank(scope)) {
             scope = "get_user_open_info";
+        }
+        if (scope.equals("get_user_open_info")) {
+            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
         }
         if (StringUtils.isBlank(u) && StringUtils.isBlank(p)) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "用户名或密码为空");
@@ -320,11 +320,6 @@ public class OauthAction extends BaseAction {
             }
             if (!client_id.equals(oauthAccessToken.getClientId())) {
                 errorMap.put("errcode", "600032");
-                errorMap.put("errmsg", "access_token invalid");
-                return errorMap;
-            }
-            if (!openid.equals(oauthAccessToken.getOpenId())) {
-                errorMap.put("errcode", "600033");
                 errorMap.put("errmsg", "access_token invalid");
                 return errorMap;
             }

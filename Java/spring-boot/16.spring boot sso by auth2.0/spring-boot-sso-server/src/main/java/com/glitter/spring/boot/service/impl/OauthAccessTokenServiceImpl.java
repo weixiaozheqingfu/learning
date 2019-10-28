@@ -45,8 +45,6 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         AccessTokenInner accessTokenInner = new AccessTokenInner();
         accessTokenInner.setClientId(oauthAccessTokenDb.getClientId());
         accessTokenInner.setUserId(oauthAccessTokenDb.getUserId());
-        accessTokenInner.setOpenId(oauthAccessTokenDb.getOpenId());
-        accessTokenInner.setUnionId(oauthAccessTokenDb.getUnionId());
         accessTokenInner.setInterfaceUri(Arrays.asList(StringUtils.join(oauthAccessTokenDb.getInterfaceUri(),",")));
 
         return accessTokenInner;

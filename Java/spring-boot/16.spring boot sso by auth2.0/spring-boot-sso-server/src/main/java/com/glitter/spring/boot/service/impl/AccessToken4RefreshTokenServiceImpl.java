@@ -94,7 +94,6 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
         accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
         accessTokenInfo.setRefresh_token(oauthAccessToken.getRefreshToken());
         accessTokenInfo.setToken_type(oauthAccessToken.getTokenType());
-        accessTokenInfo.setOpenid(oauthAccessToken.getOpenId());
 
         // 记录日志 很重要 方便问题追溯
         logger.info("AccessToken4RefreshTokenServiceImpl.getAccessTokenInfo方法,oauthAccessTokenDb对象:{},accessTokenInfo对象:{}", JSONObject.toJSONString(oauthAccessTokenDb),JSONObject.toJSONString(accessTokenInfo));

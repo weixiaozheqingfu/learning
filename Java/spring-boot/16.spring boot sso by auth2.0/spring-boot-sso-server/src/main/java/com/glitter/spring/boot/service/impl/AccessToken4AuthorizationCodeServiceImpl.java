@@ -104,8 +104,6 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         // 5.code换取accessToken
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         Date now = new Date();
-        oauthAccessToken.setOpenId(oauthCode.getOpenId());
-        oauthAccessToken.setUnionId(oauthCode.getUnionId());
         oauthAccessToken.setClientId(oauthCode.getClientId());
         oauthAccessToken.setScope(oauthCode.getScope());
         oauthAccessToken.setInterfaceUri(oauthCode.getInterfaceUri());
@@ -130,7 +128,6 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
         accessTokenInfo.setRefresh_token(oauthAccessToken.getRefreshToken());
         accessTokenInfo.setToken_type(oauthAccessToken.getTokenType());
-        accessTokenInfo.setOpenid(oauthAccessToken.getOpenId());
 
         // 记录日志 很重要 方便问题追溯
         logger.info("AccessToken4AuthorizationCodeServiceImpl.getAccessTokenInfo方法,oauthCode对象:{},accessTokenInfo对象:{}", JSONObject.toJSONString(oauthCode),JSONObject.toJSONString(accessTokenInfo));

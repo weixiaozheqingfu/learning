@@ -3,9 +3,8 @@
 <mapper namespace="com.glitter.spring.boot.persistence.dao.IOauthCodeDao">
     <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.OauthCode">
         <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="jsession_id" property="jsessionId" jdbcType="BIGINT"/>
         <result column="user_id" property="userId" jdbcType="BIGINT"/>
-        <result column="open_id" property="openId" jdbcType="VARCHAR"/>
-        <result column="union_id" property="unionId" jdbcType="VARCHAR"/>
         <result column="client_id" property="clientId" jdbcType="VARCHAR"/>
         <result column="scope" property="scope" jdbcType="VARCHAR"/>
         <result column="interface_uri" property="interfaceUri" jdbcType="VARCHAR"/>
@@ -18,9 +17,8 @@
 
     <sql id="baseColumns">
         id
+        ,jsession_id
         ,user_id
-        ,open_id
-        ,union_id
         ,client_id
         ,scope
         ,interface_uri
@@ -35,14 +33,11 @@
         <if test="id != null">
             and id=#{id}
 		</if>
+        <if test="jsessionId != null">
+            and jsession_id=#{jsessionId}
+		</if>
         <if test="userId != null">
             and user_id=#{userId}
-		</if>
-        <if test="openId != null ">
-            and open_id=#{openId}
-		</if>
-        <if test="unionId != null ">
-            and union_id=#{unionId}
 		</if>
         <if test="clientId != null ">
             and client_id=#{clientId}
@@ -76,14 +71,11 @@
             <if test="id != null">
                 id,
             </if>
+            <if test="jsessionId != null">
+                jsession_id,
+            </if>
             <if test="userId != null">
                 user_id,
-            </if>
-            <if test="openId != null ">
-                open_id,
-            </if>
-            <if test="unionId != null ">
-                union_id,
             </if>
             <if test="clientId != null ">
                 client_id,
@@ -114,14 +106,11 @@
             <if test="id != null">
                 #{id},
             </if>
+            <if test="jsessionId != null">
+                #{jsessionId},
+            </if>
             <if test="userId != null">
                 #{userId},
-            </if>
-            <if test="openId != null ">
-                #{openId},
-            </if>
-            <if test="unionId != null ">
-                #{unionId},
             </if>
             <if test="clientId != null ">
                 #{clientId},
@@ -175,14 +164,11 @@
     <update id="updateById" parameterType="com.glitter.spring.boot.bean.OauthCode">
         update oauth_code  set
         <trim suffixOverrides=",">
+        <if test="jsessionId != null">
+            jsession_id=#{jsessionId},
+        </if>
         <if test="userId != null">
             user_id=#{userId},
-        </if>
-        <if test="openId != null ">
-            open_id=#{openId},
-        </if>
-        <if test="unionId != null ">
-            union_id=#{unionId},
         </if>
         <if test="clientId != null ">
             client_id=#{clientId},

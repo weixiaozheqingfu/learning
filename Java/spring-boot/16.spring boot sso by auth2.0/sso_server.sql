@@ -17,7 +17,7 @@ CREATE TABLE `user_info` (
 
 INSERT INTO `user_info` VALUES ('1', 'gaoshanliushui', 'qwer1234', '13120411529', '高山流水', '', '0', '0', '', '\0', '2019-10-25 11:01:25', '2019-10-25 11:01:25', '2019-10-25 11:01:25');
 
-CREATE TABLE `sso_client_info` (
+CREATE TABLE `oauth_client_info` (
   `id` bigint(20) NOT NULL auto_increment COMMENT '主键',
   `client_id` varchar(50) NOT NULL default '' COMMENT '客户端应用id',
   `client_secret` varchar(50) NOT NULL default '' COMMENT '客户端应用秘钥',
@@ -30,7 +30,7 @@ CREATE TABLE `sso_client_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户端信息表';
 
 -- 该表仅仅作为一种象征性的结果,不予创建,使用redis缓存会话代替本表。
-CREATE TABLE `sso_session_info` (
+CREATE TABLE `session_info` (
   `id` bigint(20) NOT NULL auto_increment COMMENT '主键',
   `jsession_id` bigint(20) unsigned NOT NULL default '0' COMMENT 'jsessionid',
   `user_id` bigint(20) unsigned NOT NULL default '0' COMMENT '用户id',
