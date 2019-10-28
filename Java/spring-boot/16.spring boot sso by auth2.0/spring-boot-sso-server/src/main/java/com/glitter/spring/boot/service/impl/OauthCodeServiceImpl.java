@@ -58,8 +58,8 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         if (null == oauthClientInfo) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,userId非法");
         }
-        if (oauthCode.getScope().equals("")) {
-            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
+        if (!oauthCode.getScope().equals("get_user_open_info")) {
+            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常,scope非法");
         }
 
         // 1.生成code码

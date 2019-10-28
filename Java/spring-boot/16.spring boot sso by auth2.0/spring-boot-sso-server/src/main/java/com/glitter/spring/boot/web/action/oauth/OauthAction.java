@@ -105,7 +105,7 @@ public class OauthAction extends BaseAction {
             return "/authorize";
         } else {
             // 如果用户已登录，则生成code码回调地址，并使浏览器重定向到该回调地址。
-            String callbackUrl = this.generateCodeUrl(client_id, userInfo.getId(), scope, oauthClientInfo.getRedirectUri(), state);
+            String callbackUrl = this.generateCodeUrl(sessionHandler.getSession().getId(), client_id, userInfo.getId(), scope, oauthClientInfo.getRedirectUri(), state);
             try {
                 httpServletResponse.sendRedirect(callbackUrl);
             } catch (IOException e) {
@@ -156,7 +156,7 @@ public class OauthAction extends BaseAction {
         if (StringUtils.isBlank(scope)) {
             scope = "get_user_open_info";
         }
-        if (scope.equals("get_user_open_info")) {
+        if (!scope.equals("get_user_open_info")) {
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "连接失败");
         }
         if (StringUtils.isBlank(u) && StringUtils.isBlank(p)) {
@@ -173,13 +173,14 @@ public class OauthAction extends BaseAction {
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
 
         // 4.生成code码回调地址
-        String callbackUrl = this.generateCodeUrl(client_id, userInfo.getId(), scope, oauthClientInfo.getRedirectUri(), state);
+        String callbackUrl = this.generateCodeUrl(sessionHandler.getSession().getId(), client_id, userInfo.getId(), scope, oauthClientInfo.getRedirectUri(), state);
         return ResponseResult.success(callbackUrl);
     }
 
-    private String generateCodeUrl(String client_id, Long userId, String scope, String redirectUri, String state) {
+    private String generateCodeUrl(String jsessionid, String client_id, Long userId, String scope, String redirectUri, String state) {
         // 1. 生成code码。
         OauthCode oauthCode = new OauthCode();
+        oauthCode.setJsessionId(jsessionid);
         oauthCode.setClientId(client_id);
         oauthCode.setUserId(userId);
         oauthCode.setScope(scope);
