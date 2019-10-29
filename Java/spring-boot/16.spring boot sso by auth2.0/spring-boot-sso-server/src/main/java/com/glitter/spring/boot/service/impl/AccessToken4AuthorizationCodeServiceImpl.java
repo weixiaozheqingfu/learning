@@ -110,10 +110,12 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         oauthAccessToken.setInterfaceUri(oauthCode.getInterfaceUri());
         oauthAccessToken.setTokenType("bearer");
         oauthAccessToken.setAccessToken(UUID.randomUUID().toString().replace("-", ""));
-        oauthAccessToken.setAccessTokenExpireIn(60L);
+        // 此处应取jsessionid剩余过期时间
+        oauthAccessToken.setAccessTokenExpireIn(60 * 5L);
         oauthAccessToken.setAccessTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getAccessTokenExpireIn() * 1000L));
         oauthAccessToken.setRefreshToken(UUID.randomUUID().toString().replace("-", ""));
-        oauthAccessToken.setRefreshTokenExpireIn(60 * 60 * 24 * 2L);
+        // 此处应取jsessionid剩余过期时间
+        oauthAccessToken.setRefreshTokenExpireIn(60 * 5L);
         oauthAccessToken.setRefreshTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getRefreshTokenExpireIn() * 1000L));
         oauthAccessToken.setDeleteFlag(false);
         oauthAccessToken.setCreateTime(now);

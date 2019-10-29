@@ -65,12 +65,23 @@ public class OauthCodeDaoImpl implements IOauthCodeDao{
     }
 
     @Override
-    public OauthCode getByUserIdAndClient(Long userId, String clientId) {
+    public OauthCode getByUserIdAndClient(String jsessionId, Long userId, String clientId) {
         Map<String, Object> map = new HashMap<>();
+        map.put("jsessionId", jsessionId);
         map.put("userId", userId);
         map.put("clientId", clientId);
         map.put("now", new Date());
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getByUserIdAndClient", map);
+    }
+
+    @Override
+    public void deleteByUserIdAndClient(String jsessionId, Long userId, String clientId) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("jsessionId", jsessionId);
+        map.put("userId", userId);
+        map.put("clientId", clientId);
+        map.put("now", new Date());
+        sqlSessionTemplate.delete(NAME_SPACE + ".deleteByUserIdAndClient", map);
     }
 
     @Override

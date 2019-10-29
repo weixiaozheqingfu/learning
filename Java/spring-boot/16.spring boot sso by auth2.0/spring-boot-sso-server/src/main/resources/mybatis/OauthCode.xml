@@ -223,6 +223,12 @@
         limit 1
     </select>
 
+    <delete id="deleteByUserIdAndClient" parameterType="com.glitter.spring.boot.bean.OauthCode">
+        delete from oauth_code
+        where jsession_id = #{jsessionId} and user_id = #{userId} and client_id=#{clientId} and expire_time  <![CDATA[ <= ]]> #{now}
+    </delete>
+
+
 	<select id="findAllList" resultMap="BaseResultMap">
 	     select <include refid="baseColumns"/> from oauth_code
 	</select>

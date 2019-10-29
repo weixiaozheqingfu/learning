@@ -82,9 +82,13 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         oauthAccessToken.setId(oauthAccessTokenDb.getId());
         oauthAccessToken.setAccessToken(UUID.randomUUID().toString().replace("-",""));
-        oauthAccessToken.setAccessTokenExpireIn(60L);
+        // 此处应取jsessionid剩余过期时间
+        oauthAccessToken.setAccessTokenExpireIn(60 * 5L);
         oauthAccessToken.setAccessTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getAccessTokenExpireIn() * 1000L));
         oauthAccessToken.setRefreshToken(UUID.randomUUID().toString().replace("-",""));
+        // 此处应取jsessionid剩余过期时间
+        oauthAccessToken.setRefreshTokenExpireIn(60 * 5L);
+        oauthAccessToken.setRefreshTokenExpireTime(new Date(now.getTime() + oauthAccessToken.getRefreshTokenExpireIn() * 1000L));
         oauthAccessToken.setUpdateTime(now);
         oauthAccessTokenDao.updateById(oauthAccessToken);
 

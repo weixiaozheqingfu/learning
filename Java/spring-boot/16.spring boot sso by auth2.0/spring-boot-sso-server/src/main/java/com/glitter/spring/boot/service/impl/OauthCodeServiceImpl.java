@@ -65,10 +65,13 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
         // 1.生成code码
         String code = UUID.randomUUID().toString();
 
-        // 2.查询当前userId用户对clientId客户端是否存在有效的未过期的code码
-        OauthCode oauthCodeDb = oauthCodeDao.getByUserIdAndClient(oauthCode.getUserId(), oauthCode.getClientId());
+        // 2.删除过期code码,这一步可以做,因为过期后,在库中呆着也无妨,只是看着碍眼
+        oauthCodeDao.deleteByUserIdAndClient(oauthCode.getJsessionId(), oauthCode.getUserId(), oauthCode.getClientId());
+
+        // 3.查询当前jsessionId下,userId用户对clientId客户端是否存在有效的未过期的code码
+        OauthCode oauthCodeDb = oauthCodeDao.getByUserIdAndClient(oauthCode.getJsessionId(), oauthCode.getUserId(), oauthCode.getClientId());
         if(null == oauthCodeDb){
-            // 3.创建oauthCode
+            // 4.创建oauthCode
             Date now = new Date();
             oauthCode.setCode(code);
             oauthCode.setCreateTime(now);
@@ -77,7 +80,7 @@ public class OauthCodeServiceImpl implements IOauthCodeService {
             oauthCode.setExpireTime(new Date(now.getTime() + oauthCode.getExpireIn() * 1000L));
             oauthCodeDao.insert(oauthCode);
         } else {
-            // 3.更新oauthCode
+            // 4.更新oauthCode
             Date now = new Date();
             OauthCode record = new OauthCode();
             record.setId(oauthCodeDb.getId());

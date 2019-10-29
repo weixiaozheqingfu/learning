@@ -78,7 +78,15 @@ public interface IOauthCodeDao{
      * @param clientId
      * @return
      */
-    OauthCode getByUserIdAndClient(Long userId, String clientId);
+    OauthCode getByUserIdAndClient(String jsessionId, Long userId, String clientId);
+
+    /**
+     * 按条件删除
+     * @param userId
+     * @param clientId
+     * @return
+     */
+    void deleteByUserIdAndClient(String jsessionId, Long userId, String clientId);
 
     /**
      * 查询所有记录
