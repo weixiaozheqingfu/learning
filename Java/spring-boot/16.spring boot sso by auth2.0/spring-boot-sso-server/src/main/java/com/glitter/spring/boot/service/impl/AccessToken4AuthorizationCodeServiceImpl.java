@@ -92,6 +92,7 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         // 对于更新的情况,其实先删后增也可以,或者更好,干净利索,因为既然是有新的合法的code值来换取accessToken了,就说明用户又重新授权了一次,之前的当然应该删除掉
         // 这样来看,就更简单了,只要存在记录就直接删掉就好,不管是refresh_token已过期记录还是未过期记录
         OauthAccessToken record = new OauthAccessToken();
+        record.setJsessionId(oauthCode.getJsessionId());
         record.setClientId(oauthCode.getClientId());
         record.setUserId(oauthCode.getUserId());
         List<OauthAccessToken> oauthAccessTokensDb = oauthAccessTokenDao.findList(record);

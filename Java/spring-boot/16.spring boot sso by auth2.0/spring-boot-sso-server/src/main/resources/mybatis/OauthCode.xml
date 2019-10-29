@@ -219,7 +219,7 @@
 
     <select id="getByUserIdAndClient" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthCode">
         select <include refid="baseColumns"/> from oauth_code
-        where user_id = #{userId} and client_id=#{clientId} and expire_time > #{now}
+        where jsession_id = #{jsessionId} and user_id = #{userId} and client_id=#{clientId} and expire_time > #{now}
         limit 1
     </select>
 

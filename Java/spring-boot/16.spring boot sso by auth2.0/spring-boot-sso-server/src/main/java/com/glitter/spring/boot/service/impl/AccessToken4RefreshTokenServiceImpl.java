@@ -65,14 +65,14 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
             throw new BusinessException("50034", "客户端非法");
         }
 
-        // 3.验证客户端持有的code码是否存在
+        // 3.验证客户端持有的refresh_token是否存在
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenDao.getByRefreshToken(refresh_token);
         logger.info("AccessToken4AuthorizationCodeServiceImpl.getByRefreshToken方法,oauthAccessToken对象:{}", JSONObject.toJSONString(oauthAccessTokenDb));
         if(null == oauthAccessTokenDb || !client_id.equals(oauthAccessTokenDb.getClientId())){
             throw new BusinessException("50035", "refeshToken不存在");
         }
 
-        // 4.验证客户端持有的code码是否过期
+        // 4.验证客户端持有的refresh_token是否过期
         if(System.currentTimeMillis() > oauthAccessTokenDb.getRefreshTokenExpireTime().getTime()){
             throw new BusinessException("50036", "refeshToken码已过期");
         }

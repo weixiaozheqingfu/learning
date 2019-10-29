@@ -7,7 +7,7 @@ spring:
         hikari.maxLifetime: 1765000
         hikari.maximumPoolSize: 15
     redis:
-        host: 172.28.18.34
+        host: localhost
         port: 6379
         timeout: 1000
         password:
