@@ -74,4 +74,11 @@ public class SessionHandler implements ISessionHandler {
         SessionContext.set(session);
         return session;
     }
+
+    @Override
+    public void renewal(String sessionId) {
+        if (commonHashCache.isExists(cacheKeyManager.getSessionKey(sessionId))) {
+            commonHashCache.renewal(cacheKeyManager.getSessionKey(sessionId), cacheKeyManager.getSessionKeyExpireTime());
+        }
+    }
 }

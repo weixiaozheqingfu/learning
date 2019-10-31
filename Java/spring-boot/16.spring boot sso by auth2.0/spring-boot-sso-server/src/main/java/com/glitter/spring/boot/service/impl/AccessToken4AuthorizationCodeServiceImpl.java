@@ -11,6 +11,7 @@ import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import com.glitter.spring.boot.service.IAccessToken4AuthorizationCodeService;
 import com.glitter.spring.boot.service.IOauthClientInfoService;
 import com.glitter.spring.boot.service.IOauthCodeService;
+import com.glitter.spring.boot.service.ISessionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,8 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
     @Autowired
     private IOauthAccessTokenDao oauthAccessTokenDao;
 
+    @Autowired
+    private ISessionHandler sessionHandler;
 
     /**
      * 获取accessToken信息
@@ -102,7 +105,10 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
             }
         }
 
-        // 5.code换取accessToken
+        // 5.为全局会话续期
+        sessionHandler.renewal(oauthCode.getJsessionId());
+
+        // 6.code换取accessToken
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         Date now = new Date();
         oauthAccessToken.setClientId(oauthCode.getClientId());
@@ -122,17 +128,17 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         oauthAccessToken.setUpdateTime(now);
         oauthAccessTokenDao.insert(oauthAccessToken);
 
-        // 6.删除code码
+        // 7.删除code码
         oauthCodeService.deleteByCode(code);
 
-        // 7.封装返回数据
+        // 8.封装返回数据
         accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
         accessTokenInfo.setScope(oauthAccessToken.getScope());
         accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
         accessTokenInfo.setRefresh_token(oauthAccessToken.getRefreshToken());
         accessTokenInfo.setToken_type(oauthAccessToken.getTokenType());
 
-        // 记录日志 很重要 方便问题追溯
+        // 9.记录日志 很重要 方便问题追溯
         logger.info("AccessToken4AuthorizationCodeServiceImpl.getAccessTokenInfo方法,oauthCode对象:{},accessTokenInfo对象:{}", JSONObject.toJSONString(oauthCode),JSONObject.toJSONString(accessTokenInfo));
         return accessTokenInfo;
     }

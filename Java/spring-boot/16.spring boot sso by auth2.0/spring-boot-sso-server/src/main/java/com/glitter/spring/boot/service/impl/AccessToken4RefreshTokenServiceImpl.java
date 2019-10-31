@@ -10,6 +10,7 @@ import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import com.glitter.spring.boot.service.IAccessToken4RefreshTokenService;
 import com.glitter.spring.boot.service.IOauthClientInfoService;
 import com.glitter.spring.boot.service.IOauthCodeService;
+import com.glitter.spring.boot.service.ISessionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,8 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
     @Autowired
     private IOauthAccessTokenDao oauthAccessTokenDao;
 
+    @Autowired
+    private ISessionHandler sessionHandler;
 
     /**
      * 获取accessToken信息
@@ -77,7 +80,10 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
             throw new BusinessException("50036", "refeshToken码已过期");
         }
 
-        // 5.refeshToken换取accessToken,更新accessToken记录
+        // 5.为全局会话续期
+        sessionHandler.renewal(oauthAccessTokenDb.getJsessionId());
+
+        // 6.refeshToken换取accessToken,更新accessToken记录
         Date now = new Date();
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         oauthAccessToken.setId(oauthAccessTokenDb.getId());
@@ -92,14 +98,14 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
         oauthAccessToken.setUpdateTime(now);
         oauthAccessTokenDao.updateById(oauthAccessToken);
 
-        // 6.封装返回数据
+        // 7.封装返回数据
         accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
         accessTokenInfo.setScope(oauthAccessToken.getScope());
         accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
         accessTokenInfo.setRefresh_token(oauthAccessToken.getRefreshToken());
         accessTokenInfo.setToken_type(oauthAccessToken.getTokenType());
 
-        // 记录日志 很重要 方便问题追溯
+        // 8.记录日志 很重要 方便问题追溯
         logger.info("AccessToken4RefreshTokenServiceImpl.getAccessTokenInfo方法,oauthAccessTokenDb对象:{},accessTokenInfo对象:{}", JSONObject.toJSONString(oauthAccessTokenDb),JSONObject.toJSONString(accessTokenInfo));
         return accessTokenInfo;
     }
