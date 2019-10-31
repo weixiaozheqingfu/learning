@@ -10,8 +10,8 @@ public class AccessTokenInner extends BaseBean {
     /** 访问令牌 */
     private String access_token;
 
-    /** 会话id */
-    private String jsessionId;
+    /** jsessionid */
+    private String jsessionid;
 
     /** 客户id */
     private String clientId;

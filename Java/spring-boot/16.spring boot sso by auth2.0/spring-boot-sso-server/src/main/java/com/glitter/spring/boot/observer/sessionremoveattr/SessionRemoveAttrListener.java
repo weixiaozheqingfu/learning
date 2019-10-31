@@ -5,7 +5,6 @@ import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonCache;
 import com.glitter.spring.boot.service.ISession;
-import com.glitter.spring.boot.web.action.UserInfoAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,7 @@ import java.util.Map;
 @Component
 public class SessionRemoveAttrListener implements ApplicationListener<SessionRemoveAttrEvent> {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(SessionRemoveAttrListener.class);
 
     @Autowired
     private ICommonCache commonCache;

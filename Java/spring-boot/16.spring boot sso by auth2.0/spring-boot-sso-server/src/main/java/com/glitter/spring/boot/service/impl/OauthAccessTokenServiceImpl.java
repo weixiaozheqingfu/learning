@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
@@ -43,6 +44,8 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
 
         // 3.返回当前请求AccessToken的权限相关数据
         AccessTokenInner accessTokenInner = new AccessTokenInner();
+        accessTokenInner.setJsessionid(oauthAccessTokenDb.getJsessionId());
+        accessTokenInner.setAccess_token(accessToken);
         accessTokenInner.setClientId(oauthAccessTokenDb.getClientId());
         accessTokenInner.setUserId(oauthAccessTokenDb.getUserId());
         accessTokenInner.setInterfaceUri(Arrays.asList(StringUtils.join(oauthAccessTokenDb.getInterfaceUri(),",")));
@@ -59,4 +62,15 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         record.setAccessToken(accssToken);
         return oauthAccessTokenDao.get(record);
     }
+
+    @Override
+    public List<OauthAccessToken> getOauthAccessTokensByJsessionid(String jsessionid) {
+        if (StringUtils.isBlank(jsessionid)) {
+            return null;
+        }
+        OauthAccessToken record = new OauthAccessToken();
+        record.setJsessionId(jsessionid);
+        return oauthAccessTokenDao.findList(record);
+    }
+
 }

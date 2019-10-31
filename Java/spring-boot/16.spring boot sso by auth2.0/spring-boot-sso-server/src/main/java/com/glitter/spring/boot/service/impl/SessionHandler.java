@@ -10,7 +10,6 @@ import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
 import com.glitter.spring.boot.util.CookieUtils;
 import com.glitter.spring.boot.util.SpringContextUtil;
-import com.glitter.spring.boot.web.action.UserInfoAction;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ import java.util.UUID;
 @Service
 public class SessionHandler implements ISessionHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(SessionHandler.class);
 
     @Autowired
     ICommonHashCache commonHashCache;

@@ -1,6 +1,5 @@
 package com.glitter.spring.boot.observer.sessionaddattr;
 
-import com.glitter.spring.boot.web.action.UserInfoAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -12,7 +11,7 @@ import java.io.Serializable;
 @Component
 public class SessionAddAttrPublisher implements ApplicationContextAware,Serializable {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(SessionAddAttrPublisher.class);
 
     private ApplicationContext applicationContext;
 

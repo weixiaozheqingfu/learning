@@ -10,7 +10,6 @@ import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonHashCache;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.util.SpringContextUtil;
-import com.glitter.spring.boot.web.action.UserInfoAction;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ import java.util.concurrent.ConcurrentMap;
 
 public class Session implements ISession,Serializable {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserInfoAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(Session.class);
 
     private String id;
     private ConcurrentMap<String, Object> attributes;

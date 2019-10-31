@@ -11,18 +11,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import sun.swing.StringUIClientPropertyKey;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class RequestInterceptor implements HandlerInterceptor {
+public class JsessionidByCookieInterceptor implements HandlerInterceptor {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
-        ResponseContext.set(httpServletResponse);
-        RequestContext.set(httpServletRequest);
+        // 针对浏览器请求是从cookie中取jsessionId。
+        String jsessionIdCookie = CookieUtils.getCookieValueByName(httpServletRequest, GlitterConstants.JSESSIONID);
+        if (StringUtils.isNotBlank(jsessionIdCookie)) {
+            JsessionIdCookieContext.set(jsessionIdCookie);
+        }
         return true;
     }
 
