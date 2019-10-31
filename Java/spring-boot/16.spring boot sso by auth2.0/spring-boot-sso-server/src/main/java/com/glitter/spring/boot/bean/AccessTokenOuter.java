@@ -21,6 +21,6 @@ public class AccessTokenOuter extends BaseBean {
     private String scope;
 
     /** 授权用户唯一标识 */
-    private String openid;
+    private Long userId;
  
 }

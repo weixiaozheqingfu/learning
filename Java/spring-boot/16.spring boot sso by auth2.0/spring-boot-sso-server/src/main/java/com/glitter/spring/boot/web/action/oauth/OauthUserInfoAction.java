@@ -29,15 +29,25 @@ public class OauthUserInfoAction extends BaseAction{
         if(null == userInfo){
             return null;
         }
-
         UserInfoResParam result = new UserInfoResParam();
-        result.setOpenId(AccessTokenInnerContext.get().getOpenId());
-        result.setUnionId(AccessTokenInnerContext.get().getUnionId());
+        result.setUserId(AccessTokenInnerContext.get().getUserId());
         result.setNickName(userInfo.getNickName());
         result.setAge(userInfo.getAge());
         result.setSex(userInfo.getSex());
         return ResponseResult.success(result);
-
     }
 
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
+    public ResponseResult<UserInfoResParam> logout() {
+        UserInfo userInfo = userInfoService.getUserInfoById(AccessTokenInnerContext.get().getUserId());
+        if(null == userInfo){
+            return null;
+        }
+        UserInfoResParam result = new UserInfoResParam();
+        result.setUserId(AccessTokenInnerContext.get().getUserId());
+        result.setNickName(userInfo.getNickName());
+        result.setAge(userInfo.getAge());
+        result.setSex(userInfo.getSex());
+        return ResponseResult.success(result);
+    }
 }

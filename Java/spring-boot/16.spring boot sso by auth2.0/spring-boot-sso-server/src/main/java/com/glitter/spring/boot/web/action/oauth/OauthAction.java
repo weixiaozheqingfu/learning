@@ -184,6 +184,8 @@ public class OauthAction extends BaseAction {
         oauthCode.setClientId(client_id);
         oauthCode.setUserId(userId);
         oauthCode.setScope(scope);
+        // InterfaceUri与scope的对应关系应该有一张数据库表对应关系，sso需求比较固定固定，此处简化，直接代码写死。
+        oauthCode.setInterfaceUri("/oauth2/userinfo,/oauth2/logout");
         String code = oauthCodeService.generateCode(oauthCode);
 
         // 2.组装回调地址
@@ -245,7 +247,7 @@ public class OauthAction extends BaseAction {
                 resultMap.put("expires_in", accessTokenInfo.getExpires_in());
                 resultMap.put("refresh_token", accessTokenInfo.getRefresh_token());
                 resultMap.put("scope", accessTokenInfo.getScope());
-                resultMap.put("openid", accessTokenInfo.getOpenid());
+                resultMap.put("userid", accessTokenInfo.getUserId());
 
                 // 2.sso中,换取accessToken成功,即认为客户端应用创建子会话成功,作子会话标记,方便将来注销会话时回调。
 
@@ -372,7 +374,7 @@ public class OauthAction extends BaseAction {
             resultMap.put("expires_in", accessTokenInfo.getExpires_in());
             resultMap.put("refresh_token", accessTokenInfo.getRefresh_token());
             resultMap.put("scope", accessTokenInfo.getScope());
-            resultMap.put("openid", accessTokenInfo.getOpenid());
+            resultMap.put("userid", accessTokenInfo.getUserId());
 
             return resultMap;
         } catch (Exception e) {

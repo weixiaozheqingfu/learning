@@ -7,9 +7,7 @@ import lombok.Data;
 public class UserInfoResParam extends BaseBean {
 
     /** 授权用户唯一标识 */
-    private String openId;
-    /** 授权用户统一标识 */
-    private String unionId;
+    private Long userId;
     /** 昵称 */
     private String nickName;
     /** 0:未填写,1:男,2:女,3:未知 */
