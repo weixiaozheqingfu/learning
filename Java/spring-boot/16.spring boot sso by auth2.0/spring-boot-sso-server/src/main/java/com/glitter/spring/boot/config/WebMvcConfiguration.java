@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.config;
 
 import com.glitter.spring.boot.web.interceptor.JsessionidByCookieInterceptor;
+import com.glitter.spring.boot.web.interceptor.OauthResourceInterceptor;
 import com.glitter.spring.boot.web.interceptor.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return new JsessionidByCookieInterceptor();
     }
 
+    @Bean
+    OauthResourceInterceptor oauthResourceInterceptor(){
+        return new OauthResourceInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> requestInterceptorAddPathPatterns = new ArrayList<>();
@@ -33,5 +39,10 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         jsessionidByCookieInterceptorAddPathPatterns.add("/oauth2/authorize");
         jsessionidByCookieInterceptorAddPathPatterns.add("/oauth2/login");
         registry.addInterceptor(jsessionidByCookieInterceptor()).addPathPatterns(jsessionidByCookieInterceptorAddPathPatterns);
+
+        List<String> oauthResourceInterceptorAddPathPatterns = new ArrayList<>();
+        oauthResourceInterceptorAddPathPatterns.add("/oauth2/resource/userinfo");
+        oauthResourceInterceptorAddPathPatterns.add("/oauth2/resource/logout");
+        registry.addInterceptor(oauthResourceInterceptor()).addPathPatterns(oauthResourceInterceptorAddPathPatterns);
     }
 }

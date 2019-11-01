@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 通过调accessToken用资源接口拦截器
  */
-public class OauthInterceptor implements HandlerInterceptor {
-    private static final Logger logger = LoggerFactory.getLogger(OauthInterceptor.class);
+public class OauthResourceInterceptor implements HandlerInterceptor {
+    private static final Logger logger = LoggerFactory.getLogger(OauthResourceInterceptor.class);
 
     @Autowired
     IOauthAccessTokenService oauthAccessTokenService;
