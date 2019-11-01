@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.glitter.spring.boot.bean.AccessTokenInner;
+import com.glitter.spring.boot.bean.AccessTokenInParam;
 import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
@@ -28,7 +28,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
      * @return
      */
     @Override
-    public AccessTokenInner validateAccessToken(String accessToken) {
+    public AccessTokenInParam validateAccessToken(String accessToken) {
         // 1.验证accessToken是否存在
         OauthAccessToken record = new OauthAccessToken();
         record.setAccessToken(accessToken);
@@ -43,14 +43,14 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         }
 
         // 3.返回当前请求AccessToken的权限相关数据
-        AccessTokenInner accessTokenInner = new AccessTokenInner();
-        accessTokenInner.setJsessionid(oauthAccessTokenDb.getJsessionId());
-        accessTokenInner.setAccess_token(accessToken);
-        accessTokenInner.setClientId(oauthAccessTokenDb.getClientId());
-        accessTokenInner.setUserId(oauthAccessTokenDb.getUserId());
-        accessTokenInner.setInterfaceUri(Arrays.asList(StringUtils.join(oauthAccessTokenDb.getInterfaceUri(),",")));
+        AccessTokenInParam accessTokenInParam = new AccessTokenInParam();
+        accessTokenInParam.setJsessionid(oauthAccessTokenDb.getJsessionId());
+        accessTokenInParam.setAccess_token(accessToken);
+        accessTokenInParam.setClientId(oauthAccessTokenDb.getClientId());
+        accessTokenInParam.setUserId(oauthAccessTokenDb.getUserId());
+        accessTokenInParam.setInterfaceUri(Arrays.asList(StringUtils.join(oauthAccessTokenDb.getInterfaceUri(),",")));
 
-        return accessTokenInner;
+        return accessTokenInParam;
     }
 
     @Override

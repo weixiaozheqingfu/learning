@@ -236,7 +236,7 @@ public class OauthAction extends BaseAction {
             // grant_type的不同会有不同的实现类,这里演示的是grant_type=authorization_code授权码模式根据code换取accessToken的情况.
             if (GlitterConstants.OAUTH_GRANT_TYPE_AUTHORIZATION_CODE.equals(grant_type)) {
                 // 1.验证客户端身份和code信息accessToken
-                AccessTokenOuter accessTokenInfo = accessToken4AuthorizationCodeService.getAccessTokenInfo(client_id, client_secret, redirect_uri, code, grant_type);
+                AccessTokenOutParam accessTokenInfo = accessToken4AuthorizationCodeService.getAccessTokenInfo(client_id, client_secret, redirect_uri, code, grant_type);
                 if (null == accessTokenInfo) {
                     errorMap.put("errcode", CoreConstants.REQUEST_PROGRAM_ERROR_CODE);
                     errorMap.put("errmsg", "系统异常");
@@ -363,7 +363,7 @@ public class OauthAction extends BaseAction {
                 return errorMap;
             }
 
-            AccessTokenOuter accessTokenInfo = accessToken4RefreshTokenService.getAccessTokenInfo(client_id, refresh_token, grant_type);
+            AccessTokenOutParam accessTokenInfo = accessToken4RefreshTokenService.getAccessTokenInfo(client_id, refresh_token, grant_type);
             if (null == accessTokenInfo) {
                 errorMap.put("errcode", CoreConstants.REQUEST_PROGRAM_ERROR_CODE);
                 errorMap.put("errmsg", "系统异常");

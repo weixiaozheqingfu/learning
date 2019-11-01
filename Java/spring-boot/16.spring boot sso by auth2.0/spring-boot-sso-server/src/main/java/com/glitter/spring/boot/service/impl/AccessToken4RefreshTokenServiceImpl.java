@@ -1,7 +1,7 @@
 package com.glitter.spring.boot.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.glitter.spring.boot.bean.AccessTokenOuter;
+import com.glitter.spring.boot.bean.AccessTokenOutParam;
 import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.constant.GlitterConstants;
@@ -45,8 +45,8 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
      * @param grant_type
      */
     @Override
-    public AccessTokenOuter getAccessTokenInfo(String client_id, String refresh_token, String grant_type) {
-        AccessTokenOuter accessTokenInfo = new AccessTokenOuter();
+    public AccessTokenOutParam getAccessTokenInfo(String client_id, String refresh_token, String grant_type) {
+        AccessTokenOutParam accessTokenInfo = new AccessTokenOutParam();
         // 1.参数合法性校验
         // 具体返回什么码,以及前置拦截器配合http状态码返回,需要后续继续完善,这里先做一个简化示例,先实现一版再说优化.
         if (StringUtils.isBlank(client_id)) {

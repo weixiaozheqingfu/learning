@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AccessTokenInner extends BaseBean {
+public class AccessTokenInParam extends BaseBean {
 
     /** 访问令牌 */
     private String access_token;

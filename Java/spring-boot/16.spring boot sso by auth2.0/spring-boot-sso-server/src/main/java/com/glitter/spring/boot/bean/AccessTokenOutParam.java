@@ -3,7 +3,7 @@ package com.glitter.spring.boot.bean;
 import lombok.Data;
 
 @Data
-public class AccessTokenOuter extends BaseBean {
+public class AccessTokenOutParam extends BaseBean {
 
     /** 访问令牌 */
     private String access_token;
