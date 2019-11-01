@@ -73,4 +73,11 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         return oauthAccessTokenDao.findList(record);
     }
 
+    @Override
+    public void updateJsessionidClientByAccessToken(String accessToken, Long jsessionidClient) {
+        int count = oauthAccessTokenDao.updateJsessionidClientByAccessToken(accessToken, jsessionidClient);
+        if (count < 1) {
+            throw new BusinessException("50036", "更新jsessionidClient失败");
+        }
+    }
 }

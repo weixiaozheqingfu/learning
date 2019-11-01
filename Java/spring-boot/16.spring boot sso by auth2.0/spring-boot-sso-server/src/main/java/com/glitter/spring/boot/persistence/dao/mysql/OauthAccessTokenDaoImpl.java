@@ -6,7 +6,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao{
@@ -75,5 +77,12 @@ public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao{
     public int getCount(OauthAccessToken oauthAccessToken) {
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getCount", oauthAccessToken);
     }
-   
+
+    @Override
+    public int updateJsessionidClientByAccessToken(String accessToken, Long jsessionidClient) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("accessToken", accessToken);
+        map.put("jsessionidClient", jsessionidClient);
+        return sqlSessionTemplate.update(NAME_SPACE + ".updateJsessionidClientByAccessToken", map);
+    }
 }

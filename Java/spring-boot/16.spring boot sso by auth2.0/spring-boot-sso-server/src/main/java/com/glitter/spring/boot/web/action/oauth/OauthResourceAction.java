@@ -5,8 +5,10 @@ import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.context.AccessTokenInnerContext;
+import com.glitter.spring.boot.persistence.remote.IClientRemote;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import com.glitter.spring.boot.service.IOauthClientInfoService;
+import com.glitter.spring.boot.service.ISessionHandler;
 import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.web.action.BaseAction;
 import com.glitter.spring.boot.web.param.oauth.UserInfoResParam;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.AccessControlContext;
 import java.util.List;
 
 @RestController
@@ -28,12 +31,14 @@ public class OauthResourceAction extends BaseAction{
 
     @Autowired
     private IUserInfoService userInfoService;
-
     @Autowired
     private IOauthAccessTokenService oauthAccessTokenService;
-
     @Autowired
     private IOauthClientInfoService oauthClientInfoService;
+    @Autowired
+    private ISessionHandler sessionHandler;
+    @Autowired
+    private IClientRemote clientRemote;
 
     @RequestMapping(value = "userinfo", method = RequestMethod.GET)
     public ResponseResult<UserInfoResParam> getUserInfo() {
@@ -57,13 +62,13 @@ public class OauthResourceAction extends BaseAction{
      * 所以调用该接口虽然不是访问用户资源信息，你可以理解为跟oauth没有关系了，这里要传accessToken完全是sso功能的需要，并且由于前期的oauth铺垫，这里传accessToken也保证了客户端是合法的，用户是授权的前提。
      * 这就很巧妙了。
      *
-     * @param jsessionid
+     * @param jsessionidClient
      * @return
      */
     @RequestMapping(value = "uploadJsessionid", method = RequestMethod.POST)
-    public ResponseResult uploadJsessionid(@RequestParam Long jsessionid) {
-        // oauthAccessTokenService.updateJsessionIdClientByAccessToken(String accessToken, String jsessionIdClient);
-        // TODO
+    public ResponseResult uploadJsessionid(@RequestParam Long jsessionidClient) {
+        String accessToken = AccessTokenInnerContext.get().getAccess_token();
+        oauthAccessTokenService.updateJsessionidClientByAccessToken(accessToken, jsessionidClient);
         return ResponseResult.success(true);
     }
 
@@ -73,12 +78,12 @@ public class OauthResourceAction extends BaseAction{
      * 同uploadJsessionid接口，调用该接口方法需要传accessToken，理由同上。
      * accessToken就是会话的凭证，accessToken对应了sso认证中心的jsessionid。
      *
-     * @param jsessionid
      * @return
      */
     @RequestMapping(value = "keepAlive", method = RequestMethod.POST)
-    public ResponseResult keepAlive(@RequestParam Long jsessionid) {
-        // TODO
+    public ResponseResult keepAlive() {
+        String jsessionid = AccessTokenInnerContext.get().getJsessionid();
+        sessionHandler.renewal(jsessionid);
         return ResponseResult.success(true);
     }
 
@@ -88,17 +93,25 @@ public class OauthResourceAction extends BaseAction{
      * 另外该方法中回调客户端方法，是需要做rsa非对称加密的私钥签名的，这样客户端应用验证签名，知道调用方是sso认证中心，是合法的。
      * 当然认证方式有很多，首推rsa方式。这里只是为了演示流程，简单专一起见，将此签名验签过程省略。但生产环境真正做此功能，务必要加上。
      *
+     * 客户端收到该方法的返回值成功后，需要重定向到其请求登录授权页。
+     *
      * @return
      */
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ResponseResult logout() {
         String jsessionid = AccessTokenInnerContext.get().getJsessionid();
         List<OauthAccessToken> oauthAccessTokens =  oauthAccessTokenService.getOauthAccessTokensByJsessionid(jsessionid);
+        // 注销所有客户端登录
         for (int i = 0; i < oauthAccessTokens.size(); i++) {
             OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(oauthAccessTokens.get(i).getClientId());
-
+            String logoutUrl = oauthClientInfo.getLogoutUri();
+            try {
+                clientRemote.logoutClient(logoutUrl, oauthAccessTokens.get(i).getJsessionidClient());
+            } catch (Exception e) {
+                // 可以发邮件通知失败
+                e.printStackTrace();
+            }
         }
-        // TODO
         return ResponseResult.success(true);
     }
 

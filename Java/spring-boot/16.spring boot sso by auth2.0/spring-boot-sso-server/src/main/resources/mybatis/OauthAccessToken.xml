@@ -319,4 +319,8 @@
         </where>
     </select>
 
+    <update id="updateJsessionidClientByAccessToken" parameterType="java.util.Map">
+        update oauth_access_token set jsessionid_client=#{jsessionidClient} where oauth_access_token=#{accessToken}
+    </update>
+
 </mapper>

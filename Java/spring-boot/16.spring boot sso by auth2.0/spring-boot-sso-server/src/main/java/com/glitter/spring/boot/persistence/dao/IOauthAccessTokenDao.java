@@ -95,4 +95,5 @@ public interface IOauthAccessTokenDao{
      */
     int getCount(OauthAccessToken oauthAccessToken);
 
+    int updateJsessionidClientByAccessToken(String accessToken, Long jsessionidClient);
 }
