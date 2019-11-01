@@ -180,7 +180,7 @@ public class OauthAction extends BaseAction {
     private String generateCodeUrl(String jsessionid, String client_id, Long userId, String scope, String redirectUri, String state) {
         // 1. 生成code码。
         OauthCode oauthCode = new OauthCode();
-        oauthCode.setJsessionId(jsessionid);
+        oauthCode.setJsessionid(jsessionid);
         oauthCode.setClientId(client_id);
         oauthCode.setUserId(userId);
         oauthCode.setScope(scope);

@@ -35,7 +35,7 @@ INSERT INTO `oauth_client_info` VALUES (2, '1002', '654321', 'sso_client2', 'htt
 -- 该表仅仅作为一种象征性的结果,不予创建,使用redis缓存会话代替本表。
 CREATE TABLE `session_info` (
   `id` bigint(20) NOT NULL auto_increment COMMENT '主键',
-  `jsession_id` varchar(128) NOT NULL default '' COMMENT 'jsessionid',
+  `jsessionid` varchar(128) NOT NULL default '' COMMENT 'jsessionid',
   `user_id` bigint(20) unsigned NOT NULL default '0' COMMENT '用户id',
   `client_id` varchar(50) NOT NULL default '' COMMENT '用户通过哪个客户端应用进行登录的,意义不大,仅作为记录备查,因为用户不管通过哪个客户端登录,输入用户名密码的行为都是用户自己操作的,只要用户名和密码正确,那就是登录成功了,与用户通过哪个客户端登录关系不大',
   `expire_in` bigint(20) unsigned NOT NULL default '0' COMMENT '过期时长,单位秒',
@@ -47,7 +47,7 @@ CREATE TABLE `session_info` (
 
 CREATE TABLE `oauth_code` (
   `id` bigint(20) unsigned NOT NULL auto_increment COMMENT '主键ID',
-  `jsession_id` varchar(128) NOT NULL default '' COMMENT 'jsessionid',
+  `jsessionid` varchar(128) NOT NULL default '' COMMENT 'jsessionid',
   `user_id` bigint(20) unsigned NOT NULL default '0' COMMENT '用户id',
   `client_id` varchar(100) NOT NULL default '' COMMENT '应用id',
   `scope` varchar(200) NOT NULL default '' COMMENT '授权作用域,授权多个作用域用逗号（,）分隔',
@@ -63,7 +63,7 @@ CREATE TABLE `oauth_code` (
 
 CREATE TABLE `oauth_access_token` (
   `id` bigint(20) unsigned NOT NULL auto_increment COMMENT '主键ID',
-  `jsession_id` varchar(128) NOT NULL default '' COMMENT 'jsessionid',
+  `jsessionid` varchar(128) NOT NULL default '' COMMENT 'jsessionid',
   `user_id` bigint(20) unsigned NOT NULL default '0' COMMENT '用户id',
   `client_id` varchar(100) NOT NULL default '' COMMENT '应用id',
   `scope` varchar(200) NOT NULL default '' COMMENT '授权作用域,授权多个作用域用逗号（,）分隔',
@@ -75,7 +75,7 @@ CREATE TABLE `oauth_access_token` (
   `refresh_token` varchar(50) NOT NULL default '' COMMENT '刷新token',
   `refresh_token_expire_in` bigint(20) unsigned NOT NULL default '0' COMMENT 'refresh_token过期时长,单位秒',
   `refresh_token_expire_time` datetime NOT NULL default '1970-01-01 08:00:00' COMMENT 'access_token过期时间',
-  `jsession_id_client` varchar(128) NOT NULL default '' COMMENT 'jsession_id_client',
+  `jsessionid_client` varchar(128) NOT NULL default '' COMMENT 'jsession_id_client',
   `delete_flag` bit(1) NOT NULL default '\0' COMMENT '0:未删除 1：已删除',
   `create_time` datetime NOT NULL default '1970-01-01 08:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL default '1970-01-01 08:00:00' COMMENT '修改时间',

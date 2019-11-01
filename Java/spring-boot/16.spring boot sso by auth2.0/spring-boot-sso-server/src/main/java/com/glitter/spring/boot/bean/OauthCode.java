@@ -10,7 +10,7 @@ public class OauthCode extends BaseBean {
     /** 主键ID */
     private Long id;
     /** jsessionid */
-    private String jsessionId;
+    private String jsessionid;
     /** 用户id */
     private Long userId;
     /** 应用id */

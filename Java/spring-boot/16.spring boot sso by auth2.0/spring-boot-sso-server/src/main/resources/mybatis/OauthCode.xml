@@ -3,7 +3,7 @@
 <mapper namespace="com.glitter.spring.boot.persistence.dao.IOauthCodeDao">
     <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.OauthCode">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="jsession_id" property="jsessionId" jdbcType="VARCHAR"/>
+        <result column="jsessionid" property="jsessionid" jdbcType="VARCHAR"/>
         <result column="user_id" property="userId" jdbcType="BIGINT"/>
         <result column="client_id" property="clientId" jdbcType="VARCHAR"/>
         <result column="scope" property="scope" jdbcType="VARCHAR"/>
@@ -17,7 +17,7 @@
 
     <sql id="baseColumns">
         id
-        ,jsession_id
+        ,jsessionid
         ,user_id
         ,client_id
         ,scope
@@ -33,8 +33,8 @@
         <if test="id != null">
             and id=#{id}
 		</if>
-        <if test="jsessionId != null ">
-            and jsession_id=#{jsessionId}
+        <if test="jsessionid != null ">
+            and jsessionid=#{jsessionid}
 		</if>
         <if test="userId != null">
             and user_id=#{userId}
@@ -71,8 +71,8 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="jsessionId != null ">
-                jsession_id,
+            <if test="jsessionid != null ">
+                jsessionid,
             </if>
             <if test="userId != null">
                 user_id,
@@ -106,8 +106,8 @@
             <if test="id != null">
                 #{id},
             </if>
-            <if test="jsessionId != null ">
-                #{jsessionId},
+            <if test="jsessionid != null ">
+                #{jsessionid},
             </if>
             <if test="userId != null">
                 #{userId},
@@ -143,10 +143,6 @@
         delete from oauth_code where id =#{id}
     </delete>
 
-    <delete id="deleteByCode">
-        delete from oauth_code where code =#{code}
-    </delete>
-
     <delete id="deleteByIds">
         delete from oauth_code where id in
         <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
@@ -164,8 +160,8 @@
     <update id="updateById" parameterType="com.glitter.spring.boot.bean.OauthCode">
         update oauth_code  set
         <trim suffixOverrides=",">
-        <if test="jsessionId != null ">
-            jsession_id=#{jsessionId},
+        <if test="jsessionid != null ">
+            jsessionid=#{jsessionid},
         </if>
         <if test="userId != null">
             user_id=#{userId},
@@ -216,18 +212,6 @@
             <include refid="whereSql"/> limit 1
         </where>
 	</select>
-
-    <select id="getByUserIdAndClient" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthCode">
-        select <include refid="baseColumns"/> from oauth_code
-        where jsession_id = #{jsessionId} and user_id = #{userId} and client_id=#{clientId} and expire_time > #{now}
-        limit 1
-    </select>
-
-    <delete id="deleteByUserIdAndClient" parameterType="com.glitter.spring.boot.bean.OauthCode">
-        delete from oauth_code
-        where jsession_id = #{jsessionId} and user_id = #{userId} and client_id=#{clientId} and expire_time  <![CDATA[ <= ]]> #{now}
-    </delete>
-
 
 	<select id="findAllList" resultMap="BaseResultMap">
 	     select <include refid="baseColumns"/> from oauth_code

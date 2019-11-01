@@ -3,7 +3,7 @@
 <mapper namespace="com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao">
     <resultMap id="BaseResultMap" type="com.glitter.spring.boot.bean.OauthAccessToken">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="jsession_id" property="jsessionId" jdbcType="VARCHAR"/>
+        <result column="jsessionid" property="jsessionid" jdbcType="VARCHAR"/>
         <result column="user_id" property="userId" jdbcType="BIGINT"/>
         <result column="client_id" property="clientId" jdbcType="VARCHAR"/>
         <result column="scope" property="scope" jdbcType="VARCHAR"/>
@@ -15,6 +15,7 @@
         <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR"/>
         <result column="refresh_token_expire_in" property="refreshTokenExpireIn" jdbcType="BIGINT"/>
         <result column="refresh_token_expire_time" property="refreshTokenExpireTime" jdbcType="TIMESTAMP"/>
+        <result column="jsessionid_client" property="jsessionidClient" jdbcType="VARCHAR"/>
         <result column="delete_flag" property="deleteFlag" jdbcType="BIT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
@@ -22,7 +23,7 @@
 
     <sql id="baseColumns">
         id
-        ,jsession_id
+        ,jsessionid
         ,user_id
         ,client_id
         ,scope
@@ -34,6 +35,7 @@
         ,refresh_token
         ,refresh_token_expire_in
         ,refresh_token_expire_time
+        ,jsessionid_client
         ,delete_flag
         ,create_time
         ,update_time
@@ -43,8 +45,8 @@
         <if test="id != null">
             and id=#{id}
 		</if>
-        <if test="jsessionId != null ">
-            and jsession_id=#{jsessionId}
+        <if test="jsessionid != null ">
+            and jsessionid=#{jsessionid}
 		</if>
         <if test="userId != null">
             and user_id=#{userId}
@@ -79,6 +81,9 @@
         <if test="refreshTokenExpireTime != null">
             and refresh_token_expire_time=#{refreshTokenExpireTime}
 		</if>
+        <if test="jsessionidClient != null ">
+            and jsessionid_client=#{jsessionidClient}
+		</if>
         <if test="deleteFlag != null">
             and delete_flag=#{deleteFlag}
 		</if>
@@ -96,8 +101,8 @@
             <if test="id != null">
                 id,
             </if>
-            <if test="jsessionId != null ">
-                jsession_id,
+            <if test="jsessionid != null ">
+                jsessionid,
             </if>
             <if test="userId != null">
                 user_id,
@@ -132,6 +137,9 @@
             <if test="refreshTokenExpireTime != null">
                 refresh_token_expire_time,
             </if>
+            <if test="jsessionidClient != null ">
+                jsessionid_client,
+            </if>
             <if test="deleteFlag != null">
                 delete_flag,
             </if>
@@ -146,8 +154,8 @@
             <if test="id != null">
                 #{id},
             </if>
-            <if test="jsessionId != null ">
-                #{jsessionId},
+            <if test="jsessionid != null ">
+                #{jsessionid},
             </if>
             <if test="userId != null">
                 #{userId},
@@ -182,6 +190,9 @@
             <if test="refreshTokenExpireTime != null">
                 #{refreshTokenExpireTime},
             </if>
+            <if test="jsessionidClient != null ">
+                #{jsessionidClient},
+            </if>
             <if test="deleteFlag != null">
                 #{deleteFlag},
             </if>
@@ -215,8 +226,8 @@
     <update id="updateById" parameterType="com.glitter.spring.boot.bean.OauthAccessToken">
         update oauth_access_token  set
         <trim suffixOverrides=",">
-        <if test="jsessionId != null ">
-            jsession_id=#{jsessionId},
+        <if test="jsessionid != null ">
+            jsessionid=#{jsessionid},
         </if>
         <if test="userId != null">
             user_id=#{userId},
@@ -250,6 +261,9 @@
         </if>
         <if test="refreshTokenExpireTime != null">
             refresh_token_expire_time=#{refreshTokenExpireTime},
+        </if>
+        <if test="jsessionidClient != null ">
+            jsessionid_client=#{jsessionidClient},
         </if>
         <if test="deleteFlag != null">
             delete_flag=#{deleteFlag},

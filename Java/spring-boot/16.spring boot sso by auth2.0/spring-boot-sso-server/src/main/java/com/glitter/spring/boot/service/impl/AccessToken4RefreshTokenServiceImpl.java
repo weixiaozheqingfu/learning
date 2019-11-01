@@ -81,7 +81,7 @@ public class AccessToken4RefreshTokenServiceImpl implements IAccessToken4Refresh
         }
 
         // 5.为全局会话续期
-        sessionHandler.renewal(oauthAccessTokenDb.getJsessionId());
+        sessionHandler.renewal(oauthAccessTokenDb.getJsessionid());
 
         // 6.refeshToken换取accessToken,更新accessToken记录
         Date now = new Date();

@@ -10,7 +10,7 @@ public class OauthAccessToken extends BaseBean {
     /** 主键ID */
     private Long id;
     /** jsessionid */
-    private String jsessionId;
+    private String jsessionid;
     /** 用户id */
     private Long userId;
     /** 应用id */
@@ -33,6 +33,8 @@ public class OauthAccessToken extends BaseBean {
     private Long refreshTokenExpireIn;
     /** access_token过期时间 */
     private Date refreshTokenExpireTime;
+    /** jsessionidClient */
+    private String jsessionidClient;
     /** 0:未删除 1：已删除 */
     private Boolean deleteFlag;
     /** 创建时间 */

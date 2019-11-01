@@ -44,7 +44,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
 
         // 3.返回当前请求AccessToken的权限相关数据
         AccessTokenInParam accessTokenInParam = new AccessTokenInParam();
-        accessTokenInParam.setJsessionid(oauthAccessTokenDb.getJsessionId());
+        accessTokenInParam.setJsessionid(oauthAccessTokenDb.getJsessionid());
         accessTokenInParam.setAccess_token(accessToken);
         accessTokenInParam.setClientId(oauthAccessTokenDb.getClientId());
         accessTokenInParam.setUserId(oauthAccessTokenDb.getUserId());
@@ -69,7 +69,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
             return null;
         }
         OauthAccessToken record = new OauthAccessToken();
-        record.setJsessionId(jsessionid);
+        record.setJsessionid(jsessionid);
         return oauthAccessTokenDao.findList(record);
     }
 

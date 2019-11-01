@@ -62,6 +62,7 @@ public class OauthResourceAction extends BaseAction{
      */
     @RequestMapping(value = "uploadJsessionid", method = RequestMethod.POST)
     public ResponseResult uploadJsessionid(@RequestParam Long jsessionid) {
+        // oauthAccessTokenService.updateJsessionIdClientByAccessToken(String accessToken, String jsessionIdClient);
         // TODO
         return ResponseResult.success(true);
     }
