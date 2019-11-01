@@ -62,7 +62,6 @@ gradle-app.setting
 *.log
 *.bak
 build/
-doc/
 .sonar_lock
 
 # 苹果机器的内部管理文件
