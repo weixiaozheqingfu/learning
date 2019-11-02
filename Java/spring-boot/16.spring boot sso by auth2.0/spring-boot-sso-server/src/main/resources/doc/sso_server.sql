@@ -70,7 +70,6 @@ CREATE TABLE `oauth_access_token` (
   `refresh_token` varchar(50) NOT NULL default '' COMMENT '刷新token',
   `refresh_token_expire_in` bigint(20) unsigned NOT NULL default '0' COMMENT 'refresh_token过期时长,单位秒',
   `refresh_token_expire_time` datetime NOT NULL default '1970-01-01 08:00:00' COMMENT 'access_token过期时间',
-  `jsessionid_client` varchar(128) NOT NULL default '' COMMENT 'jsession_id_client',
   `delete_flag` bit(1) NOT NULL default '\0' COMMENT '0:未删除 1：已删除',
   `create_time` datetime NOT NULL default '1970-01-01 08:00:00' COMMENT '创建时间',
   `update_time` datetime NOT NULL default '1970-01-01 08:00:00' COMMENT '修改时间',

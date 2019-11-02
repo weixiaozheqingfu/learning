@@ -15,7 +15,6 @@
         <result column="refresh_token" property="refreshToken" jdbcType="VARCHAR"/>
         <result column="refresh_token_expire_in" property="refreshTokenExpireIn" jdbcType="BIGINT"/>
         <result column="refresh_token_expire_time" property="refreshTokenExpireTime" jdbcType="TIMESTAMP"/>
-        <result column="jsessionid_client" property="jsessionidClient" jdbcType="VARCHAR"/>
         <result column="delete_flag" property="deleteFlag" jdbcType="BIT"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
@@ -35,7 +34,6 @@
         ,refresh_token
         ,refresh_token_expire_in
         ,refresh_token_expire_time
-        ,jsessionid_client
         ,delete_flag
         ,create_time
         ,update_time
@@ -80,9 +78,6 @@
 		</if>
         <if test="refreshTokenExpireTime != null">
             and refresh_token_expire_time=#{refreshTokenExpireTime}
-		</if>
-        <if test="jsessionidClient != null ">
-            and jsessionid_client=#{jsessionidClient}
 		</if>
         <if test="deleteFlag != null">
             and delete_flag=#{deleteFlag}
@@ -137,9 +132,6 @@
             <if test="refreshTokenExpireTime != null">
                 refresh_token_expire_time,
             </if>
-            <if test="jsessionidClient != null ">
-                jsessionid_client,
-            </if>
             <if test="deleteFlag != null">
                 delete_flag,
             </if>
@@ -189,9 +181,6 @@
             </if>
             <if test="refreshTokenExpireTime != null">
                 #{refreshTokenExpireTime},
-            </if>
-            <if test="jsessionidClient != null ">
-                #{jsessionidClient},
             </if>
             <if test="deleteFlag != null">
                 #{deleteFlag},
@@ -262,9 +251,6 @@
         <if test="refreshTokenExpireTime != null">
             refresh_token_expire_time=#{refreshTokenExpireTime},
         </if>
-        <if test="jsessionidClient != null ">
-            jsessionid_client=#{jsessionidClient},
-        </if>
         <if test="deleteFlag != null">
             delete_flag=#{deleteFlag},
         </if>
@@ -318,9 +304,5 @@
             <include refid="whereSql"/>
         </where>
     </select>
-
-    <update id="updateJsessionidClientByAccessToken" parameterType="java.util.Map">
-        update oauth_access_token set jsessionid_client=#{jsessionidClient} where oauth_access_token=#{accessToken}
-    </update>
 
 </mapper>

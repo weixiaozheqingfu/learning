@@ -27,7 +27,7 @@ public class ClientRemoteImpl implements IClientRemote {
 	private RestTemplateUtils restTemplateUtils;
 
 	@Override
-	public void logoutClient(String url, String jsessionidClient) throws Exception{
+	public void logoutClient(String url, String accessToken) throws Exception{
 		try {
 			if(StringUtils.isBlank(url)){
 				throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "url参数为空");
@@ -37,12 +37,12 @@ public class ClientRemoteImpl implements IClientRemote {
 			}
 
 			Map<String, Object> param = new HashMap<>(1);
-			param.put("jsessionid", jsessionidClient);
+			param.put("accessToken", accessToken);
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult>(){});
 			if (responseResult == null || !responseResult.getCode().equals(CoreConstants.REQUEST_SUCCESS_CODE)) {
-				logger.error("系统调用异常，调用地址:{}, 输入参数:{},返回json:{}", url, jsessionidClient, json);
+				logger.error("系统调用异常，调用地址:{}, 输入参数:{},返回json:{}", url, accessToken, json);
 				throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统调用异常");
 			}
 		} catch (Exception e) {

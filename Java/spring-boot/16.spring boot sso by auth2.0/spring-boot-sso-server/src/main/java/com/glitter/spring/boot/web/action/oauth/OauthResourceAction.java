@@ -17,10 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.AccessControlContext;
 import java.util.List;
 
 @RestController
@@ -55,28 +53,16 @@ public class OauthResourceAction extends BaseAction{
     }
 
     /**
-     * 上传客户端局部会话的jsessionid。
-     * 调用该方法需要传accessToken,因为accessToken不仅是用户授权凭证,可以访问用户授权的接口信息。
-     * 在sso需求中,accessToken更是局部会话凭证,可以理解为用户授权客户端accessToken在这一次sso登录过程中访问用户信息。
-     * accessToken能传过来，本身说明调用者是合法的也是经过用户授权的，同时accessToken也代表了其对应的是服务器端哪个jsessionid_sso会话。
-     * 所以调用该接口虽然不是访问用户资源信息，你可以理解为跟oauth没有关系了，这里要传accessToken完全是sso功能的需要，并且由于前期的oauth铺垫，这里传accessToken也保证了客户端是合法的，用户是授权的前提。
-     * 这就很巧妙了。
-     *
-     * @param jsessionidClient
-     * @return
-     */
-    @RequestMapping(value = "uploadJsessionid", method = RequestMethod.POST)
-    public ResponseResult uploadJsessionid(@RequestParam Long jsessionidClient) {
-        String accessToken = AccessTokenInnerContext.get().getAccess_token();
-        oauthAccessTokenService.updateJsessionidClientByAccessToken(accessToken, jsessionidClient);
-        return ResponseResult.success(true);
-    }
-
-    /**
      * 客户端通过调用该方法,保持会话,即对服务器端会话进行续期。
      *
-     * 同uploadJsessionid接口，调用该接口方法需要传accessToken，理由同上。
-     * accessToken就是会话的凭证，accessToken对应了sso认证中心的jsessionid。
+     * 调用该方法需要传accessToken,因为accessToken不仅是用户授权凭证,可以访问用户授权的接口信息。
+     * 在sso需求中,,accessToken更是局部会话凭证,accessToken能传过来，本身说明调用者是合法的也是经过用户授权的，
+     * 同时accessToken也代表了其对应的是服务器端哪个jsessionid_sso会话。
+     *
+     * accessToken就是全局会话下针对每一个客户端会话的凭证和代表，accessToken对应了sso认证中心的jsessionid。
+     * 所以调用该接口虽然不是访问用户资源信息，你可以理解为跟oauth没有关系了，这里要传accessToken完全是sso功能的需要，
+     * 并且由于前期的oauth铺垫，这里传accessToken也保证了客户端是合法的，用户授权是前提。
+     * 这就很巧妙了。
      *
      * @return
      */
@@ -106,7 +92,7 @@ public class OauthResourceAction extends BaseAction{
             OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(oauthAccessTokens.get(i).getClientId());
             String logoutUrl = oauthClientInfo.getLogoutUri();
             try {
-                clientRemote.logoutClient(logoutUrl, oauthAccessTokens.get(i).getJsessionidClient());
+                clientRemote.logoutClient(logoutUrl, oauthAccessTokens.get(i).getAccessToken());
             } catch (Exception e) {
                 // 可以发邮件通知失败
                 e.printStackTrace();
@@ -114,6 +100,5 @@ public class OauthResourceAction extends BaseAction{
         }
         return ResponseResult.success(true);
     }
-
 
 }
