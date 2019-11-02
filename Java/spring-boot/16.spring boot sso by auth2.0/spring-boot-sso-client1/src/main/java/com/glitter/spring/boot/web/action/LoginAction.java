@@ -6,7 +6,6 @@ import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IRsaService;
 import com.glitter.spring.boot.service.ISession;
-import com.glitter.spring.boot.service.IUserInfoService;
 import com.glitter.spring.boot.util.CaptchaUtils;
 import com.glitter.spring.boot.web.param.LoginInfo;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -28,81 +27,14 @@ public class LoginAction extends BaseAction {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginAction.class);
 
-    @Autowired
-    private IUserInfoService userInfoService;
-
-    @Autowired
-    private IRsaService rsaService;
-
-    /**
-     * 获取公钥
-     * @return
-     */
-    @RequestMapping(value = "getPublicKey", method = RequestMethod.GET)
-    public ResponseResult<String> getPublicKey() {
-        String publicKey = rsaService.getPublicKey();
-        return ResponseResult.success(publicKey);
-    }
-
-    /**
-     * 获取图形验证码
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value = "/getLoginGraphCaptcha", method = RequestMethod.GET)
-    public ResponseResult<String> getLoginGraphCaptcha() throws IOException {
-        // 1.设置验证码属性
-        int width = 110;
-        int height = 35;
-        CaptchaUtils captchaUtils = CaptchaUtils.getInstance();
-        captchaUtils.set(width, height);
-
-        // 2.生成验证码值并存入Session
-        String graphCaptcha = captchaUtils.generateCaptchaCode();
-        sessionHandler.getSession().setAttribute("loginGraphCaptcha",graphCaptcha);
-
-        // 3.将验证码图片输入到客户端
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ImageIO.write(captchaUtils.generateCaptchaImg(graphCaptcha), "jpg", out);
-        return ResponseResult.success(new String(Base64.encodeBase64(out.toByteArray())));
-    }
-
     /**
      * 登陆
      * @return
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public ResponseResult<String> login(@RequestBody LoginInfo paramBean) throws Exception {
-        // 1.参数基本验证
-        if (null == paramBean) { throw new BusinessException("-1","请输入账号和密码"); }
-        if (null == paramBean.getAccount()) { throw new BusinessException("-1","请输入账号"); }
-        if (null == paramBean.getPassword()) { throw new BusinessException("-1","请输入密码"); }
-        if (null == paramBean.getGraphCaptcha()) { throw new BusinessException("-1","请输入图形验证码"); }
-
-        // 2.验证图形验证码
-        String loginGraphCaptcha = (String)sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
-        sessionHandler.getSession().removeAttribute(GlitterConstants.SESSION_LOGIN_GRAPHCAPTCHA);
-        if(!paramBean.getGraphCaptcha().equals(loginGraphCaptcha)){
-            throw new BusinessException("-2","图形验证码输入错误");
-        }
-
-        // 3.密码解密
-        String pwd = null;
-        try {
-            pwd = rsaService.decrypt(paramBean.getPassword());
-        } catch (Exception e) {
-            logger.error("密码解密失败");
-            throw new BusinessException("-1","密码错误");
-        }
-
-        // 4.验证用户名密码
-        UserInfo userInfo = userInfoService.getByAccount(paramBean.getAccount());
-        if(null == userInfo){ throw new BusinessException("-1","用户名或密码错误"); }
-        if (!pwd.equals(userInfo.getPassword())) { throw new BusinessException("-1", "用户名或密码错误"); }
-
-        // 5.记录用户登录会话信息
+        UserInfo userInfo = null;
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
-
         return ResponseResult.success(null);
     }
 
@@ -124,7 +56,6 @@ public class LoginAction extends BaseAction {
 
         // 3.注销session会话
         session.invalidate();
-
         return ResponseResult.success(null);
     }
 

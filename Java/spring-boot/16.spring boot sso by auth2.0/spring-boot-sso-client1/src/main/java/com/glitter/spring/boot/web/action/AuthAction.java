@@ -2,12 +2,11 @@ package com.glitter.spring.boot.web.action;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.OauthAccessToken;
-import com.glitter.spring.boot.bean.OauthClientConfig;
-import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
-import com.glitter.spring.boot.persistence.remote.IAuthRemote;
+import com.glitter.spring.boot.bean.OauthClientInfo;
+import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.service.IAuthService;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
-import com.glitter.spring.boot.service.IOauthClientConfigService;
+import com.glitter.spring.boot.service.IOauthClientInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,51 +27,33 @@ public class AuthAction extends BaseAction {
     private static final Logger logger = LoggerFactory.getLogger(AuthAction.class);
 
     @Autowired
-    private IOauthClientConfigService oauthClientConfigService;
+    private IOauthClientInfoService oauthClientInfoService;
 
     @Autowired
     private IAuthService authService;
 
     @Autowired
-    private IAuthRemote authRemote;
+    private ISsoRemote authRemote;
 
     @Autowired
     private IOauthAccessTokenService oauthAccessTokenService;
 
     /**
-     * 重定向到wechat授权页
+     * 重定向到sso_server授权页
      * @return
      */
-    @RequestMapping(value = "wechat", method = RequestMethod.GET)
-    public String wechat() {
-        return "redirect:https://open.weixin.qq.com/connect/qrconnect?appid=wx63d402790645b7e6&redirect_uri=https%3A%2F%2Fgitee.com%2Fauth%2Fwechat%2Fcallback&response_type=code&scope=snsapi_login&state=4348d1a94379cd9881a5b47dde6e47ccf5a856178674a4e6#wechat_redirect";
-    }
-
-    /**
-     * 重定向到csdn授权页
-     * @return
-     */
-    @RequestMapping(value = "csdn", method = RequestMethod.GET)
-    public String csdn() {
-        return "redirect:https://api.csdn.net/oauth2/authorize?client_id=1100511&redirect_uri=https%3A%2F%2Fgitee.com%2Fauth%2Fcsdn%2Fcallback&response_type=code&state=08c71949957fbbb0c1c0be816b46ed5a95ddcfb06b70bdad";
-    }
-
-    /**
-     * 重定向到oauth_server授权页
-     * @return
-     */
-    @RequestMapping(value = "oauth_server", method = RequestMethod.GET)
-    public void oauth_server(HttpServletResponse response) throws IOException {
+    @RequestMapping(value = "sso_server", method = RequestMethod.GET)
+    public void sso_server(HttpServletResponse response) throws IOException {
         response.sendRedirect("http://www.baidu.com");
-        OauthClientConfig oauthClientConfig = oauthClientConfigService.getOauthClientConfigByServerType("oauth_server");
+        OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByServerType("oauth_server");
 
-        String client_id = oauthClientConfig.getClientId();
-        String redirect_uri = oauthClientConfig.getRedirectUri();
-        String scope = oauthClientConfig.getScope();
+        String client_id = oauthClientInfo.getClientId();
+        String redirect_uri = oauthClientInfo.getRedirectUri();
+        String scope = oauthClientInfo.getScope();
         String response_type = "code";
         String state = authService.generateState("oauth_server");
 
-        StringBuffer url = new StringBuffer("http://localhost:8080/oauth2/authorize");
+        StringBuffer url = new StringBuffer("http://localhost:8080/sso/authorize");
         url.append("?");
         url.append("client_id=" + client_id);
         url.append("redirect_uri=" + redirect_uri);
@@ -84,30 +65,12 @@ public class AuthAction extends BaseAction {
     }
 
     /**
-     * wechat授权回调
+     * sso_server授权回调
      * @return
      */
-    @RequestMapping(value = "wechat/callback", method = RequestMethod.GET)
-    public String wechatCallback(@RequestParam String code, @RequestParam String state) {
-        return null;
-    }
-
-    /**
-     * csdn授权页授权回调
-     * @return
-     */
-    @RequestMapping(value = "csdn/callback", method = RequestMethod.GET)
-    public String csdnCallback(@RequestParam String code, @RequestParam String state) {
-        return null;
-    }
-
-    /**
-     * oauth_server授权回调
-     * @return
-     */
-    @RequestMapping(value = "oauth_server/callback", method = RequestMethod.GET)
+    @RequestMapping(value = "sso_server/callback", method = RequestMethod.GET)
     public String oauth_server_callback(@RequestParam String code, @RequestParam String state) throws IOException {
-        boolean stateStatus = authService.validateState(state, "oauth_server");
+        boolean stateStatus = authService.validateState(state, "sso_server");
 
         // 1.属于恶意请求,重定向到登陆页面,并提示连接失败,请重试.
         if (!stateStatus) {
@@ -115,11 +78,11 @@ public class AuthAction extends BaseAction {
         }
 
         // 2.获取accessToken,获取用户信息,看返回accessToken时返回的openid是否够用,如果够用,就不用再去请求获取用户信息接口了。
-        OauthClientConfig oauthClientConfig = oauthClientConfigService.getOauthClientConfigByServerType("oauth_server");
+        OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByServerType("sso_server");
 
-        String client_id = oauthClientConfig.getClientId();
-        String client_secret = oauthClientConfig.getClientSecret();
-        String redirect_uri = oauthClientConfig.getRedirectUri();
+        String client_id = oauthClientInfo.getClientId();
+        String client_secret = oauthClientInfo.getClientSecret();
+        String redirect_uri = oauthClientInfo.getRedirectUri();
         String grant_type= "authorization_code";
 
         Map map = null;
@@ -141,7 +104,7 @@ public class AuthAction extends BaseAction {
         String expires_in = (String)map.get("expires_in");
         String refresh_token = (String)map.get("refresh_token");
         String scope = (String)map.get("scope");
-        String openid = (String)map.get("openid");
+        Long userId = Long.valueOf((String)map.get("userId"));
         // 其他字段这里不一一判断了
         if (StringUtils.isBlank(access_token)) {
             return "redirect:http://localhost:8081/login.html?code=-1004";
@@ -149,7 +112,7 @@ public class AuthAction extends BaseAction {
 
         // 3.accessToken入库
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
-        oauthAccessToken.setOpenId(openid);
+        oauthAccessToken.setUserId(userId);
         oauthAccessToken.setAccessToken(access_token);
         oauthAccessToken.setExpireIn(StringUtils.isBlank(expires_in) ? null : Long.valueOf(expires_in));
         oauthAccessToken.setRefreshToken(refresh_token);

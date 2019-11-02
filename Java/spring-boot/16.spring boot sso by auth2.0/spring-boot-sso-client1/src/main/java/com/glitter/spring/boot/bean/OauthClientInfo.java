@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class OauthClientConfig extends BaseBean {
+public class OauthClientInfo extends BaseBean {
 
     /** 主键 */
     private Long id;
@@ -15,9 +15,11 @@ public class OauthClientConfig extends BaseBean {
     private String clientSecret;
     /** 客户端应用回调地址 */
     private String redirectUri;
-    /** 针对于第三方auth服务的众多授权作用域,客户端应用声明需要用户确认授权的作用域,授权多个作用域用逗号（,）分隔 */
+    /** 客户端应用注销登录地址,sso需求时有用 */
+    private String logoutUri;
+    /** 针对于授权中心众多授权作用域,客户端应用声明需要用户确认授权的部分作用域,授权多个作用域用逗号（,）分隔 */
     private String scope;
-    /** 第三方auth服务平台类型(如qq,wechart,sina,csdn,github等) */
+    /** 授权中心服务平台类型(如qq,wechart,sina,csdn,github,sso等) */
     private String serverType;
     /** 创建时间 */
     private Date createTime;

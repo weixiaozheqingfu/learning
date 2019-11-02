@@ -42,7 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         UserInfo userInfo;
         if (null == (userInfo = (UserInfo)session.getAttribute(GlitterConstants.SESSION_USER))){ throw new BusinessException("-2", "用户未登陆"); }
 
-        String jsessionIdEffective = commonCache.get(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
+        String jsessionIdEffective = commonCache.get(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getUserId())));
         if(StringUtils.isBlank(jsessionIdEffective)) { throw new BusinessException("-2", "未登录或会话超时，请重新登陆。"); }
 
         if(!jsessionIdCookie.equals(jsessionIdEffective)){
@@ -51,7 +51,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             throw new BusinessException("-2", "您的账号已在其它地方登陆，若不是本人操作，请注意账号安全！");
         }
 
-        logger.info("LoginInterceptor.preHandle验证成功,jsessionId:{},userId:{},fullName:{}",jsessionIdCookie,userInfo.getId(),userInfo.getFullName());
+        logger.info("LoginInterceptor.preHandle验证成功,jsessionId:{},userId:{},fullName:{}",jsessionIdCookie,userInfo.getUserId(),userInfo.getNickName());
         return true;
     }
 

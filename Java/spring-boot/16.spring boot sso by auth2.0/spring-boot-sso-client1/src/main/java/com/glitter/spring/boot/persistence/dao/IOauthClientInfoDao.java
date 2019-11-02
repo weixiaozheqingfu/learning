@@ -1,18 +1,18 @@
 package com.glitter.spring.boot.persistence.dao;
 
-import com.glitter.spring.boot.bean.OauthClientConfig;
+import com.glitter.spring.boot.bean.OauthClientInfo;
 
 import java.util.List;
 
-public interface IOauthClientConfigDao{
+public interface IOauthClientInfoDao {
 
     /**
     * 插入操作
     *
-    * @param oauthClientConfig
+    * @param oauthClientInfo
     * @return
     */
-    int insert(OauthClientConfig oauthClientConfig);
+    int insert(OauthClientInfo oauthClientInfo);
 
     /**
     * 根据主键删除
@@ -33,18 +33,18 @@ public interface IOauthClientConfigDao{
     /**
     * 根据条件删除
     *
-    * @param oauthClientConfig
+    * @param oauthClientInfo
     * @return
     */
-    int delete(OauthClientConfig oauthClientConfig);
+    int delete(OauthClientInfo oauthClientInfo);
 
     /**
     * 根据主键更新
     *
-    * @param oauthClientConfig
+    * @param oauthClientInfo
     * @return
     */
-    int updateById(OauthClientConfig oauthClientConfig);
+    int updateById(OauthClientInfo oauthClientInfo);
 
     /**
      * 按主键查询
@@ -52,7 +52,7 @@ public interface IOauthClientConfigDao{
      * @param id
      * @return
      */
-    OauthClientConfig getById(Long id);
+    OauthClientInfo getById(Long id);
 
     /**
      * 按主键集合查询
@@ -60,37 +60,37 @@ public interface IOauthClientConfigDao{
      * @param ids
      * @return
      */
-    List<OauthClientConfig> getByIds(Long[] ids);
+    List<OauthClientInfo> getByIds(Long[] ids);
 
     /**
      * 按条件查询
      *
-     * @param oauthClientConfig
+     * @param oauthClientInfo
      * @return
      */
-    OauthClientConfig getOauthClientConfig(OauthClientConfig oauthClientConfig);
+    OauthClientInfo getOauthClientInfo(OauthClientInfo oauthClientInfo);
 
     /**
      * 查询所有记录
      *
      * @return
      */
-    List<OauthClientConfig> findAllList();
+    List<OauthClientInfo> findAllList();
 
     /**
      * 按条件查询
      *
-     * @param oauthClientConfig
+     * @param oauthClientInfo
      * @return
      */
-    List<OauthClientConfig> findList(OauthClientConfig oauthClientConfig);
+    List<OauthClientInfo> findList(OauthClientInfo oauthClientInfo);
 
     /**
      * 按条件获取数量
      *
-     * @param oauthClientConfig
+     * @param oauthClientInfo
      * @return
      */
-    int getCount(OauthClientConfig oauthClientConfig);
+    int getCount(OauthClientInfo oauthClientInfo);
 
 }

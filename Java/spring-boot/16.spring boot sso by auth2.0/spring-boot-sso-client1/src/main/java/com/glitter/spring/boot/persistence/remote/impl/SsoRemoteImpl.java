@@ -5,7 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
-import com.glitter.spring.boot.persistence.remote.IAuthRemote;
+import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.util.RestTemplateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class AuthRemoteImpl implements IAuthRemote {
+public class SsoRemoteImpl implements ISsoRemote {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthRemoteImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(SsoRemoteImpl.class);
 
 	@Autowired
 	private RestTemplateUtils restTemplateUtils;
