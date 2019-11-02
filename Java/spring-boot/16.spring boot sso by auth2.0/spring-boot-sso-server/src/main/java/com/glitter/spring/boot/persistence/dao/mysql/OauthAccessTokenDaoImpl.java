@@ -78,11 +78,4 @@ public class OauthAccessTokenDaoImpl implements IOauthAccessTokenDao{
         return sqlSessionTemplate.selectOne(NAME_SPACE + ".getCount", oauthAccessToken);
     }
 
-    @Override
-    public int updateJsessionidClientByAccessToken(String accessToken, Long jsessionidClient) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("accessToken", accessToken);
-        map.put("jsessionidClient", jsessionidClient);
-        return sqlSessionTemplate.update(NAME_SPACE + ".updateJsessionidClientByAccessToken", map);
-    }
 }

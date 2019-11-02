@@ -13,8 +13,10 @@ CREATE TABLE `oauth_client_info` (
 
 INSERT INTO `oauth_client_info` VALUES ('1', '1001', '123456', 'http://localhost:8081/auth/sso/callback', 'http://localhost:8081/auth/sso/logout', 'get_user_open_info', 'sso', '2019-11-02 13:46:18', '2019-11-02 13:46:18');
 
--- 会话信息存redis了,当jsessionid过期后,这里对应的记录也就失效了,可以晚上定时清理。
+-- 会话信息存redis里了,当jsessionid过期后,这里对应的记录也就失效了,可以晚上定时清理。
 -- 在清理之前,每次得到jsessionid后,可以先查询redis,如果redis中存在,则表示会话为过期,则此处的对应记录是有效的。
+-- 另外该表也可以去掉,转而也使用redis。
+-- 但是使用redis会有一个问题,就是sso用户中心注销所有客户端会话时,客户端的access_token键可能自然到期后已经失效了,如果使用redis,就找不到access_token键了,也就找不到对应的jsession_id了。
 CREATE TABLE `oauth_access_token` (
   `id` bigint(20) NOT NULL auto_increment COMMENT '主键',
   `jsessionid` varchar(128) NOT NULL default '' COMMENT 'jsessionid',

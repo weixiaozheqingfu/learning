@@ -16,6 +16,4 @@ public interface IOauthAccessTokenService {
 
     List<OauthAccessToken> getOauthAccessTokensByJsessionid(String jsessionid);
 
-    void updateJsessionidClientByAccessToken(String accessToken, Long jsessionidClient);
-
 }
