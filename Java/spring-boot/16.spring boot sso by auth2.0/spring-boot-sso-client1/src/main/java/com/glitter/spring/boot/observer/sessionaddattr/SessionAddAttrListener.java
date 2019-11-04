@@ -36,7 +36,7 @@ public class SessionAddAttrListener implements ApplicationListener<SessionAddAtt
         // 限制多端同时登陆逻辑
         UserInfo userInfo = null;
         if(null == (userInfo = (UserInfo) attribute.get(GlitterConstants.SESSION_USER))){ return; }
-        commonCache.add(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())), session.getId(), cacheKeyManager.getLimitMultiLoginKeyExpireTime());
+        commonCache.add(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getUserId())), session.getId(), cacheKeyManager.getLimitMultiLoginKeyExpireTime());
         return;
     }
 
