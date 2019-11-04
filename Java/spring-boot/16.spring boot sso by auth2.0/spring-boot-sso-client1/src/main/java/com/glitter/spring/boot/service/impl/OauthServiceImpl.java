@@ -1,10 +1,8 @@
 package com.glitter.spring.boot.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
-import com.glitter.spring.boot.bean.AuthStateInfo;
 import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonCache;
-import com.glitter.spring.boot.service.IAuthService;
+import com.glitter.spring.boot.service.IOauthService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class AuthServiceImpl implements IAuthService {
+public class OauthServiceImpl implements IOauthService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(OauthServiceImpl.class);
 
     @Autowired
     ICommonCache commonCache;

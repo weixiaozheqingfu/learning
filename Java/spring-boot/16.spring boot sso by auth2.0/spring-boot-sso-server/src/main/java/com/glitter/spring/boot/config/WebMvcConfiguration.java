@@ -36,13 +36,13 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(requestInterceptor()).addPathPatterns(requestInterceptorAddPathPatterns);
 
         List<String> jsessionidByCookieInterceptorAddPathPatterns = new ArrayList<>();
-        jsessionidByCookieInterceptorAddPathPatterns.add("/oauth2/authorize");
-        jsessionidByCookieInterceptorAddPathPatterns.add("/oauth2/login");
+        jsessionidByCookieInterceptorAddPathPatterns.add("/sso/authorize");
+        jsessionidByCookieInterceptorAddPathPatterns.add("/sso/login");
         registry.addInterceptor(jsessionidByCookieInterceptor()).addPathPatterns(jsessionidByCookieInterceptorAddPathPatterns);
 
         List<String> oauthResourceInterceptorAddPathPatterns = new ArrayList<>();
-        oauthResourceInterceptorAddPathPatterns.add("/oauth2/resource/userinfo");
-        oauthResourceInterceptorAddPathPatterns.add("/oauth2/resource/logout");
+        oauthResourceInterceptorAddPathPatterns.add("/sso/resource/userinfo");
+        oauthResourceInterceptorAddPathPatterns.add("/sso/resource/logout");
         registry.addInterceptor(oauthResourceInterceptor()).addPathPatterns(oauthResourceInterceptorAddPathPatterns);
     }
 }

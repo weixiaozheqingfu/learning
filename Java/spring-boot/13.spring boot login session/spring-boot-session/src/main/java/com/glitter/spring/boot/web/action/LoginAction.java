@@ -76,6 +76,9 @@ public class LoginAction extends BaseAction{
         return ResponseResult.success(new String(Base64.encodeBase64(out.toByteArray())));
     }
 
+    // 说明：请求登录页，可以直接浏览器请求login.html静态页面。
+    // 当然如果想做一个后台方法，来获取登录页，这个方法也是直接重定向到login.html静态页面，如果是ajax请求，则直接返回login.html的地址给前端，前端再重定向到这个登录地址静态页。
+
     /**
      * 登陆
      * @return

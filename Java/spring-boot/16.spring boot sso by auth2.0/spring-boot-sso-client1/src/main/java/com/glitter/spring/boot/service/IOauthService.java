@@ -1,7 +1,7 @@
 package com.glitter.spring.boot.service;
 
 
-public interface IAuthService {
+public interface IOauthService {
 
     /**
      * 生成state值

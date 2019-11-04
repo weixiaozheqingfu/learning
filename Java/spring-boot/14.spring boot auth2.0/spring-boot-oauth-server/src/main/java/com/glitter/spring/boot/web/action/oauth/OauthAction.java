@@ -295,7 +295,7 @@ public class OauthAction extends BaseAction {
 
     /**
      * 检验授权凭证（access_token）是否有效
-     *
+     * <p>
      * 其实client_id参数和openid参数可以不传
      * 因为只是一个有效性验证而已,传不传都行,传的话,相对更严格,但也只是掩耳盗铃,因为如果access_token被泄露了,client_id和openid通常也不保,所以不传也没问题,传了就给点安慰.
      * 因为获取access_token的过程是https通讯,只有合法的客户端才会持有access_token,除非客户端主动泄露access_token或者没有保护好被攻击了,那都是属于客户端自己的安全范畴了
@@ -303,41 +303,29 @@ public class OauthAction extends BaseAction {
      * <p>
      * 正确返回样例：
      * {
-     * "errcode":0,
-     * "errmsg":"ok"
+     * "code":0,
+     * "msg":"ok",
+     * "remaining_expiration_time":"3600"
      * }
      * <p>
      * 错误返回样例：
      * {
      * "errcode":40003,
-     * "errmsg":"invalid openid"
+     * "errmsg":"invalid access_token"
      * }
      *
      * @param access_token
-     * @param openid
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "auth", method = RequestMethod.GET)
-    public Map<String, Object> auth(@RequestParam(required = false) String client_id,
-                                    @RequestParam(required = false) String access_token,
-                                    @RequestParam(required = false) String openid) {
+    public Map<String, Object> auth(@RequestParam(required = false) String access_token) {
         Map resultMap = new HashMap<>();
         Map errorMap = new HashMap<>();
         try {
-            if (StringUtils.isBlank(client_id)) {
-                errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
-                errorMap.put("errmsg", "client_id参数为空");
-                return errorMap;
-            }
             if (StringUtils.isBlank(access_token)) {
                 errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
                 errorMap.put("errmsg", "access_token参数为空");
-                return errorMap;
-            }
-            if (StringUtils.isBlank(openid)) {
-                errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
-                errorMap.put("errmsg", "openid参数为空");
                 return errorMap;
             }
             OauthAccessToken oauthAccessToken = oauthAccessTokenService.getOauthAccessToken(access_token);
@@ -346,23 +334,20 @@ public class OauthAction extends BaseAction {
                 errorMap.put("errmsg", "access_token invalid");
                 return errorMap;
             }
-            if (!client_id.equals(oauthAccessToken.getClientId())) {
-                errorMap.put("errcode", "600032");
-                errorMap.put("errmsg", "access_token invalid");
-                return errorMap;
-            }
-            if (!openid.equals(oauthAccessToken.getOpenId())) {
-                errorMap.put("errcode", "600033");
-                errorMap.put("errmsg", "access_token invalid");
-                return errorMap;
-            }
-            if(System.currentTimeMillis() > oauthAccessToken.getRefreshTokenExpireTime().getTime()){
+
+            // 剩余有效期,单位秒
+            Long endTime = oauthAccessToken.getAccessTokenExpireTime().getTime();
+            Long nowTime = System.currentTimeMillis();
+            Long remaining_expiration_time = (endTime - nowTime) / 1000;
+            if (nowTime >= endTime) {
                 errorMap.put("errcode", "600034");
                 errorMap.put("errmsg", "access_token已过期");
                 return errorMap;
             }
-            errorMap.put("errcode", "0");
-            errorMap.put("errmsg", "ok");
+
+            resultMap.put("code", "0");
+            resultMap.put("msg", "ok");
+            resultMap.put("remaining_expiration_time", remaining_expiration_time);
             return resultMap;
         } catch (Exception e) {
             BusinessException ex = (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");

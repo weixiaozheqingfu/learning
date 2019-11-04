@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/oauth2/resource")
+@RequestMapping("/sso/resource")
 public class OauthResourceAction extends BaseAction{
 
     private static final Logger logger = LoggerFactory.getLogger(OauthResourceAction.class);

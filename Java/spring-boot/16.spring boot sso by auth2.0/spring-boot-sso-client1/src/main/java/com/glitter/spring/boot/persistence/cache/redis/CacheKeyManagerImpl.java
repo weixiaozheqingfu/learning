@@ -67,7 +67,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
 
     @Override
     public String getAuthStateKey(String uuid) {
-        return CacheKeyManagerImpl.getKey("auth", "state", uuid);
+        return CacheKeyManagerImpl.getKey("oauth", "state", uuid);
     }
 
     @Override
