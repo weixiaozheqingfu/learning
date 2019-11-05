@@ -42,6 +42,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
         List<String> oauthResourceInterceptorAddPathPatterns = new ArrayList<>();
         oauthResourceInterceptorAddPathPatterns.add("/sso/resource/userinfo");
+        oauthResourceInterceptorAddPathPatterns.add("/sso/resource/keepAlive");
         oauthResourceInterceptorAddPathPatterns.add("/sso/resource/logout");
         registry.addInterceptor(oauthResourceInterceptor()).addPathPatterns(oauthResourceInterceptorAddPathPatterns);
     }

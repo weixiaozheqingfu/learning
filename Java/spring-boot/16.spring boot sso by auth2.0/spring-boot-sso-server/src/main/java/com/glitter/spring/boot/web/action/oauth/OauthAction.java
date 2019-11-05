@@ -235,7 +235,7 @@ public class OauthAction extends BaseAction {
         try {
             // grant_type的不同会有不同的实现类,这里演示的是grant_type=authorization_code授权码模式根据code换取accessToken的情况.
             if (GlitterConstants.OAUTH_GRANT_TYPE_AUTHORIZATION_CODE.equals(grant_type)) {
-                // 1.验证客户端身份和code信息accessToken
+                // 1.验证客户端身份和code信息获取accessToken
                 AccessTokenOutParam accessTokenInfo = accessToken4AuthorizationCodeService.getAccessTokenInfo(client_id, client_secret, redirect_uri, code, grant_type);
                 if (null == accessTokenInfo) {
                     errorMap.put("errcode", CoreConstants.REQUEST_PROGRAM_ERROR_CODE);
@@ -249,7 +249,10 @@ public class OauthAction extends BaseAction {
                 resultMap.put("scope", accessTokenInfo.getScope());
                 resultMap.put("userid", accessTokenInfo.getUserId());
 
-                // 2.sso中,换取accessToken成功,即认为客户端应用创建子会话成功,作子会话标记,方便将来注销会话时回调。
+                // 2.为全局会话续期
+                sessionHandler.renewal(accessTokenInfo.getJsessionid());
+
+                // 3.sso中,换取accessToken成功,即认为客户端应用创建子会话成功,作子会话标记,方便将来注销会话时回调。
 
             } else if (GlitterConstants.OAUTH_GRANT_TYPE_PASSWORD.equals(grant_type)) {
                 // ......
@@ -266,7 +269,6 @@ public class OauthAction extends BaseAction {
             return errorMap;
         }
     }
-
 
     /**
      * 检验授权凭证（access_token）是否有效
@@ -298,31 +300,21 @@ public class OauthAction extends BaseAction {
         Map resultMap = new HashMap<>();
         Map errorMap = new HashMap<>();
         try {
-            if (StringUtils.isBlank(access_token)) {
-                errorMap.put("errcode", CoreConstants.REQUEST_ERROR_PARAMS);
-                errorMap.put("errmsg", "access_token参数为空");
-                return errorMap;
-            }
-            OauthAccessToken oauthAccessToken = oauthAccessTokenService.getOauthAccessToken(access_token);
-            if (null == oauthAccessToken) {
-                errorMap.put("errcode", "600031");
-                errorMap.put("errmsg", "access_token invalid");
-                return errorMap;
+            // 验证access_token是否有效
+            AccessTokenInParam accessTokenInParam = oauthAccessTokenService.validateAccessToken(access_token);
+
+            // 验证access_token对应的jsessionid全局会话是否仍在会话期间内
+            UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenInParam.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
+            if (userinfo == null) {
+                throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
             }
 
-            // 剩余有效期,单位秒
-            Long endTime = oauthAccessToken.getAccessTokenExpireTime().getTime();
-            Long nowTime = System.currentTimeMillis();
-            Long remaining_expiration_time = (endTime - nowTime) / 1000;
-            if (nowTime >= endTime) {
-                errorMap.put("errcode", "600034");
-                errorMap.put("errmsg", "access_token已过期");
-                return errorMap;
-            }
+            // 为全局会话续期
+            sessionHandler.renewal(accessTokenInParam.getJsessionid());
 
             resultMap.put("code", "0");
             resultMap.put("msg", "ok");
-            resultMap.put("remaining_expiration_time", remaining_expiration_time);
+            resultMap.put("remaining_expiration_time", accessTokenInParam.getRemainingExpirationTime());
             return resultMap;
         } catch (Exception e) {
             BusinessException ex = (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
@@ -331,7 +323,6 @@ public class OauthAction extends BaseAction {
             return errorMap;
         }
     }
-
 
     /**
      * @param client_id
@@ -353,18 +344,28 @@ public class OauthAction extends BaseAction {
                 return errorMap;
             }
 
-            AccessTokenOutParam accessTokenInfo = accessToken4RefreshTokenService.getAccessTokenInfo(client_id, refresh_token, grant_type);
-            if (null == accessTokenInfo) {
+            AccessTokenOutParam accessTokenOutParam = accessToken4RefreshTokenService.getAccessTokenInfo(client_id, refresh_token, grant_type);
+            if (null == accessTokenOutParam) {
                 errorMap.put("errcode", CoreConstants.REQUEST_PROGRAM_ERROR_CODE);
                 errorMap.put("errmsg", "系统异常");
                 return errorMap;
             }
-            resultMap.put("access_token", accessTokenInfo.getAccess_token());
-            resultMap.put("token_type", accessTokenInfo.getToken_type());
-            resultMap.put("expires_in", accessTokenInfo.getExpires_in());
-            resultMap.put("refresh_token", accessTokenInfo.getRefresh_token());
-            resultMap.put("scope", accessTokenInfo.getScope());
-            resultMap.put("userid", accessTokenInfo.getUserId());
+
+            // 验证access_token对应的jsessionid全局会话是否仍在会话期间内
+            UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenOutParam.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
+            if (userinfo == null) {
+                throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
+            }
+
+            // 为全局会话续期
+            sessionHandler.renewal(accessTokenOutParam.getJsessionid());
+
+            resultMap.put("access_token", accessTokenOutParam.getAccess_token());
+            resultMap.put("token_type", accessTokenOutParam.getToken_type());
+            resultMap.put("expires_in", accessTokenOutParam.getExpires_in());
+            resultMap.put("refresh_token", accessTokenOutParam.getRefresh_token());
+            resultMap.put("scope", accessTokenOutParam.getScope());
+            resultMap.put("userid", accessTokenOutParam.getUserId());
 
             return resultMap;
         } catch (Exception e) {

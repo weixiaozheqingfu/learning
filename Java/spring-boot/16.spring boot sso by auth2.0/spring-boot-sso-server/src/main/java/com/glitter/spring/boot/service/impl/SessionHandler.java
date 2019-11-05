@@ -75,6 +75,14 @@ public class SessionHandler implements ISessionHandler {
     }
 
     @Override
+    public ISession getSession(String jsessionid) {
+        ISession session = new Session(jsessionid);
+        commonHashCache.renewal(cacheKeyManager.getSessionKey(session.getId()), cacheKeyManager.getSessionKeyExpireTime());
+        SpringContextUtil.getBean(SessionRenewalPublisher.class).publishEvent(session);
+        return session;
+    }
+
+    @Override
     public void renewal(String sessionId) {
         if (commonHashCache.isExists(cacheKeyManager.getSessionKey(sessionId))) {
             commonHashCache.renewal(cacheKeyManager.getSessionKey(sessionId), cacheKeyManager.getSessionKeyExpireTime());

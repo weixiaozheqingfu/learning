@@ -105,10 +105,7 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
             }
         }
 
-        // 5.为全局会话续期
-        sessionHandler.renewal(oauthCode.getJsessionid());
-
-        // 6.code换取accessToken
+        // 5.code换取accessToken
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         Date now = new Date();
         oauthAccessToken.setClientId(oauthCode.getClientId());
@@ -128,17 +125,17 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         oauthAccessToken.setUpdateTime(now);
         oauthAccessTokenDao.insert(oauthAccessToken);
 
-        // 7.删除code码
+        // 6.删除code码
         oauthCodeService.deleteByCode(code);
 
-        // 8.封装返回数据
+        // 7.封装返回数据
         accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
         accessTokenInfo.setScope(oauthAccessToken.getScope());
         accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
         accessTokenInfo.setRefresh_token(oauthAccessToken.getRefreshToken());
         accessTokenInfo.setToken_type(oauthAccessToken.getTokenType());
 
-        // 9.记录日志 很重要 方便问题追溯
+        // 8.记录日志 很重要 方便问题追溯
         logger.info("AccessToken4AuthorizationCodeServiceImpl.getAccessTokenInfo方法,oauthCode对象:{},accessTokenInfo对象:{}", JSONObject.toJSONString(oauthCode),JSONObject.toJSONString(accessTokenInfo));
         return accessTokenInfo;
     }

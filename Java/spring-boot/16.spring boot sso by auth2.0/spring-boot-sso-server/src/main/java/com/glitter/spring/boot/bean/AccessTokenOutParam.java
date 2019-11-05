@@ -8,6 +8,9 @@ public class AccessTokenOutParam extends BaseBean {
     /** 访问令牌 */
     private String access_token;
 
+    /** jsessionid */
+    private String jsessionid;
+
     /** 令牌类型 */
     private String token_type;
 

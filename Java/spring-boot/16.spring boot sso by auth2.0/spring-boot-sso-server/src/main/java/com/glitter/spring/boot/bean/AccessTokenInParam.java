@@ -22,4 +22,7 @@ public class AccessTokenInParam extends BaseBean {
     /** 接口权限范围 */
     private List<String> interfaceUri;
 
+    /** access_tokens剩余有效期,单位秒 */
+    private Long remainingExpirationTime;
+
 }

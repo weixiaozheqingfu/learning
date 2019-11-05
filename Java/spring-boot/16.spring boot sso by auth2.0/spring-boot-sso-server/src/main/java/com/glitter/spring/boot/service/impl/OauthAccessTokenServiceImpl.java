@@ -29,7 +29,12 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
      */
     @Override
     public AccessTokenInParam validateAccessToken(String accessToken) {
-        // 1.验证accessToken是否存在
+        // 1.校验参数是否为空
+        if (StringUtils.isBlank(accessToken)) {
+            throw new BusinessException("50034", "accessToken参数为空");
+        }
+
+        // 2.验证accessToken是否存在
         OauthAccessToken record = new OauthAccessToken();
         record.setAccessToken(accessToken);
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenDao.get(record);
@@ -37,19 +42,24 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
             throw new BusinessException("50035", "accessToken不存在");
         }
 
-        // 2.验证accessToken是否在有效期内
-        if(System.currentTimeMillis() > oauthAccessTokenDb.getAccessTokenExpireTime().getTime()){
+        // 3.验证accessToken是否在有效期内
+        Long endTime = oauthAccessTokenDb.getAccessTokenExpireTime().getTime();
+        Long nowTime = System.currentTimeMillis();
+        if(nowTime >= endTime){
             throw new BusinessException("50036", "accessToken失效");
         }
 
-        // 3.返回当前请求AccessToken的权限相关数据
+        // 4.计算剩余有效期,单位秒
+        Long remaining_expiration_time = (endTime - nowTime) / 1000;
+
+        // 5.返回当前请求AccessToken的权限相关数据
         AccessTokenInParam accessTokenInParam = new AccessTokenInParam();
         accessTokenInParam.setJsessionid(oauthAccessTokenDb.getJsessionid());
         accessTokenInParam.setAccess_token(accessToken);
         accessTokenInParam.setClientId(oauthAccessTokenDb.getClientId());
         accessTokenInParam.setUserId(oauthAccessTokenDb.getUserId());
         accessTokenInParam.setInterfaceUri(Arrays.asList(StringUtils.join(oauthAccessTokenDb.getInterfaceUri(),",")));
-
+        accessTokenInParam.setRemainingExpirationTime(remaining_expiration_time);
         return accessTokenInParam;
     }
 
