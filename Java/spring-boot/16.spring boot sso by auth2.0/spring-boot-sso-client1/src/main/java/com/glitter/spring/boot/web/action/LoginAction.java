@@ -67,8 +67,9 @@ public class LoginAction extends BaseAction {
         try {
             ssoRemote.logout(oauthAccessTokenDb.getAccessToken());
         } catch (Exception e) {
+            // 如果出现失败的情况,则应该发邮件预警,并调查bug了。
             e.printStackTrace();
-            return ResponseResult.fail("-100","操作失败，请稍后重试！", true);
+            return ResponseResult.fail("-100","操作失败，请联系管理员！", true);
         }
 
         // 3.跳转到登录页
