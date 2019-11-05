@@ -4,4 +4,6 @@ public interface ISessionHandler {
 
     ISession getSession();
 
+    ISession getSession(String jsessionid);
+
 }

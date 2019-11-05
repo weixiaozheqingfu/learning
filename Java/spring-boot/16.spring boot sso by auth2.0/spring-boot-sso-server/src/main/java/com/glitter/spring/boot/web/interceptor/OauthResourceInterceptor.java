@@ -27,6 +27,9 @@ public class OauthResourceInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
+        // TODO 访问资源的前提是用户处于登录状态。否则accessToken传过来也无效。并且accessToken要和当前的jsessionid是一组的,否则也认为非法。
+
+
         String requestURI = httpServletRequest.getRequestURI();
         logger.info("OauthInterceptor.preHandle输入参数:requestURI:{}", requestURI);
 

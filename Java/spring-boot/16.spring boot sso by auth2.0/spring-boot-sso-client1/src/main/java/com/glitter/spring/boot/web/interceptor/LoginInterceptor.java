@@ -2,6 +2,7 @@ package com.glitter.spring.boot.web.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.OauthAccessToken;
+import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
@@ -11,6 +12,7 @@ import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
 import com.glitter.spring.boot.persistence.cache.ICommonCache;
 import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
+import com.glitter.spring.boot.service.IOauthClientInfoService;
 import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
 import org.apache.commons.lang3.StringUtils;
@@ -23,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 public class LoginInterceptor implements HandlerInterceptor {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -37,6 +40,9 @@ public class LoginInterceptor implements HandlerInterceptor {
     ISsoRemote ssoRemote;
     @Autowired
     IOauthAccessTokenService oauthAccessTokenService;
+    @Autowired
+    private IOauthClientInfoService oauthClientInfoService;
+
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
@@ -68,18 +74,69 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         if (!jsessionIdCookie.equals(jsessionIdEffective)) {
             // 被其他端"挤掉"了,就注销当前客户端与服务器端已经失效的这个会话
+            oauthAccessTokenService.deleteByJsessionid(session.getId());
             session.invalidate();
             this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "您的账号已在其它地方登陆，若不是本人操作，请注意账号安全！");
             return false;
         }
 
-        // sso全局会话续期
-        OauthAccessToken oauthAccessToken = oauthAccessTokenService.getOauthAccessTokenByJsessionid(jsessionIdCookie);
-        if (oauthAccessToken == null || StringUtils.isBlank(oauthAccessToken.getAccessToken())) {
+        OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByJsessionid(jsessionIdCookie);
+        if (oauthAccessTokenDb == null || StringUtils.isBlank(oauthAccessTokenDb.getAccessToken())) {
             this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常");
             return false;
         }
-        ssoRemote.keepAlive(oauthAccessToken.getAccessToken());
+
+        // 校验token是否有效，如果已经过期，或者有效期剩余小于30秒，则认为已过期，则触发refresh_token换access_token
+        // 如果refresh_token换access_token失败，一般情况是refresh_token也失效，则触发当前会话注销，因为不注销也不行了。
+        // 不注销后续没有办法与sso用户中心通讯了，比如续期等操作都没办法做，所以我们就注销重来重来。并且如果sso全局会话还存在的话，这个过程对用户是不需要登录的（用户会感觉怎么点一个操作突然到首页了，哈哈）。
+        // 重新跳转到/login,即重定向到sso登录授权页，重新获取accessToken。
+        try {
+            Map<String, String> map = ssoRemote.auth(oauthAccessTokenDb.getAccessToken());
+            // 如果accessToken已经过期
+            if (null == map || StringUtils.isBlank(map.get("remaining_expiration_time")) || Long.valueOf((String)map.get("remaining_expiration_time"))<30L ) {
+                // 使用refreshToken换accessToken
+                OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByServerType("sso");
+                String client_id = oauthClientInfo.getClientId();
+                try {
+                    Map refreshTokenMap = ssoRemote.refreshToken(client_id, oauthAccessTokenDb.getRefreshToken(), "refresh_token");
+                    String access_token = null == refreshTokenMap ? null :(String)refreshTokenMap.get("access_token");
+                    String token_type = null == refreshTokenMap ? null : (String)refreshTokenMap.get("token_type");
+                    String expires_in = null == refreshTokenMap ? null : (String)refreshTokenMap.get("expires_in");
+                    String refresh_token = null == refreshTokenMap ? null : (String)refreshTokenMap.get("refresh_token");
+                    String scope = null == refreshTokenMap ? null : (String)refreshTokenMap.get("scope");
+                    Long userId = null == refreshTokenMap ? null : Long.valueOf((String)map.get("userId"));
+                    // 其他字段这里不一一判断了
+                    if (null == refreshTokenMap || StringUtils.isBlank(access_token)) {
+                        oauthAccessTokenService.deleteByJsessionid(session.getId());
+                        session.invalidate();
+                        this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常,请重试");
+                        return false;
+                    }
+                    // 更新accessToken信息
+                    OauthAccessToken oauthAccessToken = new OauthAccessToken();
+                    oauthAccessToken.setAccessToken(access_token);
+                    oauthAccessToken.setExpireIn(StringUtils.isBlank(expires_in) ? null : Long.valueOf(expires_in));
+                    oauthAccessToken.setRefreshToken(refresh_token);
+                    oauthAccessTokenService.modifyById(oauthAccessToken);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    oauthAccessTokenService.deleteByJsessionid(session.getId());
+                    session.invalidate();
+                    this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常,请重试");
+                    return false;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            oauthAccessTokenService.deleteByJsessionid(session.getId());
+            session.invalidate();
+            this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常,请重试");
+            return false;
+        }
+
+        // sso全局会话续期
+        OauthAccessToken oauthAccessTokenDb2 = oauthAccessTokenService.getOauthAccessTokenByJsessionid(jsessionIdCookie);
+        ssoRemote.keepAlive(oauthAccessTokenDb2.getAccessToken());
 
         logger.info("LoginInterceptor.preHandle验证成功,jsessionId:{},userId:{},fullName:{}", jsessionIdCookie, userInfo.getUserId(), userInfo.getNickName());
         return true;

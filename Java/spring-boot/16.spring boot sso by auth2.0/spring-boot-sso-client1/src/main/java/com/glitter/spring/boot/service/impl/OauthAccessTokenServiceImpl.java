@@ -58,14 +58,14 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
         if(null == id){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
         }
+        oauthAccessTokenDao.deleteById(id);
+    }
+
+    @Override
+    public void deleteByJsessionid(String jsessionid) {
         OauthAccessToken record = new OauthAccessToken();
-        record.setId(id);
-        record.setUpdateTime(new Date());
-        int count = oauthAccessTokenDao.updateById(record);
-        if(count < 1){
-            logger.error("OauthAccessTokenServiceImpl.deleteById方法执行失败,输入参数:{}",id);
-            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "操作失败");
-        }
+        record.setJsessionid(jsessionid);
+        oauthAccessTokenDao.delete(record);
     }
 
     /**
@@ -80,6 +80,30 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
             return result;
         }
         result = oauthAccessTokenDao.getById(id);
+        return result;
+    }
+
+    @Override
+    public OauthAccessToken getOauthAccessTokenByJsessionid(String jsessionid) {
+        OauthAccessToken result = null;
+        if(null == jsessionid){
+            return result;
+        }
+        OauthAccessToken record = new OauthAccessToken();
+        record.setJsessionid(jsessionid);
+        result = oauthAccessTokenDao.getOauthAccessToken(record);
+        return result;
+    }
+
+    @Override
+    public OauthAccessToken getOauthAccessTokenByAccessToken(String access_token) {
+        OauthAccessToken result = null;
+        if(null == access_token){
+            return result;
+        }
+        OauthAccessToken record = new OauthAccessToken();
+        record.setAccessToken(access_token);
+        result = oauthAccessTokenDao.getOauthAccessToken(record);
         return result;
     }
 

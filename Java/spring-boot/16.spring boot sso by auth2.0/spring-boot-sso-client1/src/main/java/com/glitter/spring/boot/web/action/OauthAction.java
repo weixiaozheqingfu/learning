@@ -4,11 +4,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
+import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.service.IOauthService;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import com.glitter.spring.boot.service.IOauthClientInfoService;
+import com.glitter.spring.boot.service.ISession;
+import com.glitter.spring.boot.service.impl.Session;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -135,5 +140,17 @@ public class OauthAction extends BaseAction {
         return "redirect:http://localhost:8081/index.html";
     }
 
+    /**
+     * sso回调注销客户端会话。
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "sso/logout", method = RequestMethod.GET)
+    public ResponseResult logout(@RequestParam String access_token) throws IOException {
+        OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByAccessToken(access_token);
+        oauthAccessTokenService.deleteByJsessionid(oauthAccessTokenDb.getJsessionid());
+        sessionHandler.getSession(oauthAccessTokenDb.getJsessionid()).invalidate();
+        return ResponseResult.success(true);
+    }
 }
 

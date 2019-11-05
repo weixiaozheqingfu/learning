@@ -24,6 +24,12 @@ public interface IOauthAccessTokenService {
     void deleteById(Long id);
 
     /**
+     * 根据jsessionid删除access_token
+     * @param jsessionid
+     */
+    void deleteByJsessionid(String jsessionid);
+
+    /**
      * 根据主键获取access_token
      * @param id
      * @return
@@ -36,5 +42,12 @@ public interface IOauthAccessTokenService {
      * @return
      */
     OauthAccessToken getOauthAccessTokenByJsessionid(String jsessionid);
+
+    /**
+     * 根据access_token获取access_token
+     * @param access_token
+     * @return
+     */
+    OauthAccessToken getOauthAccessTokenByAccessToken(String access_token);
 
 }
