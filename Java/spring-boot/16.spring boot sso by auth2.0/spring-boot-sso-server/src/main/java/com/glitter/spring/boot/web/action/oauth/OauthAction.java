@@ -249,10 +249,16 @@ public class OauthAction extends BaseAction {
                 resultMap.put("scope", accessTokenInfo.getScope());
                 resultMap.put("userid", accessTokenInfo.getUserId());
 
-                // 2.为全局会话续期
+                // 2.验证access_token对应的jsessionid全局会话是否仍在会话期间内
+                UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenInfo.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
+                if (userinfo == null) {
+                    throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
+                }
+
+                // 3.为全局会话续期
                 sessionHandler.renewal(accessTokenInfo.getJsessionid());
 
-                // 3.sso中,换取accessToken成功,即认为客户端应用创建子会话成功,作子会话标记,方便将来注销会话时回调。
+                // 4.sso中,换取accessToken成功,即认为客户端应用创建子会话成功,作子会话标记,方便将来注销会话时回调。
 
             } else if (GlitterConstants.OAUTH_GRANT_TYPE_PASSWORD.equals(grant_type)) {
                 // ......
