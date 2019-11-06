@@ -143,6 +143,10 @@
         delete from oauth_code where id =#{id}
     </delete>
 
+    <delete id="deleteByCode">
+        delete from oauth_code where code =#{code}
+    </delete>
+
     <delete id="deleteByIds">
         delete from oauth_code where id in
         <foreach collection="array" item="item" index="index"  open="(" close=")" separator=",">
@@ -212,6 +216,18 @@
             <include refid="whereSql"/> limit 1
         </where>
 	</select>
+
+    <select id="getByUserIdAndClient" resultMap="BaseResultMap" parameterType="com.glitter.spring.boot.bean.OauthCode">
+        select <include refid="baseColumns"/> from oauth_code
+        where jsessionid = #{jsessionId} and user_id = #{userId} and client_id=#{clientId} and expire_time > #{now}
+        limit 1
+    </select>
+
+    <delete id="deleteByUserIdAndClient" parameterType="com.glitter.spring.boot.bean.OauthCode">
+        delete from oauth_code
+        where jsessionid = #{jsessionId} and user_id = #{userId} and client_id=#{clientId} and expire_time  <![CDATA[ <= ]]> #{now}
+    </delete>
+
 
 	<select id="findAllList" resultMap="BaseResultMap">
 	     select <include refid="baseColumns"/> from oauth_code

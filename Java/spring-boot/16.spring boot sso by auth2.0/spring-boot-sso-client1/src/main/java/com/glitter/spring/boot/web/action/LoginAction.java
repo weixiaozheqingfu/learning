@@ -8,12 +8,14 @@ import com.glitter.spring.boot.service.IOauthAccessTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Controller
 public class LoginAction extends BaseAction {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginAction.class);
@@ -23,7 +25,6 @@ public class LoginAction extends BaseAction {
     @Autowired
     IOauthAccessTokenService oauthAccessTokenService;
 
-
     /**
      * 请求登陆页(与前端约定，该方法非ajax方法，用户浏览器直接访问，或前端代码重定向，重定向也是浏览器直接访问)
      * (非sso登录,则可以直接请求自己应用的login.html)
@@ -31,7 +32,7 @@ public class LoginAction extends BaseAction {
      *
      * @return
      */
-    @RequestMapping(value = "login", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public void login(HttpServletResponse httpServletResponse) throws Exception {
         httpServletResponse.sendRedirect("/oauth/sso/authorize");
         return;
@@ -58,7 +59,7 @@ public class LoginAction extends BaseAction {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public ResponseResult logout() throws Exception {
         // 1.获取当前登录会话对应的accessToken
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByJsessionid(JsessionIdCookieContext.get());

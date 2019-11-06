@@ -17,7 +17,7 @@ import java.util.Map;
 public class RestTemplateUtils {
     private static final Logger logger = LoggerFactory.getLogger(RestTemplateUtils.class);
 
-    @Qualifier("restTemplate")
+    @Autowired
     private RestTemplate restTemplate;
 
 

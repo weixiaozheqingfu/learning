@@ -8,29 +8,9 @@
     <link href="/images/favicon.ico" rel="SHORTCUT ICON"/>
 </head>
 <body>
-<div class="main">jjj
+<div class="main">
     <div class="logbox">
-        <p><a href="http://localhost:8081" target="_blank">clientN</a>访问你的sso账号，将获得以下权限：</p>
-        <table style="width:100%; margin-top:20px;">
-            <tr>
-                <td style="width:55%;">
-                        <input type="checkbox" value="" checked="checked">
-                            全选
-                        </input>
-                        <br>
-                        <input type="checkbox" th:each="scope : ${scopes}" th:value="${scope.scopeName}" th:text="${scope.scopeDesc}" checked="checked">
-                        </input>
-                        <br>
-                </td>
-                <td>
-                    <img src="http://localhost:8080/images/oauth_appbg.png" alt=""/>
-                </td>
-                <td style="width:35%;">
-                    clientN
-                </td>
-            </tr>
-        </table>
-        <p>授权后表明你已同意 <a href="https://connect.qq.com/devuser.html?agreement#/">sso_server登录服务协议</a></p>
+        <p>sso单点登录</p>
 
         <div class="line"></div>
         <table cellspacing="6" style="width:98%;">
@@ -39,31 +19,13 @@
                 <tr>
                     <td style="width:50px;">账号</td>
                     <td><input id="u" type="text" class="put" tabindex="1"/></td>
-                    <td rowspan="2" style="width:200px;">
-                        <a class="btns shouquan" href="#" onclick="javascript:subform();return false;" tabindex="3"></a>
-                        <a class="btns quxiao" href="#" onclick="javascript:cancel();return false;" tabindex="4"></a>
-                    </td>
                 </tr>
                 <tr>
                     <td>密码</td>
                     <td><input id="p" type="password" class="put" tabindex="2"/></td>
                 </tr>
-            </tbody>
-
-
-            <!--已登录状态-->
-            <tbody id="tb2" style="display:none;">
                 <tr>
-                    <td>
-                        当前登录帐号：<b id="b_un"></b>
-                        <span style="padding-left:10px;">
-                            <a href="#" onclick="javascript:changeUN();return false;">用其它帐号登录</a>
-                        </span>
-                    </td>
-                    <td style="width:200px;">
-                        <a class="btns shouquan" href="#" onclick="javascript:subform2();return false;" tabindex="3"></a>
-                        <a class="btns quxiao" href="#" onclick="javascript:cancel();return false;" tabindex="4"></a>
-                    </td>
+                    <td><a href="#" onclick="javascript:subform();return false;" tabindex="3">登录</a></td>
                 </tr>
             </tbody>
 
@@ -103,31 +65,17 @@
         }
     });
 
-    function changeUN() {
-        $('#tb2').hide();
-        $('#tb1').show();
-        $('#u').focus();
-    }
-
     function subform() {
-        // 1.获取用户选择的授权范围
-        var scope = "";
-        $.each($('input:checkbox:checked'),function(){
-            if(!!$(this).val()){
-                scope = scope + $(this).val() + ",";
-            }
-        });
-
-        if(!scope){
-            showerr("请选择授权范围");
-        }
-        scope = scope.substring(0, scope.length - 1);
+        // 单点登录scope不存在用户选择授权哪些信息的概念,而是sso用户中心提前内置好了就开放这么多资源接口
+        // 每个客户端的scope申请值只要在这个范围内就可以。
+        // 这是跟oauth2的区别，因为sso用户中心和各客户端都是企业内部系统，为了方便用户从同一个地方登录一次而已。并非是不可信的第三方应用（客户端和服务端）之间用户授权的场景。
+        // sso只是借助oauth2的基本原理，最终实现过程要灵活的根据sso业务场景来，切不可照搬照抄，会闹笑话，说明oauth2还没彻底理解精髓。
 
         // 组织提交数据
         var data = {
             client_id: $('#client_id').val(),
             redirect_uri: $('#redirect_uri').val(),
-            scope: scope,
+            scope: $('#scope').val(),
             response_type: $('#response_type').val(),
             state: $('#state').val(),
             u: $('#u').val(),
@@ -137,7 +85,7 @@
 
         // 参数校验
         if (!data.u) {
-            showerr('请输入CSDN用户名或注册Email。');
+            showerr('请输入用户名或email');
             return;
         }
         if (!data.p) {
@@ -148,7 +96,7 @@
         // 提交授权
         $.ajax({
             type: "POST",
-            url: domain + "/oauth2/login",
+            url: domain + "/sso/login",
             contentType: "application/x-www-form-urlencoded; charset=utf-8",
             data: data,
             dataType: "json",
@@ -164,41 +112,6 @@
             }
         });
 
-    }
-
-    function subform2() {
-        var data = {
-            client_id: $('#client_id').val(),
-            redirect_uri: $('#redirect_uri').val(),
-            scope: $('#scope').val(),
-            response_type: $('#response_type').val(),
-            state: $('#state').val(),
-            u: un,
-            _r: (new Date()).getTime()
-        };
-
-        $.ajax({
-            type: "POST",
-            url: domain + "/oauth2/login",
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            data: data,
-            dataType: "json",
-            success: function (resultObj) {
-                if(resultObj.code=='0'){
-                    window.location.href=resultObj.data;
-                } else {
-                    showerr(resultObj.message);
-                }
-            },
-            error: function (message) {
-                alert(message);
-            }
-        });
-    }
-
-
-    function cancel() {
-        window.location.href = $('#redirect_uri').val();
     }
 
     function showerr(msg) {

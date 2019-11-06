@@ -18,11 +18,14 @@
                     data: "id=1",
                     async: false,
                     success: function(data){
+                        data = JSON.parse(data);
+                        // console.log(data.code);
+                        // alert(typeof(data));
                         if(data.code == 0){
                             $("#userNameSpan").html(","+data.data.fullName);
                         } else if (data.code == -2){
                             alert(data.message);
-                            window.location.href=domain + "/login.html";
+                            window.location.href=data.data;
                         } else {
                             alert(data.message);
                         }
@@ -34,7 +37,7 @@
             $("#logoutBtn").click(function(){
                 $.ajax({
                     type: "POST",
-                    url: domain + "/login/logout",
+                    url: domain + "/logout",
                     async: false,
                     success: function(data){
                         if(data.code == 0){
