@@ -100,12 +100,12 @@ public class OauthAction extends BaseAction {
         if (null != map.get("errcode")) {
             return "redirect:http://localhost:8081/error.html?code=-1003";
         }
-        String access_token = (String)map.get("access_token");
-        String token_type = (String)map.get("token_type");
-        String expires_in = (String)map.get("expires_in");
-        String refresh_token = (String)map.get("refresh_token");
-        String scope = (String)map.get("scope");
-        Long userId = Long.valueOf((String)map.get("userId"));
+        String access_token = String.valueOf(map.get("access_token"));
+        String token_type = String.valueOf(map.get("token_type"));
+        String expires_in = String.valueOf(map.get("expires_in"));
+        String refresh_token = String.valueOf(map.get("refresh_token"));
+        String scope = String.valueOf(map.get("scope"));
+        Long userId = Long.valueOf(String.valueOf(map.get("userId")));
         // 其他字段这里不一一判断了
         if (StringUtils.isBlank(access_token)) {
             return "redirect:http://localhost:8081/error.html?code=-1004";
