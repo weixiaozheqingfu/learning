@@ -130,6 +130,7 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         oauthCodeService.deleteByCode(code);
 
         // 7.封装返回数据
+        accessTokenInfo.setJsessionid(oauthAccessToken.getJsessionid());
         accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
         accessTokenInfo.setScope(oauthAccessToken.getScope());
         accessTokenInfo.setExpires_in(oauthAccessToken.getAccessTokenExpireIn());
