@@ -95,6 +95,7 @@ public class OauthAction extends BaseAction {
 
         // 检查用户是否已处于登陆状态
         UserInfo userInfo = (UserInfo) sessionHandler.getSession().getAttribute(GlitterConstants.SESSION_USER);
+        logger.info("authorize方法sessionHandler.getSession().getId():" + sessionHandler.getSession().getId());
         if (null == userInfo) {
             // 如果用户未登录，则返回登录页面。本版本是forward方式，采用重定向方式也可以，只要到达授权中心的授权页面即可。
             model.addAttribute("client_id", client_id);
@@ -247,6 +248,7 @@ public class OauthAction extends BaseAction {
                 resultMap.put("userid", accessTokenInfo.getUserId());
 
                 // 2.验证access_token对应的jsessionid全局会话是否仍在会话期间内
+                logger.info("getAccessToken方法accessTokenInfo.getJsessionid():" + accessTokenInfo.getJsessionid());
                 UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenInfo.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
                 if (userinfo == null) {
                     return ResponseResult.fail("60032", "sso全局会话已过期，请重新登录");

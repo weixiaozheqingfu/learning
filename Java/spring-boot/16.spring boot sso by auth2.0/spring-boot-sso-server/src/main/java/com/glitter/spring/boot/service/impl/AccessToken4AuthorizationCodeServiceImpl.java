@@ -108,6 +108,7 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         // 5.code换取accessToken
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         Date now = new Date();
+        oauthAccessToken.setJsessionid(oauthCode.getJsessionid());
         oauthAccessToken.setClientId(oauthCode.getClientId());
         oauthAccessToken.setScope(oauthCode.getScope());
         oauthAccessToken.setInterfaceUri(oauthCode.getInterfaceUri());
