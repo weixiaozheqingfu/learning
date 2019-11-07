@@ -66,7 +66,7 @@ public class OauthResourceAction extends BaseAction{
      *
      * @return
      */
-    @RequestMapping(value = "keepAlive", method = RequestMethod.POST)
+    @RequestMapping(value = "keepAlive", method = RequestMethod.GET)
     public ResponseResult keepAlive() {
         // String jsessionid = AccessTokenInnerContext.get().getJsessionid();
         // 拦截器已完成续期,此处不需要再续期,该接口可以理解为标记接口,方法内部不做任何处理。

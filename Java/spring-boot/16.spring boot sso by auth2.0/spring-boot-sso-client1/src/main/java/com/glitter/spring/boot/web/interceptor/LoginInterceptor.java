@@ -102,7 +102,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         try {
             Map<String, String> map = ssoRemote.auth(oauthAccessTokenDb.getAccessToken());
             // 如果accessToken已经过期
-            if (null == map || StringUtils.isBlank(map.get("remaining_expiration_time")) || Long.valueOf((String)map.get("remaining_expiration_time"))<30L ) {
+            Object remainingExpirationTimeObj = map == null ? null : map.get("remaining_expiration_time");
+            String remainingExpirationTimeStr = remainingExpirationTimeObj == null ? null : String.valueOf(remainingExpirationTimeObj);
+            Long remainingExpirationTimeLong = remainingExpirationTimeStr == null ? null : Long.valueOf(remainingExpirationTimeStr);
+            if (null == map || null == remainingExpirationTimeLong || remainingExpirationTimeLong < 30L ) {
                 // 使用refreshToken换accessToken
                 OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByServerType("sso");
                 String client_id = oauthClientInfo.getClientId();

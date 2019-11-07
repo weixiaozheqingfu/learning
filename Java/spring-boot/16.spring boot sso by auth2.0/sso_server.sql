@@ -15,7 +15,7 @@ CREATE TABLE `user_info` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表';
 
-INSERT INTO `user_info` VALUES ('1', 'gaoshanliushui', 'qwer1234', '13120411529', '高山流水', '', '0', '0', '', '\0', '2019-10-25 11:01:25', '2019-10-25 11:01:25', '2019-10-25 11:01:25');
+INSERT INTO `user_info` VALUES ('1', 'gaoshanliushui', 'qwer1234', '13120411529', '高山流水', '高山流水', '1', '30', '', '\0', '2019-10-25 11:01:25', '2019-10-25 11:01:25', '2019-10-25 11:01:25');
 
 CREATE TABLE `oauth_client_info` (
   `id` bigint(20) NOT NULL auto_increment COMMENT '主键',

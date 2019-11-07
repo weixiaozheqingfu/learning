@@ -25,6 +25,7 @@
                             $("#userNameSpan").html(","+data.data.fullName);
                         } else if (data.code == -2){
                             alert(data.message);
+                            alert(data.data);
                             window.location.href=data.data;
                         } else {
                             alert(data.message);

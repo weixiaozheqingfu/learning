@@ -186,7 +186,7 @@ public class OauthAction extends BaseAction {
         oauthCode.setUserId(userId);
         oauthCode.setScope(scope);
         // InterfaceUri与scope的对应关系应该有一张数据库表对应关系，sso需求比较固定固定，此处简化，直接代码写死。
-        oauthCode.setInterfaceUri("/sso/resource/userinfo,/sso/resource/logout");
+        oauthCode.setInterfaceUri("/sso/resource/userinfo,/sso/resource/keepAlive,/sso/resource/logout");
         String code = oauthCodeService.generateCode(oauthCode);
 
         // 2.组装回调地址
