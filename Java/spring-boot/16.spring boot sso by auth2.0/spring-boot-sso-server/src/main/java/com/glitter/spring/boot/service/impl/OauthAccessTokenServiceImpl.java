@@ -58,7 +58,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         accessTokenInParam.setAccess_token(accessToken);
         accessTokenInParam.setClientId(oauthAccessTokenDb.getClientId());
         accessTokenInParam.setUserId(oauthAccessTokenDb.getUserId());
-        accessTokenInParam.setInterfaceUri(Arrays.asList(StringUtils.join(oauthAccessTokenDb.getInterfaceUri(),",")));
+        accessTokenInParam.setInterfaceUri(Arrays.asList(oauthAccessTokenDb.getInterfaceUri().split(",")));
         accessTokenInParam.setRemainingExpirationTime(remaining_expiration_time);
         return accessTokenInParam;
     }
