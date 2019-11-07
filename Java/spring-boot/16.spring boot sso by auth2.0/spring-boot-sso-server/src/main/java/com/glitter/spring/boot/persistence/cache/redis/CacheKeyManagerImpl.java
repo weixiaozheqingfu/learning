@@ -18,7 +18,7 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
     /**
      * 接口变量默认修饰符public、static、final可省
      */
-    private static final String KEY_PREFIX = "gliter";
+    private static final String KEY_PREFIX = "gliter:sso_server";
 
     static String getKey(String... str) {
         String result = KEY_PREFIX;

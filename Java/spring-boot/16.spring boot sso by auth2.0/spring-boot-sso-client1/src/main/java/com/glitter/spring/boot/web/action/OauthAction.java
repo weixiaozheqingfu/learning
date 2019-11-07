@@ -130,8 +130,14 @@ public class OauthAction extends BaseAction {
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
 
         // 6.accessToken对象绑定jsessionid并入库
-        oauthAccessToken.setJsessionid(sessionHandler.getSession().getId());
-        oauthAccessTokenService.create(oauthAccessToken);
+        try {
+            oauthAccessToken.setJsessionid(sessionHandler.getSession().getId());
+            oauthAccessTokenService.create(oauthAccessToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            sessionHandler.getSession().invalidate();
+            return "redirect:http://localhost:8081/error.html?code=-1006";
+        }
 
         // 7.完成登录后重定向到首页
         return "redirect:http://localhost:8081/index.html";
