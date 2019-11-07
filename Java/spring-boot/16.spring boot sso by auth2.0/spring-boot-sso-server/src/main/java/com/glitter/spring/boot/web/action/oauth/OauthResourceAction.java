@@ -92,6 +92,8 @@ public class OauthResourceAction extends BaseAction{
         // 注销全局会话
         sessionHandler.getSession(jsessionid).invalidate();
 
+        // TODO 数据库也要删掉根据jsessionid删除
+
         List<OauthAccessToken> oauthAccessTokens =  oauthAccessTokenService.getOauthAccessTokensByJsessionid(jsessionid);
         // 注销所有客户端登录
         for (int i = 0; i < oauthAccessTokens.size(); i++) {
