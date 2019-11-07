@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            var domain = "http://localhost:8082";
+            // var domain = "http://limengjun.com/demo";
+
+            getUserInfo();
+
+            function getUserInfo() {
+                $.ajax({
+                    type: "GET",
+                    url: domain + "/userInfo/getLoginUserInfo",
+                    data: "id=1",
+                    async: false,
+                    success: function(data){
+                        if(typeof(data)=='string'){
+                            data = JSON.parse(data);
+                        }
+                        // console.log(data.code);
+                        // alert(typeof(data));
+                        if(data.code == 0){
+                            //alert(data.data.nickName);
+                            $("#userNameSpan").html(","+data.data.nickName);
+                            //alert( $("#userNameSpan").html());
+                        } else if (data.code == -2){
+                            // alert(data.message);
+                            // alert(data.data);
+                            window.location.href= domain + "/login";
+                        } else {
+                            alert(data.message);
+                        }
+                    }
+                });
+            }
+
+
+            $("#logoutBtn").click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: domain + "/logout",
+                    async: false,
+                    success: function(data){
+                        alert("data.code:"+data.code);
+                        if(data.code == 0){
+                            // alert(data.code);
+                            window.location.href= domain + "/login";
+                        } else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+欢迎你来到首页<span id="userNameSpan"></span>! <br>
+<input type="button" name="logoutBtn" id="logoutBtn" value="退出" />
+</body>
+</html>
