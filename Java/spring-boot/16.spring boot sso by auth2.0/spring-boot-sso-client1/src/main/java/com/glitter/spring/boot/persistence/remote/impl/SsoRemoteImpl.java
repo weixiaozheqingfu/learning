@@ -5,6 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.CoreConstants;
+import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.util.RestTemplateUtils;
@@ -34,7 +35,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			param.put("code", code);
 			param.put("grant_type", grant_type);
 
-			String url = "http://localhost:8080/sso/access_token";
+			String url = GlitterConstants.DOMAIN_SSO_SERVER + "/sso/access_token";
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult<Map> responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult<Map>>(){});
@@ -55,7 +56,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			Map<String, Object> param = new HashMap<>(1);
 			param.put("access_token", access_token);
 
-			String url = "http://localhost:8080/sso/resource/userinfo";
+			String url = GlitterConstants.DOMAIN_SSO_SERVER + "/sso/resource/userinfo";
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult<UserInfo> responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult<UserInfo>>(){});
@@ -76,7 +77,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			Map<String, Object> param = new HashMap<>(1);
 			param.put("access_token", access_token);
 
-			String url = "http://localhost:8080/sso/resource/keepAlive";
+			String url = GlitterConstants.DOMAIN_SSO_SERVER + "/sso/resource/keepAlive";
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult>(){});
@@ -95,7 +96,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			Map<String, Object> param = new HashMap<>(1);
 			param.put("access_token", accessToken);
 
-			String url = "http://localhost:8080/sso/auth";
+			String url = GlitterConstants.DOMAIN_SSO_SERVER + "/sso/auth";
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult<Map> responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult<Map>>(){});
@@ -117,7 +118,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			param.put("refresh_token", refresh_token);
 			param.put("grant_type", grant_type);
 
-			String url = "http://localhost:8080/sso/refresh_token";
+			String url = GlitterConstants.DOMAIN_SSO_SERVER + "/sso/refresh_token";
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult<Map> responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult<Map>>(){});
@@ -138,7 +139,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			Map<String, Object> param = new HashMap<>(1);
 			param.put("access_token", accessToken);
 
-			String url = "http://localhost:8080/sso/resource/logout";
+			String url = GlitterConstants.DOMAIN_SSO_SERVER + "/sso/resource/logout";
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult>(){});

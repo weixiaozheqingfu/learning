@@ -46,7 +46,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
-        String loginUrl = "http://localhost:8081/login";
+        String loginUrl = GlitterConstants.DOMAIN_SSO_CLIETN1 +"/login";
 
         String jsessionIdCookie = JsessionIdCookieContext.get();
         if (StringUtils.isBlank(jsessionIdCookie)) {

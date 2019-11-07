@@ -30,7 +30,7 @@
                         } else if (data.code == -2){
                             // alert(data.message);
                             // alert(data.data);
-                            window.location.href="http://localhost:8081/login";
+                            window.location.href= domain + "/login";
                         } else {
                             alert(data.message);
                         }
@@ -48,7 +48,7 @@
                         alert("data.code:"+data.code);
                         if(data.code == 0){
                             // alert(data.code);
-                            window.location.href="http://localhost:8081/login";
+                            window.location.href= domain + "/login";
                         } else{
                             alert(data.message);
                         }

@@ -57,7 +57,7 @@ public class OauthAction extends BaseAction {
         String response_type = "code";
         String state = oauthService.generateState("sso");
 
-        StringBuffer url = new StringBuffer("http://localhost:8080/sso/authorize");
+        StringBuffer url = new StringBuffer(GlitterConstants.DOMAIN_SSO_SERVER + "/sso/authorize");
         url.append("?");
         url.append("&client_id=" + client_id);
         url.append("&redirect_uri=" + redirect_uri);
@@ -77,7 +77,7 @@ public class OauthAction extends BaseAction {
         boolean stateStatus = oauthService.validateState(state, "sso");
         // 1.属于恶意请求,重定向到登陆页面,并提示连接失败,请重试.
         if (!stateStatus) {
-            return "redirect:http://localhost:8081/error.html?code=-1000";
+            return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/error.html?code=-1000";
         }
 
         // 2.code换accessToken
@@ -93,13 +93,13 @@ public class OauthAction extends BaseAction {
             logger.info("map:" + JSONObject.toJSONString(map));
         } catch (Exception e) {
             logger.error(JSONObject.toJSONString(e));
-            return "redirect:http://localhost:8081/error.html?code=-1001";
+            return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/error.html?code=-1001";
         }
         if (null == map) {
-            return "redirect:http://localhost:8081/error.html?code=-1002";
+            return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/error.html?code=-1002";
         }
         if (null != map.get("errcode")) {
-            return "redirect:http://localhost:8081/error.html?code=-1003";
+            return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/error.html?code=-1003";
         }
         String access_token = map.get("access_token") == null ? null : String.valueOf(map.get("access_token"));
         String token_type = map.get("access_token") == null ? null : String.valueOf(map.get("access_token"));
@@ -109,7 +109,7 @@ public class OauthAction extends BaseAction {
         Long userId = map.get("userid") == null ? null : Long.valueOf(String.valueOf(map.get("userid")));
         // 其他字段这里不一一判断了
         if (StringUtils.isBlank(access_token)) {
-            return "redirect:http://localhost:8081/error.html?code=-1004";
+            return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/error.html?code=-1004";
         }
 
         // 3.组装accessToken对象
@@ -124,7 +124,7 @@ public class OauthAction extends BaseAction {
         // 4.获取用户信息
         UserInfo userInfo = ssoRemote.getUerInfo(access_token);
         if (userInfo == null) {
-            return "redirect:http://localhost:8081/error.html?code=-1005";
+            return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/error.html?code=-1005";
         }
 
         // 5.创建会话
@@ -151,11 +151,11 @@ public class OauthAction extends BaseAction {
         } catch (Exception e) {
             e.printStackTrace();
             sessionHandler.getSession().invalidate();
-            return "redirect:http://localhost:8081/error.html?code=-1006";
+            return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/error.html?code=-1006";
         }
 
         // 7.完成登录后重定向到首页
-        return "redirect:http://localhost:8081/index.html";
+        return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/index.html";
     }
 
     /**

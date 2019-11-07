@@ -2,6 +2,7 @@ package com.glitter.spring.boot.web.action;
 
 import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.common.ResponseResult;
+import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
@@ -74,7 +75,7 @@ public class LoginAction extends BaseAction {
         }
 
         // 3.跳转到登录页
-        String loginUrl = "http://localhost:8081/login";
+        String loginUrl = GlitterConstants.DOMAIN_SSO_CLIETN1 + "/login";
         return ResponseResult.success(loginUrl);
     }
 
