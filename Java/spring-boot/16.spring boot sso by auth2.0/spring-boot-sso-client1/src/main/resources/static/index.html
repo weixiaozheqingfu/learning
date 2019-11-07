@@ -18,15 +18,19 @@
                     data: "id=1",
                     async: false,
                     success: function(data){
-                        data = JSON.parse(data);
+                        if(typeof(data)=='string'){
+                            data = JSON.parse(data);
+                        }
                         // console.log(data.code);
                         // alert(typeof(data));
                         if(data.code == 0){
-                            $("#userNameSpan").html(","+data.data.fullName);
+                            //alert(data.data.nickName);
+                            $("#userNameSpan").html(","+data.data.nickName);
+                            //alert( $("#userNameSpan").html());
                         } else if (data.code == -2){
-                            alert(data.message);
-                            alert(data.data);
-                            window.location.href=data.data;
+                            // alert(data.message);
+                            // alert(data.data);
+                            window.location.href="http://localhost:8081/login";
                         } else {
                             alert(data.message);
                         }
@@ -41,8 +45,10 @@
                     url: domain + "/logout",
                     async: false,
                     success: function(data){
+                        alert("data.code:"+data.code);
                         if(data.code == 0){
-                            window.location.href=domain + "/login.html";
+                            // alert(data.code);
+                            window.location.href="http://localhost:8081/login";
                         } else{
                             alert(data.message);
                         }

@@ -37,7 +37,7 @@ public class ClientRemoteImpl implements IClientRemote {
 			}
 
 			Map<String, Object> param = new HashMap<>(1);
-			param.put("accessToken", accessToken);
+			param.put("access_token", accessToken);
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult>(){});

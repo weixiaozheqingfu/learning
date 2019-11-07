@@ -89,6 +89,9 @@ public class OauthResourceAction extends BaseAction{
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ResponseResult logout() {
         String jsessionid = AccessTokenInnerContext.get().getJsessionid();
+        // 注销全局会话
+        sessionHandler.getSession(jsessionid).invalidate();
+
         List<OauthAccessToken> oauthAccessTokens =  oauthAccessTokenService.getOauthAccessTokensByJsessionid(jsessionid);
         // 注销所有客户端登录
         for (int i = 0; i < oauthAccessTokens.size(); i++) {
@@ -101,6 +104,7 @@ public class OauthResourceAction extends BaseAction{
                 e.printStackTrace();
             }
         }
+        // 返回注销结果
         return ResponseResult.success(true);
     }
 

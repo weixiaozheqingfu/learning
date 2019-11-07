@@ -84,6 +84,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 				throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统调用异常");
 			}
 		} catch (Exception e) {
+			logger.error(JSONObject.toJSONString(e));
 			throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
 		}
 	}
@@ -103,6 +104,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			}
 			return responseResult.getData();
 		} catch (Exception e) {
+			logger.error(JSONObject.toJSONString(e));
 			throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
 		}
 	}
@@ -125,6 +127,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 
 			return responseResult.getData();
 		} catch (Exception e) {
+			logger.error(JSONObject.toJSONString(e));
 			throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
 		}
 	}
@@ -143,6 +146,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 				throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统调用异常");
 			}
 		} catch (Exception e) {
+			logger.error(JSONObject.toJSONString(e));
 			throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
 		}
 	}

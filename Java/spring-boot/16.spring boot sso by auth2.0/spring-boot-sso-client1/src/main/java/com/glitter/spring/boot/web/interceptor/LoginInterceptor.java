@@ -80,9 +80,10 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
 
+        // 登录状态jsessionIdCookie会话维护了一个accessToken与全局会话保持通讯
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByJsessionid(jsessionIdCookie);
         if (oauthAccessTokenDb == null || StringUtils.isBlank(oauthAccessTokenDb.getAccessToken())) {
-            this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常");
+            this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "系统异常");
             return false;
         }
 
@@ -121,7 +122,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                     if (null == refreshTokenMap || StringUtils.isBlank(access_token)) {
                         oauthAccessTokenService.deleteByJsessionid(session.getId());
                         session.invalidate();
-                        this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常,请重试");
+                        this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "系统异常,请重试");
                         return false;
                     }
                     // 更新accessToken信息
@@ -134,7 +135,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                     e.printStackTrace();
                     oauthAccessTokenService.deleteByJsessionid(session.getId());
                     session.invalidate();
-                    this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常,请重试");
+                    this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "系统异常,请重试");
                     return false;
                 }
             }
@@ -142,7 +143,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             e.printStackTrace();
             oauthAccessTokenService.deleteByJsessionid(session.getId());
             session.invalidate();
-            this.response(httpServletRequest, httpServletResponse, loginUrl, "-100", "系统异常,请重试");
+            this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "系统异常,请重试");
             return false;
         }
 

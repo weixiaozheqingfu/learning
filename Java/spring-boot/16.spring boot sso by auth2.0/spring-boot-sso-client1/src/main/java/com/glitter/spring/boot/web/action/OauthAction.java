@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -128,11 +129,25 @@ public class OauthAction extends BaseAction {
 
         // 5.创建会话
         sessionHandler.getSession().setAttribute(GlitterConstants.SESSION_USER, userInfo);
+        oauthAccessToken.setJsessionid(sessionHandler.getSession().getId());
 
-        // 6.accessToken对象绑定jsessionid并入库
+        // 6.accessToken对象绑定jsessionid并入库(保证code换accessToken的过程具备反复执行的能力)
         try {
-            oauthAccessToken.setJsessionid(sessionHandler.getSession().getId());
-            oauthAccessTokenService.create(oauthAccessToken);
+            OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByJsessionid(sessionHandler.getSession().getId());
+            if (null == oauthAccessTokenDb) {
+                oauthAccessTokenService.create(oauthAccessToken);
+            } else {
+                oauthAccessTokenDb.setUserId(oauthAccessToken.getUserId());
+                oauthAccessTokenDb.setAccessToken(oauthAccessToken.getAccessToken());
+                oauthAccessTokenDb.setExpireIn(oauthAccessToken.getExpireIn());
+                oauthAccessTokenDb.setRefreshToken(oauthAccessToken.getRefreshToken());
+                oauthAccessTokenDb.setScope(oauthAccessToken.getScope());
+                oauthAccessTokenDb.setServerType(oauthAccessToken.getServerType());
+                oauthAccessTokenDb.setJsessionid(oauthAccessToken.getJsessionid());
+                oauthAccessTokenDb.setUpdateTime(new Date());
+                oauthAccessTokenService.modifyById(oauthAccessTokenDb);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             sessionHandler.getSession().invalidate();
