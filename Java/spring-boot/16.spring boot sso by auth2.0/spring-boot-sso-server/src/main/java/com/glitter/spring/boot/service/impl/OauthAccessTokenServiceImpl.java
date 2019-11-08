@@ -83,4 +83,11 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         return oauthAccessTokenDao.findList(record);
     }
 
+    @Override
+    public void deleteAccessTokensByJsessionid(String jsessionid) {
+        OauthAccessToken record = new OauthAccessToken();
+        record.setJsessionid(jsessionid);
+        oauthAccessTokenDao.delete(record);
+    }
+
 }

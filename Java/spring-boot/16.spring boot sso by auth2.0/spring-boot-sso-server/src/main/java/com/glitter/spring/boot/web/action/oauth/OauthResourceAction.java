@@ -46,7 +46,9 @@ public class OauthResourceAction extends BaseAction{
         }
         UserInfoResParam result = new UserInfoResParam();
         result.setUserId(AccessTokenInnerContext.get().getUserId());
+        result.setFullName(userInfo.getFullName());
         result.setNickName(userInfo.getNickName());
+        result.setPhone(userInfo.getPhone());
         result.setAge(userInfo.getAge());
         result.setSex(userInfo.getSex());
         return ResponseResult.success(result);
@@ -89,12 +91,14 @@ public class OauthResourceAction extends BaseAction{
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ResponseResult logout() {
         String jsessionid = AccessTokenInnerContext.get().getJsessionid();
+        List<OauthAccessToken> oauthAccessTokens =  oauthAccessTokenService.getOauthAccessTokensByJsessionid(jsessionid);
+
         // 注销全局会话
         sessionHandler.getSession(jsessionid).invalidate();
 
-        // TODO 数据库也要删掉根据jsessionid删除
+        // 删除jsessionid会话相关accessToken凭证
+        oauthAccessTokenService.deleteAccessTokensByJsessionid(jsessionid);
 
-        List<OauthAccessToken> oauthAccessTokens =  oauthAccessTokenService.getOauthAccessTokensByJsessionid(jsessionid);
         // 注销所有客户端登录
         for (int i = 0; i < oauthAccessTokens.size(); i++) {
             OauthClientInfo oauthClientInfo = oauthClientInfoService.getOauthClientInfoByClientId(oauthAccessTokens.get(i).getClientId());
@@ -106,6 +110,7 @@ public class OauthResourceAction extends BaseAction{
                 e.printStackTrace();
             }
         }
+
         // 返回注销结果
         return ResponseResult.success(true);
     }

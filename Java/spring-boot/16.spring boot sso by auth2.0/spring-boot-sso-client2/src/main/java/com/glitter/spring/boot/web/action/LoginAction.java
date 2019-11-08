@@ -75,7 +75,7 @@ public class LoginAction extends BaseAction {
         }
 
         // 3.跳转到登录页
-        String loginUrl = GlitterConstants.DOMAIN_SSO_CLIETN1 + "/login";
+        String loginUrl = GlitterConstants.DOMAIN_SSO_CLIETN2 + "/login";
         return ResponseResult.success(loginUrl);
     }
 

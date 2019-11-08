@@ -15,7 +15,7 @@ CREATE TABLE `user_info` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表';
 
-INSERT INTO `user_info` VALUES ('1', 'gaoshanliushui', 'qwer1234', '13120411529', '高山流水', '高山流水', '1', '30', '', '\0', '2019-10-25 11:01:25', '2019-10-25 11:01:25', '2019-10-25 11:01:25');
+INSERT INTO `user_info` VALUES ('1', 'gaoshanliushui', 'qwer1234', '13188888888', '李孟军', '高山流水', '1', '30', '', '\0', '2019-10-25 11:01:25', '2019-10-25 11:01:25', '2019-10-25 11:01:25');
 
 CREATE TABLE `oauth_client_info` (
   `id` bigint(20) NOT NULL auto_increment COMMENT '主键',
@@ -31,6 +31,7 @@ CREATE TABLE `oauth_client_info` (
 
 INSERT INTO `oauth_client_info` VALUES (1, '1001', '123456', 'sso_client1', 'http://localhost:8081/oauth/sso/callback', 'http://localhost:8081/oauth/sso/logout', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
 INSERT INTO `oauth_client_info` VALUES (2, '1002', '654321', 'sso_client2', 'http://localhost:8082/oauth/sso/callback', 'http://localhost:8082/oauth/sso/logout', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
+INSERT INTO `oauth_client_info` VALUES (3, '1003', '654123', 'sso_client3', 'http://localhost:8083/oauth/sso/callback', 'http://localhost:8083/oauth/sso/logout', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
 
 -- 该表仅仅作为一种象征性的结果,不予创建,使用redis缓存会话代替本表。
 CREATE TABLE `session_info` (
