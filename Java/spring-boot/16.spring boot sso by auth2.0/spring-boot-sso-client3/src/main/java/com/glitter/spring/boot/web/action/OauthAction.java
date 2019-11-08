@@ -166,6 +166,9 @@ public class OauthAction extends BaseAction {
     @RequestMapping(value = "sso/logout", method = RequestMethod.GET)
     public ResponseResult logout(@RequestParam String access_token) throws IOException {
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByAccessToken(access_token);
+        if (oauthAccessTokenDb == null) {
+            return ResponseResult.fail("-100","access_token不存在，请排查问题后重试。");
+        }
         oauthAccessTokenService.deleteByJsessionid(oauthAccessTokenDb.getJsessionid());
         sessionHandler.getSession(oauthAccessTokenDb.getJsessionid()).invalidate();
         return ResponseResult.success(true);
