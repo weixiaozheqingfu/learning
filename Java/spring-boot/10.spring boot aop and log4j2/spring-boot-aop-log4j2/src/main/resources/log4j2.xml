@@ -1,7 +1,7 @@
 <configuration status="INFO" monitorInterval="1800">
 
     <Properties>
-        <Property name="LOG_PATH">/home/logs</Property>
+        <Property name="LOG_PATH">./home/logs</Property>
         <Property name="LOG_PROJECT_NAME">@project.artifactId@</Property>
         <Property name="LOG_PATTERN">[${LOG_PROJECT_NAME}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-5p => %c.%M(%F:%L) - %m%n</Property>
         <Property name="ROLLING_FILE_NAME">${LOG_PATH}/${LOG_PROJECT_NAME}</Property>

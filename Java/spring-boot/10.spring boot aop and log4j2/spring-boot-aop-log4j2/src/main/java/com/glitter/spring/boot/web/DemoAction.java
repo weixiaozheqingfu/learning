@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.exception.BusinessException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/demo")
 public class DemoAction {
+
+    private static final Logger logger = LoggerFactory.getLogger(DemoAction
+            .class);
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseResult add(@RequestBody UserInfo bean) {
@@ -44,6 +49,10 @@ public class DemoAction {
 
     @RequestMapping(value = "/getUserInfos", method = RequestMethod.GET)
     public ResponseResult<List<UserInfo>> getUserInfos(@RequestParam Long id) {
+        logger.debug("Application.debug...................................."+id);
+        logger.info("Application.info...................................."+id);
+        logger.warn("Application.warn...................................."+id);
+        logger.error("Application.error...................................."+id);
         if(id<0){
             throw new BusinessException("-1", "参数异常");
         }
