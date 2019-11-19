@@ -3,6 +3,7 @@
     <Properties>
         <Property name="LOG_PATH">/home/logs</Property>
         <Property name="LOG_PROJECT_NAME">@project.artifactId@</Property>
+        <Property name="LOG_CHARSET">UTF-8</Property>
         <Property name="LOG_PATTERN">[${LOG_PROJECT_NAME}] [%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-5p => %c.%M(%F:%L) - %m%n</Property>
         <Property name="ROLLING_FILE_NAME">${LOG_PATH}/${LOG_PROJECT_NAME}</Property>
         <Property name="ROLLING_FILE_PATTERN">${LOG_PATH}/${date:yyyy}/${date:yyyy-MM}/${date:yyyy-MM-dd}/${LOG_PROJECT_NAME}</Property>
@@ -20,7 +21,7 @@
             <Filters>
                 <ThresholdFilter level="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout charset="${LOG_CHARSET}" pattern="${LOG_PATTERN}" />
         </Console>
         <!-- 各个ThresholdFilter去交集后的最终结果是,这个RollingFile追加器只输出DEBUG级别的日志 -->
         <RollingFile name="RollingFileDebug" fileName="${ROLLING_FILE_NAME}-debug.log" filePattern="${ROLLING_FILE_PATTERN}-debug-%i.log.gz">
@@ -28,7 +29,7 @@
                 <ThresholdFilter level="INFO" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout charset="${LOG_CHARSET}" pattern="${LOG_PATTERN}" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>
@@ -40,7 +41,7 @@
                 <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout charset="${LOG_CHARSET}" pattern="${LOG_PATTERN}" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>
@@ -52,7 +53,7 @@
                 <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
                 <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout charset="${LOG_CHARSET}" pattern="${LOG_PATTERN}" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>
@@ -63,7 +64,7 @@
             <Filters>
                 <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             </Filters>
-            <PatternLayout pattern="${LOG_PATTERN}" />
+            <PatternLayout charset="${LOG_CHARSET}" pattern="${LOG_PATTERN}" />
             <Policies>
                 <SizeBasedTriggeringPolicy size="${ROLLING_FILE_MAX_SIZE}" />
             </Policies>

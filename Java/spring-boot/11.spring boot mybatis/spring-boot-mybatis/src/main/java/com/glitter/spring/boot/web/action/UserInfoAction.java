@@ -38,8 +38,13 @@ public class UserInfoAction{
 
     @RequestMapping(value = "deleteById", method = RequestMethod.POST)
     public ResponseResult deleteById(@RequestParam Long id) {
-        if(null == id) {
-            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常，id值为空!");
+        logger.trace("Application.trace...................................."+id);
+        logger.debug("Application.debug...................................."+id);
+        logger.info("Application.info...................................."+id);
+        logger.warn("Application.warn...................................."+id);
+        logger.error("Application.error...................................."+id);
+        if(id < 0) {
+            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数异常，id值异常!");
         }
         userInfoService.deleteById(id);
         return ResponseResult.success(null);

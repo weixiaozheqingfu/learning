@@ -15,6 +15,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseResult handleBusinessException(BusinessException e) {
+        // 这里抛出完全是为了做特定的测试，正常是没有这段if代码的。
+        if (1==1) {
+            logger.error("handleBusinessException捕获业务异常信息:{}", JSONObject.toJSONString(e));
+            throw e;
+        }
+
         try {
             // 如果有需要的话,这里也可以将参数打印出来RequestLogInfoContext.get()
             logger.error("handleBusinessException捕获业务异常信息:{}", JSONObject.toJSONString(e));
