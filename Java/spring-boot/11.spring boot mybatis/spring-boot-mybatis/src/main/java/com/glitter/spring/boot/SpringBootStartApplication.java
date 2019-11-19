@@ -12,7 +12,7 @@ public class SpringBootStartApplication extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
 
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 1; i++) {
             logger.debug("SpringApplicationBuilder.debug...................................."+i);
             logger.info("SpringApplicationBuilder.info...................................."+i);
             logger.warn("SpringApplicationBuilder.warn...................................."+i);
