@@ -280,14 +280,14 @@ public class OauthAction extends BaseAction {
      * 正确返回样例：
      * {
      * "code":0,
-     * "msg":"ok",
-     * "remaining_expiration_time":"3600"
+     * "msg":"success",
+     * "data":{"remaining_expiration_time":"3600"}
      * }
-     * <p>
-     * 错误返回样例：
+     *
+     * * 正确返回样例：
      * {
-     * "errcode":50036,
-     * "errmsg":"invalid access_token"
+     * "code":"50035",
+     * "msg":"invalid access_token",
      * }
      *
      * 特殊说明,客户端需要对不通的返回码做出对应的响应。
@@ -315,9 +315,6 @@ public class OauthAction extends BaseAction {
 
             // 2.为全局会话续期
             sessionHandler.renewal(accessTokenInParam.getJsessionid());
-
-            resultMap.put("code", "0");
-            resultMap.put("msg", "ok");
             resultMap.put("remaining_expiration_time", accessTokenInParam.getRemainingExpirationTime());
             return ResponseResult.success(resultMap);
         } catch (Exception e) {

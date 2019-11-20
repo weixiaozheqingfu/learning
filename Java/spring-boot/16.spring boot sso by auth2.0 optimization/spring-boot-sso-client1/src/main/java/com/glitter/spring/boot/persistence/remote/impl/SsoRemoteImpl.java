@@ -91,7 +91,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 	}
 
 	@Override
-	public Map auth(String accessToken) {
+	public ResponseResult<Map> auth(String accessToken) {
 		try {
 			Map<String, Object> param = new HashMap<>(1);
 			param.put("access_token", accessToken);
@@ -100,10 +100,11 @@ public class SsoRemoteImpl implements ISsoRemote {
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult<Map> responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult<Map>>(){});
-			if (responseResult == null || !responseResult.getCode().equals(CoreConstants.REQUEST_SUCCESS_CODE)) {
+			// 对于返回code码有特殊含义的，其实适合将code码等一并返回给调用方。
+			if (responseResult == null) {
 				throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统调用异常");
 			}
-			return responseResult.getData();
+			return responseResult;
 		} catch (Exception e) {
 			logger.error(JSONObject.toJSONString(e));
 			throw (e instanceof BusinessException) ? (BusinessException) e : new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
