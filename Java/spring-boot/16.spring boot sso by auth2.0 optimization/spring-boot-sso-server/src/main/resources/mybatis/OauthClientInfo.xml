@@ -7,7 +7,6 @@
         <result column="client_secret" property="clientSecret" jdbcType="VARCHAR"/>
         <result column="client_name" property="clientName" jdbcType="VARCHAR"/>
         <result column="redirect_uri" property="redirectUri" jdbcType="VARCHAR"/>
-        <result column="logout_uri" property="logoutUri" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>

@@ -57,12 +57,6 @@ public class OauthResourceInterceptor implements HandlerInterceptor {
             throw new BusinessException("60034", "接口访问异常,无接口访问权限");
         }
 
-        // 验证access_token对应的jsessionid全局会话是否仍在会话期间内
-        UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenInParam.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
-        if (userinfo == null) {
-            throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
-        }
-
         // 为全局会话续期
         sessionHandler.renewal(accessTokenInParam.getJsessionid());
 

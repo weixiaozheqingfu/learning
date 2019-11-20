@@ -240,6 +240,8 @@ public class OauthAction extends BaseAction {
                 if (null == accessTokenInfo) {
                     return ResponseResult.fail(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
                 }
+                logger.info("getAccessToken方法accessTokenInfo.getJsessionid():" + accessTokenInfo.getJsessionid());
+
                 resultMap.put("access_token", accessTokenInfo.getAccess_token());
                 resultMap.put("token_type", accessTokenInfo.getToken_type());
                 resultMap.put("expires_in", accessTokenInfo.getExpires_in());
@@ -247,17 +249,13 @@ public class OauthAction extends BaseAction {
                 resultMap.put("scope", accessTokenInfo.getScope());
                 resultMap.put("userid", accessTokenInfo.getUserId());
 
-                // 2.验证access_token对应的jsessionid全局会话是否仍在会话期间内
-                logger.info("getAccessToken方法accessTokenInfo.getJsessionid():" + accessTokenInfo.getJsessionid());
-                UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenInfo.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
-                if (userinfo == null) {
-                    return ResponseResult.fail("60032", "sso全局会话已过期，请重新登录");
-                }
+                // 2.验证accessToken所依附的jessionid全局会话是否仍在会话期间内
+                oauthAccessTokenService.validateJsessionid(accessTokenInfo.getJsessionid());
 
                 // 3.为全局会话续期
                 sessionHandler.renewal(accessTokenInfo.getJsessionid());
 
-                // 4.sso中,换取accessToken成功,即认为客户端应用创建子会话成功,作子会话标记,方便将来注销会话时回调。
+                // 4.sso中,换取accessToken成功,即认为客户端应用创建其局部会话成功,作局部会话与全局会话通信的凭证,一根绳上的蚂蚱。
 
             } else if (GlitterConstants.OAUTH_GRANT_TYPE_PASSWORD.equals(grant_type)) {
                 // ......
@@ -288,9 +286,21 @@ public class OauthAction extends BaseAction {
      * <p>
      * 错误返回样例：
      * {
-     * "errcode":40003,
+     * "errcode":50036,
      * "errmsg":"invalid access_token"
      * }
+     *
+     * 特殊说明,客户端需要对不通的返回码做出对应的响应。
+     *
+     * "0": "accessToken有效",客户端继续其业务流程。
+     * "50034": "accessToken输入参数为空", 客户端传参问题,客户端自行解决。
+     * "50035": "accessToken失效",客户端考虑使用refreshToken重新换取accessToken,如果refreshToken换取失败,比如refreshToken也失效了, 则可以考虑注销本地会话并重新跳转到sso授权登录页,
+     *          此时如果sso全局会话依然是存在的,那么客户端就会完成重新自动登录的过程,重新建立和sso用户中心的关系,拿到新的对应的accessToken,并关联建立新的局部会话,整个过程用户无感。
+     *          如果sso全局会话是不存在的,则该客户端即第一个完成sso全局登录的客户端,这个过程只是多了用户输入用户名和密码的过程,后续流程依然是重新建立和sso用户中心的关系,拿到新的对应的accessToken,并关联建立新的局部会话。
+     * "60032": 表示全局会话已失效,accessToken自然也失效,此时客户端应该注销自己的局部会话,并重新跳转到sso授权登录页,后续过程同50035描述。
+     * xx即其他返回码: 应该是sso中心其他系统异常情况,此时客户端应该注销自己的局部会话,并重新跳转到sso授权登录页,后续过程同50035描述。
+     *                既然sso中心出问题了,那客户端自己也不能局部会话偷偷登录着,必须退出局部会话，并重试sso登录,能登录上应该一切自然恢复,不能登录,则局部会话已经退出,没有安全问题。
+     *                并且客户端应该线下将情况反馈到sso中心的同事排查问题，当然sso中心自己也应该有报警，并排查问题。
      *
      * @param access_token
      * @return
@@ -300,16 +310,10 @@ public class OauthAction extends BaseAction {
     public ResponseResult<Map<String, Object>> auth(@RequestParam(required = false) String access_token) {
         Map resultMap = new HashMap<>();
         try {
-            // 验证access_token是否有效
+            // 1.验证access_token是否有效
             AccessTokenInParam accessTokenInParam = oauthAccessTokenService.validateAccessToken(access_token);
 
-            // 验证access_token对应的jsessionid全局会话是否仍在会话期间内
-            UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenInParam.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
-            if (userinfo == null) {
-                throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
-            }
-
-            // 为全局会话续期
+            // 2.为全局会话续期
             sessionHandler.renewal(accessTokenInParam.getJsessionid());
 
             resultMap.put("code", "0");
@@ -338,19 +342,16 @@ public class OauthAction extends BaseAction {
             if (!GlitterConstants.OAUTH_GRANT_TYPE_REFRESH_TOKEN.equals(grant_type)) {
                 return ResponseResult.fail(CoreConstants.REQUEST_ERROR_PARAMS, "grant_type参数非法");
             }
-
+            // 1.获取refresh_token对应的条目
             AccessTokenOutParam accessTokenOutParam = accessToken4RefreshTokenService.getAccessTokenInfo(client_id, refresh_token, grant_type);
             if (null == accessTokenOutParam) {
                 return ResponseResult.fail(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统异常");
             }
 
-            // 验证access_token对应的jsessionid全局会话是否仍在会话期间内
-            UserInfo userinfo = (UserInfo) sessionHandler.getSession(accessTokenOutParam.getJsessionid()).getAttribute(GlitterConstants.SESSION_USER);
-            if (userinfo == null) {
-                return ResponseResult.fail("60032", "sso全局会话已过期，请重新登录");
-            }
+            // 2.验证accessToken所依附的jessionid全局会话是否仍在会话期间内
+            oauthAccessTokenService.validateJsessionid(accessTokenOutParam.getJsessionid());
 
-            // 为全局会话续期
+            // 3.为全局会话续期
             sessionHandler.renewal(accessTokenOutParam.getJsessionid());
 
             resultMap.put("access_token", accessTokenOutParam.getAccess_token());

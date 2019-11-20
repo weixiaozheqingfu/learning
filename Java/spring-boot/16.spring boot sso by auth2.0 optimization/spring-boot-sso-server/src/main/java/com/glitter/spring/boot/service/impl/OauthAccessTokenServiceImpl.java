@@ -2,9 +2,12 @@ package com.glitter.spring.boot.service.impl;
 
 import com.glitter.spring.boot.bean.AccessTokenInParam;
 import com.glitter.spring.boot.bean.OauthAccessToken;
+import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
+import com.glitter.spring.boot.service.ISessionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +24,8 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
 
     @Autowired
     IOauthAccessTokenDao oauthAccessTokenDao;
+    @Autowired
+    public ISessionHandler sessionHandler;
 
     /**
      * 验证accessToken
@@ -29,24 +34,25 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
      */
     @Override
     public AccessTokenInParam validateAccessToken(String accessToken) {
-        // 1.校验参数是否为空
+        // 1.基础校验
         if (StringUtils.isBlank(accessToken)) {
             throw new BusinessException("50034", "accessToken参数为空");
         }
-
-        // 2.验证accessToken是否存在
         OauthAccessToken record = new OauthAccessToken();
         record.setAccessToken(accessToken);
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenDao.get(record);
         if (null == oauthAccessTokenDb) {
-            throw new BusinessException("50035", "accessToken不存在");
+            throw new BusinessException("50035", "accessToken失效");
         }
+
+        // 2.验证accessToken所依附的jessionid全局会话是否仍在会话期间内
+        this.validateJsessionid(oauthAccessTokenDb.getJsessionid());
 
         // 3.验证accessToken是否在有效期内
         Long endTime = oauthAccessTokenDb.getAccessTokenExpireTime().getTime();
         Long nowTime = System.currentTimeMillis();
         if(nowTime >= endTime){
-            throw new BusinessException("50036", "accessToken失效");
+            throw new BusinessException("50035", "accessToken失效");
         }
 
         // 4.计算剩余有效期,单位秒
@@ -61,6 +67,14 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         accessTokenInParam.setInterfaceUri(Arrays.asList(oauthAccessTokenDb.getInterfaceUri().split(",")));
         accessTokenInParam.setRemainingExpirationTime(remaining_expiration_time);
         return accessTokenInParam;
+    }
+
+    @Override
+    public void validateJsessionid(String jsessionid) {
+        UserInfo userinfo = (UserInfo) sessionHandler.getSession(jsessionid).getAttribute(GlitterConstants.SESSION_USER);
+        if (userinfo == null) {
+            throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
+        }
     }
 
     @Override
