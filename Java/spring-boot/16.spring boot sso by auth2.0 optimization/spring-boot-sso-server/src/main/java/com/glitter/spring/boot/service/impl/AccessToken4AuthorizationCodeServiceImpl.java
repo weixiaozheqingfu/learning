@@ -85,7 +85,12 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
             throw new BusinessException("40035", "code码不存在");
         }
 
-        // 4.验证客户端持有的code码是否过期
+        // 4.验证请求code码即准授权码所授予的客户端与本次参数中传来的客户端id是否一致
+        if (!oauthCode.getClientId().equals(client_id)) {
+            throw new BusinessException("40035", "非法请求");
+        }
+
+        // 5.验证客户端持有的code码是否过期
         if(System.currentTimeMillis() > oauthCode.getExpireTime().getTime()){
             throw new BusinessException("40036", "code码已过期");
         }
@@ -105,7 +110,7 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
             }
         }
 
-        // 5.code换取accessToken
+        // 6.code换取accessToken
         OauthAccessToken oauthAccessToken = new OauthAccessToken();
         Date now = new Date();
         oauthAccessToken.setJsessionid(oauthCode.getJsessionid());
@@ -127,10 +132,10 @@ public class AccessToken4AuthorizationCodeServiceImpl implements IAccessToken4Au
         oauthAccessToken.setUpdateTime(now);
         oauthAccessTokenDao.insert(oauthAccessToken);
 
-        // 6.删除code码
+        // 7.删除code码
         oauthCodeService.deleteByCode(code);
 
-        // 7.封装返回数据
+        // 8.封装返回数据
         accessTokenInfo.setJsessionid(oauthAccessToken.getJsessionid());
         accessTokenInfo.setAccess_token(oauthAccessToken.getAccessToken());
         accessTokenInfo.setScope(oauthAccessToken.getScope());
