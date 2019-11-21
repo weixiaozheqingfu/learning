@@ -3,7 +3,6 @@ CREATE TABLE `oauth_client_info` (
   `client_id` varchar(50) NOT NULL default '' COMMENT '第三方auth服务平台分配的客户端id',
   `client_secret` varchar(50) NOT NULL default '' COMMENT '第三方auth服务平台分配的客户端密码',
   `redirect_uri` varchar(200) NOT NULL default '' COMMENT '客户端应用回调地址',
-  `logout_uri` varchar(200) NOT NULL DEFAULT '' COMMENT '客户端应用注销登录地址,sso需求时有用',
   `scope` varchar(200) NOT NULL default '' COMMENT '针对于授权中心众多授权作用域,客户端应用声明需要用户确认授权的部分作用域,授权多个作用域用逗号（,）分隔',
   `server_type` varchar(50) NOT NULL default '' COMMENT '授权中心服务平台类型(如qq,wechart,sina,csdn,github,sso等)',
   `create_time` datetime default NULL COMMENT '创建时间',

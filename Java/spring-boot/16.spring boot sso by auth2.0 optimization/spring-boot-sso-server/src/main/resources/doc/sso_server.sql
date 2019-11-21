@@ -23,7 +23,6 @@ CREATE TABLE `oauth_client_info` (
   `client_secret` varchar(50) NOT NULL default '' COMMENT '客户端应用秘钥',
   `client_name` varchar(50) NOT NULL default '' COMMENT '客户端应用名称',
   `redirect_uri` varchar(200) NOT NULL default '' COMMENT '客户端应用回调地址',
-  `logout_uri` varchar(200) NOT NULL default '' COMMENT '客户端应用注销登录地址',
   `create_time` datetime default NULL COMMENT '创建时间',
   `update_time` datetime default NULL COMMENT '更新时间',
   PRIMARY KEY  (`id`)

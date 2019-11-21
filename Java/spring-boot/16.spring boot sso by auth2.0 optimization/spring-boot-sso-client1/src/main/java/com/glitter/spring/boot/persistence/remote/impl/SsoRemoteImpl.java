@@ -100,7 +100,7 @@ public class SsoRemoteImpl implements ISsoRemote {
 			String json = restTemplateUtils.getFormRequest(url, param);
 
 			ResponseResult<Map> responseResult = JSONObject.parseObject(json, new TypeReference<ResponseResult<Map>>(){});
-			// 对于返回code码有特殊含义的，其实适合将code码等一并返回给调用方。
+			// 对于返回code码有特殊含义的,这里不判断成功失败,将code码等一并返回给调用方,由调用方自行判断。
 			if (responseResult == null) {
 				throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "系统调用异常");
 			}

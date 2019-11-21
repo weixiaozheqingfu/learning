@@ -6,7 +6,6 @@
         <result column="client_id" property="clientId" jdbcType="VARCHAR"/>
         <result column="client_secret" property="clientSecret" jdbcType="VARCHAR"/>
         <result column="redirect_uri" property="redirectUri" jdbcType="VARCHAR"/>
-        <result column="logout_uri" property="logoutUri" jdbcType="VARCHAR"/>
         <result column="scope" property="scope" jdbcType="VARCHAR"/>
         <result column="server_type" property="serverType" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -18,7 +17,6 @@
         ,client_id
         ,client_secret
         ,redirect_uri
-        ,logout_uri
         ,scope
         ,server_type
         ,create_time
@@ -37,9 +35,6 @@
 		</if>
         <if test="redirectUri != null ">
             and redirect_uri=#{redirectUri}
-		</if>
-        <if test="logoutUri != null ">
-            and logout_uri=#{logoutUri}
 		</if>
         <if test="scope != null ">
             and scope=#{scope}
@@ -70,9 +65,6 @@
             <if test="redirectUri != null ">
                 redirect_uri,
             </if>
-            <if test="logoutUri != null ">
-                logout_uri,
-            </if>
             <if test="scope != null ">
                 scope,
             </if>
@@ -98,9 +90,6 @@
             </if>
             <if test="redirectUri != null ">
                 #{redirectUri},
-            </if>
-            <if test="logoutUri != null ">
-                #{logoutUri},
             </if>
             <if test="scope != null ">
                 #{scope},
@@ -146,9 +135,6 @@
         </if>
         <if test="redirectUri != null ">
             redirect_uri=#{redirectUri},
-        </if>
-        <if test="logoutUri != null ">
-            logout_uri=#{logoutUri},
         </if>
         <if test="scope != null ">
             scope=#{scope},

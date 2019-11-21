@@ -2,6 +2,7 @@ package com.glitter.spring.boot.persistence.remote;
 
 
 import com.glitter.spring.boot.bean.UserInfo;
+import com.glitter.spring.boot.common.ResponseResult;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public interface ISsoRemote {
 
     Map refreshToken(String client_id, String refresh_token, String grant_type);
 
-    Map auth(String accessToken);
+    ResponseResult<Map> auth(String accessToken);
 
     UserInfo getUerInfo(String access_token);
 

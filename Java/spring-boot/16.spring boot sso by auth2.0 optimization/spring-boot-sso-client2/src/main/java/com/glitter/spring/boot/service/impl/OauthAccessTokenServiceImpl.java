@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -21,10 +22,11 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
     IOauthAccessTokenDao oauthAccessTokenDao;
 
     /**
-     * 创建access_token表; InnoDB free: 488448 kB
+     * 创建access_token
      * @param oauthAccessToken
      */
     @Override
+    @Transactional
     public void create(OauthAccessToken oauthAccessToken) {
         if(null == oauthAccessToken){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS,"输入参数为空");
@@ -36,24 +38,25 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
     }
 
     /**
-     * 修改access_token表; InnoDB free: 488448 kB
+     * 修改access_token
      * @param oauthAccessToken
      */
     @Override
+    @Transactional
     public void modifyById(OauthAccessToken oauthAccessToken) {
-        if(null == oauthAccessToken){
+        if(null == oauthAccessToken || null == oauthAccessToken.getId()){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
         }
-        // TODO 参数校验
         oauthAccessToken.setUpdateTime(new Date());
         oauthAccessTokenDao.updateById(oauthAccessToken);
     }
 
     /**
-     * 根据主键删除access_token表; InnoDB free: 488448 kB
+     * 根据主键删除access_token
      * @param id
      */
     @Override
+    @Transactional
     public void deleteById(Long id) {
         if(null == id){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS, "输入参数为空");
@@ -69,7 +72,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService {
     }
 
     /**
-     * 根据主键获取access_token表; InnoDB free: 488448 kB
+     * 根据主键获取access_token
      * @param id
      * @return
      */
