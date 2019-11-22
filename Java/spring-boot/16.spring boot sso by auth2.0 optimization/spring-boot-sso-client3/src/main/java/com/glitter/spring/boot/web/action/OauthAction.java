@@ -147,7 +147,6 @@ public class OauthAction extends BaseAction {
                 oauthAccessTokenDb.setUpdateTime(new Date());
                 oauthAccessTokenService.modifyById(oauthAccessTokenDb);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             sessionHandler.getSession().invalidate();

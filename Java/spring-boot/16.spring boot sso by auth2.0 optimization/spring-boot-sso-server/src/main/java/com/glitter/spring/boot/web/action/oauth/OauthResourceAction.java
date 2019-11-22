@@ -93,7 +93,7 @@ public class OauthResourceAction extends BaseAction{
         // 注销全局会话
         sessionHandler.getSession(jsessionid).invalidate();
 
-        // 删除jsessionid会话相关accessToken凭证
+        // 删除jsessionid会话下的accessToken记录
         oauthAccessTokenService.deleteAccessTokensByJsessionid(jsessionid);
 
         // 返回注销结果

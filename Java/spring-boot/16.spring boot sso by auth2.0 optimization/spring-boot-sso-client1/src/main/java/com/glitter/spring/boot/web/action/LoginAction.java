@@ -62,10 +62,16 @@ public class LoginAction extends BaseAction {
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public ResponseResult logout() throws Exception {
-        // 1.获取当前登录会话对应的accessToken
+        // 1.获取当前局部会话对应的accessToken
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByJsessionid(JsessionIdCookieContext.get());
 
-        // 2.通知sso用户中心退出全局会话
+        // 2.删除当前局部会话绑定的access_token记录
+        oauthAccessTokenService.deleteByJsessionid(oauthAccessTokenDb.getJsessionid());
+
+        // 3.注销局部会话
+        sessionHandler.getSession(oauthAccessTokenDb.getJsessionid()).invalidate();
+
+        // 4.通知sso用户中心注销全局会话
         try {
             ssoRemote.logout(oauthAccessTokenDb.getAccessToken());
         } catch (Exception e) {
@@ -74,7 +80,7 @@ public class LoginAction extends BaseAction {
             return ResponseResult.fail("-100","操作失败，请联系管理员！", true);
         }
 
-        // 3.跳转到登录页
+        // 5.跳转到登录页
         String loginUrl = GlitterConstants.DOMAIN_SSO_CLIETN1 + "/login";
         return ResponseResult.success(loginUrl);
     }
