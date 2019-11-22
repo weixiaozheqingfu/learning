@@ -92,11 +92,16 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // 客户端登录校验通过的情况下,需要验证accessToken是否有效,目的有二:
-        // 1.当前accessToken如果无效,需要及时换取新的accessToken,以保持客户端和sso认证中心之间通信的畅通。
-        // 2.accessToken其实代表了sso全局会话,因为是一根绳,通过accessToken可以窥探全局会话是否失效,如果accessToken对应的sso全局会话失效,那么就要注销本地会话,走重新登录流程。
         try {
+            // 客户端登录校验通过的情况下,需要验证accessToken是否有效,目的有二:
+            // 1.当前accessToken如果无效,需要及时换取新的accessToken,以保持客户端和sso认证中心之间通信的畅通。
+            // 2.accessToken其实代表了sso全局会话,因为是一根绳,通过accessToken可以窥探全局会话是否失效,如果accessToken对应的sso全局会话失效,那么就要注销本地会话,走重新登录流程。
             this.authAccessToken(oauthAccessTokenDb.getAccessToken());
+
+            // 不管accessToken本来就是有效的,还是通过refreshToken换取了最新的accessToken,代码运行到此处都能保证当前的库中的accessToken是有效的,sso全局会话这一根绳是串起来的,sso全局整体会话是有效的。
+            // 由于上述流程已经为客户端局部会话完成了续期,现在对sso全局会话续期。
+            OauthAccessToken oauthAccessTokenDb2 = oauthAccessTokenService.getOauthAccessTokenByJsessionid(jsessionIdCookie);
+            ssoRemote.keepAlive(oauthAccessTokenDb2.getAccessToken());
         } catch (Exception e) {
             // 注销本地会话,走重新登录流程,走重新登录流程有两种情况
             // (为什么sso全局会话可能会是失效呢,因为用户可能先通过其他客户端点击退出登录操作了,此时全局会话已经失效,然后再切换到当前客户端页面触发资源请求操作,即本次代码流程)
@@ -109,11 +114,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             this.response(httpServletRequest, httpServletResponse, loginUrl, "-3", "系统异常,请重试");
             return false;
         }
-
-        // 不管accessToken本来就是有效的,还是通过refreshToken换取了最新的accessToken,代码运行到此处都能保证当前的库中的accessToken是有效的,sso全局会话这一根绳是串起来的,sso全局整体会话是有效的。
-        // 由于上述流程已经为客户端局部会话完成了续期,现在对sso全局会话续期。
-        OauthAccessToken oauthAccessTokenDb2 = oauthAccessTokenService.getOauthAccessTokenByJsessionid(jsessionIdCookie);
-        ssoRemote.keepAlive(oauthAccessTokenDb2.getAccessToken());
 
         logger.info("LoginInterceptor.preHandle验证成功,jsessionId:{},userId:{},fullName:{}", jsessionIdCookie, userInfo.getUserId(), userInfo.getNickName());
         return true;
