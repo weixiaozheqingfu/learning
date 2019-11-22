@@ -128,7 +128,7 @@ public class LoginInterceptor implements HandlerInterceptor {
      *         如果这个过程顺利则罢了
      *         如果这个过程失败或者异常,则抛出异常,由调用方注销局部会话,并且走重新登录流程.
      *
-     *         特注:一般情况是refresh_token也失效,导致其换取access_token失败,不管什么原因导致换取失败,此时都要抛出异常,由调用方注销局部会话,并且走重新登录流程.
+     *         特注:一般情况是refresh_token也失效,或者其他客户端注销全局会话,导致全局会话相关refresh_token记录全部删除。从而导致其换取access_token失败,不管什么原因导致换取失败,此时都要抛出异常,由调用方注销局部会话,并且走重新登录流程.
      *              因为不注销也不行了,这根绳已经断了,不注销后续没有办法与sso用户中心通讯了,比如续期等操作都没办法做,只能注销通过重新登录重新把这根绳建立起来。
      *     }
      * }
@@ -164,7 +164,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                     try {
                         this.refreshToken(accessToken);
                     } catch (Exception e) {
-                        // 一般情况是refresh_token也失效,导致其换取access_token失败,不管什么原因导致换取失败,此时都要抛出异常,由调用方注销局部会话,并且走重新登录流程.
+                        // 一般情况是refresh_token也失效,或者其他客户端注销全局会话,导致全局会话相关refresh_token记录全部删除。从而导致其换取access_token失败,不管什么原因导致换取失败,此时都要抛出异常,由调用方注销局部会话,并且走重新登录流程.
                         // 因为不注销也不行了,这根绳已经断了,不注销后续没有办法与sso用户中心通讯了,比如续期等操作都没办法做,只能注销通过重新登录重新把这根绳建立起来。
                         logger.info(JSONObject.toJSONString(e));
                         throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "refreshToken换取accessToken失败");
@@ -175,7 +175,7 @@ public class LoginInterceptor implements HandlerInterceptor {
                 try {
                     this.refreshToken(accessToken);
                 } catch (Exception e) {
-                    // 一般情况是refresh_token也失效,导致其换取access_token失败,不管什么原因导致换取失败,此时都要抛出异常,由调用方注销局部会话,并且走重新登录流程.
+                    // 一般情况是refresh_token也失效,或者其他客户端注销全局会话,导致全局会话相关refresh_token记录全部删除。从而导致其换取access_token失败,不管什么原因导致换取失败,此时都要抛出异常,由调用方注销局部会话,并且走重新登录流程.
                     // 因为不注销也不行了,这根绳已经断了,不注销后续没有办法与sso用户中心通讯了,比如续期等操作都没办法做,只能注销通过重新登录重新把这根绳建立起来。
                     logger.info(JSONObject.toJSONString(e));
                     throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "refreshToken换取accessToken失败");
