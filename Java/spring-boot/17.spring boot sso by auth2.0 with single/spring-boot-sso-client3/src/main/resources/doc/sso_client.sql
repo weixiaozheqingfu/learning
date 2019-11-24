@@ -10,7 +10,7 @@ CREATE TABLE `oauth_client_info` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='auth客户端基本信息配置表';
 
-INSERT INTO `oauth_client_info` VALUES ('1', '1003', '654123', 'http://localhost:8083/oauth/sso/callback', 'get_user_open_info', 'sso', '2019-11-02 13:46:18', '2019-11-02 13:46:18');
+INSERT INTO `oauth_client_info` VALUES ('1', '1003', '654123', 'http://glitter.com:8083/oauth/sso/callback', 'get_user_open_info', 'sso', '2019-11-02 13:46:18', '2019-11-02 13:46:18');
 
 -- 会话信息存redis里了,当jsessionid过期后,这里对应的记录也就失效了,可以晚上定时清理。
 -- 在清理之前,每次得到jsessionid后,可以先查询redis,如果redis中存在,则表示会话为过期,则此处的对应记录是有效的。

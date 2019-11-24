@@ -9,8 +9,8 @@ public class GlitterConstants {
 
     public static final String JSESSIONID = "jsessionid_client3";
 
-    public static final String DOMAIN_SSO_CLIETN3 = "http://localhost:8083";
+    public static final String DOMAIN_SSO_CLIETN3 = "http://glitter.com:8083";
 
-    public static final String DOMAIN_SSO_SERVER = "http://localhost:8080";
+    public static final String DOMAIN_SSO_SERVER = "http://glitter.com:8080";
 
 }
