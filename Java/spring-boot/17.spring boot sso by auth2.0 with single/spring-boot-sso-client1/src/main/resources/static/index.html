@@ -28,6 +28,9 @@
                             // alert(data.message);
                             // alert(data.data);
                             window.location.href= domain + "/login";
+                        } else if (data.code == "60032") {
+                            alert(data.data);
+                            window.location.href= domain + "/login";
                         } else{
                             alert(data.message);
                         }
@@ -61,6 +64,9 @@
                         // alert(data.message);
                         // alert(data.data);
                         window.location.href= domain + "/login";
+                    } else if (data.code == "60032") {
+                        alert(data.data);
+                        window.location.href= domain + "/login";
                     } else {
                         alert(data.message);
                     }
@@ -85,6 +91,9 @@
                     } else if (data.code == -3){
                         // alert(data.message);
                         // alert(data.data);
+                        window.location.href= domain + "/login";
+                    } else if (data.code == "60032") {
+                        alert(data.data);
                         window.location.href= domain + "/login";
                     } else {
                         alert(data.message);

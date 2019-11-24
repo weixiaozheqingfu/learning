@@ -5,8 +5,11 @@ import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.exception.BusinessException;
+import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
+import com.glitter.spring.boot.persistence.cache.ICommonCache;
 import com.glitter.spring.boot.persistence.dao.IOauthAccessTokenDao;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
+import com.glitter.spring.boot.service.ISession;
 import com.glitter.spring.boot.service.ISessionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,6 +29,10 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     IOauthAccessTokenDao oauthAccessTokenDao;
     @Autowired
     public ISessionHandler sessionHandler;
+    @Autowired
+    ICommonCache commonCache;
+    @Autowired
+    ICacheKeyManager cacheKeyManager;
 
     /**
      * 验证accessToken
@@ -45,7 +52,7 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
             throw new BusinessException("50035", "accessToken失效");
         }
 
-        // 2.验证accessToken所依附的jessionid全局会话是否仍在会话期间内
+        // 2.验证accessToken所依附的jessionid全局会话是否仍在会话期间内,是否被踢掉
         this.validateJsessionid(oauthAccessTokenDb.getJsessionid());
 
         // 3.验证accessToken是否在有效期内
@@ -71,9 +78,24 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
 
     @Override
     public void validateJsessionid(String jsessionid) {
-        UserInfo userinfo = (UserInfo) sessionHandler.getSession(jsessionid).getAttribute(GlitterConstants.SESSION_USER);
-        if (userinfo == null) {
+        ISession session = sessionHandler.getSession(jsessionid);
+        if (null == session) {
             throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
+        }
+
+        UserInfo userInfo = (UserInfo) session.getAttribute(GlitterConstants.SESSION_USER);
+        if (userInfo == null) {
+            throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
+        }
+
+        // 校验单端登录
+        String jsessionIdEffective = commonCache.get(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getId())));
+        if (StringUtils.isBlank(jsessionIdEffective)) {
+            throw new BusinessException("60032", "sso全局会话已过期，请重新登录");
+        }
+        if (!jsessionid.equals(jsessionIdEffective)) {
+            // 被其他端"挤掉"了,注销局部会话。
+            throw new BusinessException("60033", "sso全局会话被踢出，请重新登录");
         }
     }
 

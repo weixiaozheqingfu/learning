@@ -1,11 +1,13 @@
 package com.glitter.spring.boot.web.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.context.JsessionIdCookieContext;
 import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
+import com.glitter.spring.boot.service.ISession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,14 +71,17 @@ public class LoginAction extends BaseAction {
         oauthAccessTokenService.deleteByJsessionid(oauthAccessTokenDb.getJsessionid());
 
         // 3.注销局部会话
-        sessionHandler.getSession(oauthAccessTokenDb.getJsessionid()).invalidate();
+        ISession session = sessionHandler.getSession(oauthAccessTokenDb.getJsessionid());
+        if (null != session) {
+            session.invalidate();
+        }
 
         // 4.通知sso用户中心注销全局会话
         try {
             ssoRemote.logout(oauthAccessTokenDb.getAccessToken());
         } catch (Exception e) {
             // 如果出现失败的情况,则应该发邮件预警,并调查bug了。
-            e.printStackTrace();
+            logger.error(JSONObject.toJSONString(e));
             return ResponseResult.fail("-100","操作失败，请联系管理员！", true);
         }
 

@@ -1,15 +1,10 @@
 package com.glitter.spring.boot.web.action.oauth;
 
-import com.glitter.spring.boot.bean.OauthAccessToken;
-import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.bean.UserInfo;
 import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.context.AccessTokenInnerContext;
 import com.glitter.spring.boot.persistence.remote.IClientRemote;
-import com.glitter.spring.boot.service.IOauthAccessTokenService;
-import com.glitter.spring.boot.service.IOauthClientInfoService;
-import com.glitter.spring.boot.service.ISessionHandler;
-import com.glitter.spring.boot.service.IUserInfoService;
+import com.glitter.spring.boot.service.*;
 import com.glitter.spring.boot.web.action.BaseAction;
 import com.glitter.spring.boot.web.param.oauth.UserInfoResParam;
 import org.slf4j.Logger;
@@ -18,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/sso/resource")
@@ -88,10 +81,12 @@ public class OauthResourceAction extends BaseAction{
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ResponseResult logout() {
         String jsessionid = AccessTokenInnerContext.get().getJsessionid();
-        List<OauthAccessToken> oauthAccessTokens =  oauthAccessTokenService.getOauthAccessTokensByJsessionid(jsessionid);
 
         // 注销全局会话
-        sessionHandler.getSession(jsessionid).invalidate();
+        ISession session = sessionHandler.getSession(jsessionid);
+        if (null != session) {
+            session.invalidate();
+        }
 
         // 删除jsessionid会话下的accessToken记录
         oauthAccessTokenService.deleteAccessTokensByJsessionid(jsessionid);

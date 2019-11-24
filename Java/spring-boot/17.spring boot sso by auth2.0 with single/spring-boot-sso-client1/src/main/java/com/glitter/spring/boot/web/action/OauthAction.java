@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.glitter.spring.boot.bean.OauthAccessToken;
 import com.glitter.spring.boot.bean.OauthClientInfo;
 import com.glitter.spring.boot.bean.UserInfo;
-import com.glitter.spring.boot.common.ResponseResult;
 import com.glitter.spring.boot.constant.GlitterConstants;
 import com.glitter.spring.boot.persistence.remote.ISsoRemote;
 import com.glitter.spring.boot.service.IOauthAccessTokenService;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -157,20 +155,5 @@ public class OauthAction extends BaseAction {
         return "redirect:" + GlitterConstants.DOMAIN_SSO_CLIETN1 + "/index.html";
     }
 
-    /**
-     * sso回调注销客户端会话。
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping(value = "sso/logout", method = RequestMethod.GET)
-    public ResponseResult logout(@RequestParam String access_token) throws IOException {
-        OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByAccessToken(access_token);
-        if (oauthAccessTokenDb == null) {
-            return ResponseResult.fail("-100","access_token不存在，请排查问题后重试。");
-        }
-        oauthAccessTokenService.deleteByJsessionid(oauthAccessTokenDb.getJsessionid());
-        sessionHandler.getSession(oauthAccessTokenDb.getJsessionid()).invalidate();
-        return ResponseResult.success(true);
-    }
 }
 

@@ -56,13 +56,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
 
         ISession session = sessionHandler.getSession();
-        if (!session.getId().equals(jsessionIdCookie)) {
-            this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "未登录或会话超时，请重新登陆。");
-            return false;
-        }
-
-        UserInfo userInfo;
-        if (null == (userInfo = (UserInfo) session.getAttribute(GlitterConstants.SESSION_USER))) {
+        UserInfo userInfo = (UserInfo) session.getAttribute(GlitterConstants.SESSION_USER);
+        if (null == null) {
             this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "用户未登陆");
             return false;
         }
@@ -71,24 +66,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         OauthAccessToken oauthAccessTokenDb = oauthAccessTokenService.getOauthAccessTokenByJsessionid(jsessionIdCookie);
         if (oauthAccessTokenDb == null || StringUtils.isBlank(oauthAccessTokenDb.getAccessToken())) {
             this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "系统异常");
-            return false;
-        }
-
-        // 校验单端登录
-        String jsessionIdEffective = commonCache.get(cacheKeyManager.getLimitMultiLoginKey(String.valueOf(userInfo.getUserId())));
-        if (StringUtils.isBlank(jsessionIdEffective)) {
-            this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "未登录或会话超时，请重新登陆。");
-            return false;
-        }
-        if (!jsessionIdCookie.equals(jsessionIdEffective)) {
-            // 被其他端"挤掉"了,注销局部会话。
-            oauthAccessTokenService.deleteByJsessionid(session.getId());
-            session.invalidate();
-            // 注销全局会话。因为如果不注销这端的单点登录整体会话,那么用户收到下面的提示后，点击这段任何客户端的任何功能都会在后台再次默默完成登录，再把单端会话抢过来。
-            // 这体验就不太好了，相当于强制把另一端的登录给踢掉了，而这个操作应该留给用户来做才好。
-            // 所以既然登录被其他端踢掉了，那咱这端就整体注销，如果用户要这端登录，那就自行在这端完成登录挤掉那一端整体会话即可。
-            ssoRemote.logout(oauthAccessTokenDb.getAccessToken());
-            this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "您的账号已在其它地方登陆，若不是本人操作，请注意账号安全！");
             return false;
         }
 
@@ -111,7 +88,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             session.invalidate();
             // 如果是ajax请求,当前端收到返回码是-3时,则直接跳转到loginUrl,不再进行弹窗提示,这是最友好的。
             // 如果非ajax请求,则也是直接跳转到loginUrl,不再进行弹窗提示,这是最友好的。
-            this.response(httpServletRequest, httpServletResponse, loginUrl, "-3", "系统异常,请重试");
+            if (e instanceof BusinessException && ((BusinessException) e).getCode().equals("60033")) {
+                this.response(httpServletRequest, httpServletResponse, loginUrl, ((BusinessException) e).getCode(), ((BusinessException) e).getMessage());
+            } else {
+                this.response(httpServletRequest, httpServletResponse, loginUrl, "-3", "系统异常,请重试");
+            }
             return false;
         }
 
@@ -120,7 +101,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     /**
-     * 校验accessToken有效性
+     * 校验accessToken有效性,简而言之,验证通过了,就算了,验证没通过看有无尝试的必要,如果没必要就抛出异常,如果有必要就会尝试重试,如果重试成功,那就算了,失败,那就抛出异常。
      * 如果有效则罢了
      * 如果无效{
      *     则触发refreshToken换取accessToken,最终得到一个新的有效的aceessToken,维持一根绳
@@ -183,7 +164,9 @@ public class LoginInterceptor implements HandlerInterceptor {
             // 如果accessToken对应的sso全局会话失效,抛出异常,统一处理,即注销本地局部会话,走重新登录流程。
             } else if (responseResult.getCode().equals("60032")) {
                 throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "sso全局会话失效");
-            // 其他异常情况,抛出异常,统一处理,即注销本地局部会话,走重新登录流程。
+            // 如果accessToken对应的sso全局会话被其他端登录挤掉,抛出异常,统一处理,即注销本地局部会话,走重新登录流程。
+            } else if (responseResult.getCode().equals("60033")) {
+                throw new BusinessException("60033", "您的账号已在其它地方登陆，若不是本人操作，请注意账号安全！");
             } else {
                 throw new BusinessException(CoreConstants.REQUEST_PROGRAM_ERROR_CODE, "sso全局会话通信异常");
             }
