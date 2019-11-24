@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
+
+    <script type="text/javascript">
+        var domain = "http://localhost:8081";
+
+        $(function(){
+            getUserInfo();
+
+            $("#logoutBtn").click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: domain + "/logout",
+                    async: false,
+                    success: function(data){
+                        if(typeof(data)=='string'){
+                            data = JSON.parse(data);
+                        }
+                        // alert("data.code:"+data.code);
+                        if(data.code == 0){
+                            window.location.href= domain + "/login";
+                        } else if(data.code == -2){
+                            window.location.href= domain + "/login";
+                        } else if (data.code == -3){
+                            // alert(data.message);
+                            // alert(data.data);
+                            window.location.href= domain + "/login";
+                        } else{
+                            alert(data.message);
+                        }
+                    }
+                });
+            });
+        });
+
+
+        function getUserInfo() {
+            $.ajax({
+                type: "GET",
+                url: domain + "/userInfo/getLoginUserInfo",
+                data: "id=1",
+                async: false,
+                success: function(data){
+                    if(typeof(data)=='string'){
+                        data = JSON.parse(data);
+                    }
+                    // console.log(data.code);
+                    // alert(typeof(data));
+                    if(data.code == 0){
+                        //alert(data.data.nickName);
+                        $("#userNameSpan").html(","+data.data.nickName);
+                        //alert( $("#userNameSpan").html());
+                    } else if (data.code == -2){
+                        // alert(data.message);
+                        // alert(data.data);
+                        window.location.href= domain + "/login";
+                    } else if (data.code == -3){
+                        // alert(data.message);
+                        // alert(data.data);
+                        window.location.href= domain + "/login";
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+
+        function getUserInfo2() {
+            $.ajax({
+                type: "GET",
+                url: domain + "/userInfo/getLoginUserInfo",
+                data: "id=1",
+                async: false,
+                success: function(data){
+                    if(typeof(data)=='string'){
+                        data = JSON.parse(data);
+                    }
+                    if(data.code == 0){
+                        $("#userInfoSpan").html("姓名:" + data.data.fullName + ",手机号:" + data.data.phone);
+                    } else if (data.code == -2){
+                        window.location.href= domain + "/login";
+                    } else if (data.code == -3){
+                        // alert(data.message);
+                        // alert(data.data);
+                        window.location.href= domain + "/login";
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+<span style="color:#202020;font-size:16px">欢迎来到sso_client1首页</span>
+<span id="userNameSpan" style="color:#202020;font-size:16px"></span>
+<span style="color:#202020;font-size:16px">!</span><br>
+
+<a href="http://localhost:8082/login" target="_blank">client2</a> <br>
+<a href="http://localhost:8083/login" target="_blank">client3</a> <br>
+
+<a href="#" onclick="javascript:getUserInfo2();return false;">获取用户信息</a> <br>
+<span id="userInfoSpan" style="color:#bec518;font-size:16px"></span> <br>
+
+<input type="button" name="logoutBtn" id="logoutBtn" value="退出" />
+</body>
+</html>
