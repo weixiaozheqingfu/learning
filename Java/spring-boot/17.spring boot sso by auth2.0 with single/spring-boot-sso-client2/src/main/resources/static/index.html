@@ -5,7 +5,7 @@
     <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
 
     <script type="text/javascript">
-        var domain = "http://glitter.com:8082";
+        var domain = "http://sso.glitter.com:8082";
 
         $(function(){
             getUserInfo();
@@ -28,7 +28,7 @@
                             // alert(data.message);
                             // alert(data.data);
                             window.location.href= domain + "/login";
-                        } else if (data.code == "60032") {
+                        } else if (data.code == "60033") {
                             alert(data.data);
                             window.location.href= domain + "/login";
                         } else{
@@ -64,7 +64,7 @@
                         // alert(data.message);
                         // alert(data.data);
                         window.location.href= domain + "/login";
-                    } else if (data.code == "60032") {
+                    } else if (data.code == "60033") {
                         alert(data.data);
                         window.location.href= domain + "/login";
                     } else {
@@ -92,7 +92,7 @@
                         // alert(data.message);
                         // alert(data.data);
                         window.location.href= domain + "/login";
-                    } else if (data.code == "60032") {
+                    } else if (data.code == "60033") {
                         alert(data.data);
                         window.location.href= domain + "/login";
                     } else {

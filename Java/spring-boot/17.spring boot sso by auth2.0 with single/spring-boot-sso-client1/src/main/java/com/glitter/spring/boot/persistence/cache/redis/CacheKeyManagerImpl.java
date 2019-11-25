@@ -2,7 +2,6 @@ package com.glitter.spring.boot.persistence.cache.redis;
 
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.persistence.cache.ICacheKeyManager;
-import com.sun.org.apache.regexp.internal.RE;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,8 @@ public class CacheKeyManagerImpl implements ICacheKeyManager {
 
     private static final Logger logger = LoggerFactory.getLogger(CacheKeyManagerImpl.class);
 
-    /** 10分钟 */
-    private static final Long DEFAULT_EXPIRE_TIME = 60 * 10L;
+    /** 30分钟 */
+    private static final Long DEFAULT_EXPIRE_TIME = 60 * 30L;
 
     /** 10分钟 */
     private static final Long AUTH_STATE_EXPIRE_TIME = 60 * 10L;

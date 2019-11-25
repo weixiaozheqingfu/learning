@@ -16,7 +16,7 @@
 
     <name>spring-boot-sso-client2</name>
     <description>spring-boot-sso-client2示例</description>
-    <url>http://www.glitter.com/spring-boot-sso-client2</url>
+    <url>http://www.sso.glitter.com/spring-boot-sso-client2</url>
 
     <properties>
         <spring-boot.version>2.0.0.RELEASE</spring-boot.version>

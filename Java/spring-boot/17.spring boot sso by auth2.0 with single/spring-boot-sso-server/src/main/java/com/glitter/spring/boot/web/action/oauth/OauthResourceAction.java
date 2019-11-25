@@ -25,8 +25,6 @@ public class OauthResourceAction extends BaseAction{
     @Autowired
     private IOauthAccessTokenService oauthAccessTokenService;
     @Autowired
-    private IOauthClientInfoService oauthClientInfoService;
-    @Autowired
     private ISessionHandler sessionHandler;
     @Autowired
     private IClientRemote clientRemote;

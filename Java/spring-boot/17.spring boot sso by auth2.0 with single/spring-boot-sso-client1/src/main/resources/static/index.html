@@ -5,7 +5,7 @@
     <script type="text/javascript" src="/js/jsencrypt.min.js"></script>
 
     <script type="text/javascript">
-        var domain = "http://glitter.com:8081";
+        var domain = "http://sso.glitter.com:8081";
 
         $(function(){
             getUserInfo();
@@ -28,10 +28,10 @@
                             // alert(data.message);
                             // alert(data.data);
                             window.location.href= domain + "/login";
-                        } else if (data.code == "60032") {
+                        } else if (data.code == "60033") {
                             alert(data.data);
                             window.location.href= domain + "/login";
-                        } else{
+                        } else {
                             alert(data.message);
                         }
                     }
@@ -64,7 +64,7 @@
                         // alert(data.message);
                         // alert(data.data);
                         window.location.href= domain + "/login";
-                    } else if (data.code == "60032") {
+                    } else if (data.code == "60033") {
                         alert(data.data);
                         window.location.href= domain + "/login";
                     } else {
@@ -92,7 +92,7 @@
                         // alert(data.message);
                         // alert(data.data);
                         window.location.href= domain + "/login";
-                    } else if (data.code == "60032") {
+                    } else if (data.code == "60033") {
                         alert(data.data);
                         window.location.href= domain + "/login";
                     } else {
@@ -109,8 +109,8 @@
 <span id="userNameSpan" style="color:#202020;font-size:16px"></span>
 <span style="color:#202020;font-size:16px">!</span><br>
 
-<a href="http://glitter.com:8082/login" target="_blank">client2</a> <br>
-<a href="http://glitter.com:8083/login" target="_blank">client3</a> <br>
+<a href="http://sso.glitter.com:8082/login" target="_blank">client2</a> <br>
+<a href="http://sso.glitter.com:8083/login" target="_blank">client3</a> <br>
 
 <a href="#" onclick="javascript:getUserInfo2();return false;">获取用户信息</a> <br>
 <span id="userInfoSpan" style="color:#bec518;font-size:16px"></span> <br>

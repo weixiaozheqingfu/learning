@@ -1,1 +1,18 @@
 登陆会话-图形验证码(区分功能)-手机或邮箱验证码（区分功能）-单端登陆-单点登陆  画时序图
+
+
+http://sso.glitter.com:8081/index.html
+
+chrome浏览器对sso.glitter.com自定义域名映射支持不太好，总是报Provisional headers are shown。
+safari浏览器对sso.glitter.com自定义域名支持可以。
+
+Chrome浏览器好像在2019.09月份又有什么新升级的安全策略导致的，这个以后再慢慢研究吧。
+Chrome浏览器 Mac下版本 77.0.3865.90（正式版本） （64 位） 不行
+Chrome浏览器 Windwos下 78.0.3904.108 (正式版本) （32 位） 就可以。
+然后将mac下的chrome版本也升级到 78.0.3904.108（正式版本） （64 位）就可以了，奇葩。
+
+如果特别想用chrome浏览器，可以将项目中的sso.glitter.com全部替换为localhost，然后数据库配置的回调地址也都修改成localhost。这样就可以在本地使用chrome浏览器了。
+
+http://localhost:8081/index.html
+
+

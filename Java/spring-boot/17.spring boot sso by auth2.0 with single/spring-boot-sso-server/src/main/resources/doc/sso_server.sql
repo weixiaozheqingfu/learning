@@ -28,9 +28,9 @@ CREATE TABLE `oauth_client_info` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户端信息表';
 
-INSERT INTO `oauth_client_info` VALUES (1, '1001', '123456', 'sso_client1', 'http://localhost:8081/oauth/sso/callback', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
-INSERT INTO `oauth_client_info` VALUES (2, '1002', '654321', 'sso_client2', 'http://localhost:8082/oauth/sso/callback', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
-INSERT INTO `oauth_client_info` VALUES (3, '1003', '654123', 'sso_client3', 'http://localhost:8083/oauth/sso/callback', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
+INSERT INTO `oauth_client_info` VALUES (1, '1001', '123456', 'sso_client1', 'http://sso.glitter.com:8081/oauth/sso/callback', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
+INSERT INTO `oauth_client_info` VALUES (2, '1002', '654321', 'sso_client2', 'http://sso.glitter.com:8082/oauth/sso/callback', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
+INSERT INTO `oauth_client_info` VALUES (3, '1003', '654123', 'sso_client3', 'http://sso.glitter.com:8083/oauth/sso/callback', '2019-10-25 18:05:33', '2019-10-25 18:05:40');
 
 -- 该表仅仅作为一种象征性的结果,不予创建,使用redis缓存会话代替本表。
 CREATE TABLE `session_info` (

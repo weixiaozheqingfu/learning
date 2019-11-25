@@ -57,7 +57,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         ISession session = sessionHandler.getSession();
         UserInfo userInfo = (UserInfo) session.getAttribute(GlitterConstants.SESSION_USER);
-        if (null == null) {
+        if (null == userInfo) {
             this.response(httpServletRequest, httpServletResponse, loginUrl, "-2", "用户未登陆");
             return false;
         }

@@ -27,7 +27,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-//              .allowedOrigins("http://*.glitter.com")
+//              .allowedOrigins("http://*.sso.glitter.com")
                 .allowedOrigins("*")
                 .allowedMethods("PUT", "DELETE", "POST", "GET", "OPTIONS")
                 .allowedHeaders("x-requested-with", "content-type", "accept", "origin")

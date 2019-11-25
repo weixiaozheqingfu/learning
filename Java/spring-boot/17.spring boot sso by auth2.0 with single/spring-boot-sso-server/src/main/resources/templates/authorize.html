@@ -36,7 +36,7 @@
             </tr>
         </table>
     </div>
-    <p class="bnote">提示：为保障您的帐号安全，请确认本页面域名为 localhost:8080</p>
+    <p class="bnote">提示：为保障您的帐号安全，请确认本页面域名为 sso.glitter.com:8080</p>
 </div>
 
 <div class="cloud"></div>
@@ -48,7 +48,7 @@
 <input id="state" type="hidden" th:value="${state}"/>
 
 <script type="text/javascript" th:inline="javascript">
-    var domain = "http://localhost:8080";
+    var domain = "http://sso.glitter.com:8080";
 
     var un = [[${userId}]];
     var fullName = [[${fullName}]];

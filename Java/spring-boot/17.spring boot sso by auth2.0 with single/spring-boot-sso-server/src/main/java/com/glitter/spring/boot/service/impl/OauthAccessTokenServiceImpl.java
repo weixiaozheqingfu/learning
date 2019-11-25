@@ -33,6 +33,8 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
     ICommonCache commonCache;
     @Autowired
     ICacheKeyManager cacheKeyManager;
+    @Autowired
+    private IOauthAccessTokenService oauthAccessTokenService;
 
     /**
      * 验证accessToken
@@ -95,6 +97,8 @@ public class OauthAccessTokenServiceImpl implements IOauthAccessTokenService{
         }
         if (!jsessionid.equals(jsessionIdEffective)) {
             // 被其他端"挤掉"了,注销局部会话。
+            oauthAccessTokenService.deleteAccessTokensByJsessionid(jsessionid);
+            session.invalidate();
             throw new BusinessException("60033", "sso全局会话被踢出，请重新登录");
         }
     }
