@@ -5,6 +5,7 @@ import com.glitter.spring.boot.web.interceptor.OauthResourceInterceptor;
 import com.glitter.spring.boot.web.interceptor.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -27,6 +28,16 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Bean
     OauthResourceInterceptor oauthResourceInterceptor(){
         return new OauthResourceInterceptor();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+//              .allowedOrigins("http://*.glitter.com")
+                .allowedOrigins("*")
+                .allowedMethods("PUT", "DELETE", "POST", "GET", "OPTIONS")
+                .allowedHeaders("x-requested-with", "content-type", "accept", "origin")
+                .allowCredentials(true).maxAge(3600);
     }
 
     @Override
