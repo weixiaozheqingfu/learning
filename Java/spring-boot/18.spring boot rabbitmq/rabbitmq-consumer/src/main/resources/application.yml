@@ -48,4 +48,6 @@ mq:
         #password: 888888
         exchange:
             name: firstFanoutExchange
+        #queue:
+            #name: firstFanoutQueue
 

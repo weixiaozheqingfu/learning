@@ -1,6 +1,9 @@
 package com.glitter.spring.boot.config;
 
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,6 +27,8 @@ public class RabbitConfig {
     String username;
     @Value("${mq.rabbit.password}")
     String password;
+    @Value("${mq.rabbit.queue.name}")
+    String queuename;
     @Value("${mq.rabbit.virtualHost}")
     String mqRabbitVirtualHost;
     @Value("${mq.rabbit.exchange.name}")
@@ -57,6 +62,18 @@ public class RabbitConfig {
     @Bean
     FanoutExchange fanoutExchange() {
         return new FanoutExchange(exchangeName);
+    }
+
+    // 队列A
+    @Bean
+    public Queue fanoutQueue() {
+        return new Queue(queuename);
+    }
+
+    // 绑定对列到Fanout交换器
+    @Bean
+    Binding bindingFanoutExchange(Queue fanoutQueue, FanoutExchange fanoutExchange) {
+        return BindingBuilder.bind(fanoutQueue).to(fanoutExchange);
     }
 
 }

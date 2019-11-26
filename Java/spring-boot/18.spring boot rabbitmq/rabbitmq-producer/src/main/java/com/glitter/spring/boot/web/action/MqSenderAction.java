@@ -14,7 +14,7 @@ import java.util.Date;
  * @Date : 2018-05-06 15:15
  */
 @RestController
-public class SendController {
+public class MqSenderAction {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
