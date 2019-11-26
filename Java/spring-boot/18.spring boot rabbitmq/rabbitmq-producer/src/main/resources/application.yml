@@ -37,3 +37,15 @@ mybatis:
         default-statement-timeout: 25000
         default-fetch-size: 100
         map-underscore-to-camel-case: true
+
+mq:
+    rabbit:
+        #address: 192.168.119.155:5672,192.168.119.155:5673,192.168.119.155:5674
+        #address: 172.31.240.101:5672
+        #address: rabbitmqhost:5672
+        virtualHost: /
+        #username: admin
+        #password: 888888
+        exchange:
+            name: firstFanoutExchange
+
