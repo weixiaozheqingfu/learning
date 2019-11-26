@@ -1,0 +1,51 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://127.0.0.1:3306/demo_client
+        username: root
+        password: root
+        hikari.maxLifetime: 1765000
+        hikari.maximumPoolSize: 15
+    redis:
+        host: 172.28.18.34
+        port: 6379
+        timeout: 1000
+        password:
+        database: 3
+        lettuce:
+            pool:
+                max-active: 100
+                max-wait: 100000
+                max-idle: 8
+                min-idle: 0
+    # http请求响应强制使用utf-8编码
+    http:
+        encoding:
+            force: true
+
+mybatis:
+    mapper-locations: classpath:mybatis/*.xml
+    type-aliases-package: com.glitter.spring.boot.bean
+    configuration:
+        cache-enabled: false
+        lazy-loading-enabled: false
+        aggressive-lazy-loading: false
+        multiple-result-sets-enabled: true
+        use-column-label: true
+        use-generated-keys: true
+        auto-mapping-behavior: FULL
+        default-statement-timeout: 25000
+        default-fetch-size: 100
+        map-underscore-to-camel-case: true
+
+mq:
+    rabbit:
+        #address: 192.168.119.155:5672,192.168.119.155:5673,192.168.119.155:5674
+        #address: 172.31.240.101:5672
+        #address: rabbitmqhost:5672
+        virtualHost: /
+        #username: admin
+        #password: 888888
+        exchange:
+            name: firstFanoutExchange
+
