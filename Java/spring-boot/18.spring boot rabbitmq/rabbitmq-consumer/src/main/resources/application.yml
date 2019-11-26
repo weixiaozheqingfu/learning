@@ -46,8 +46,8 @@ mq:
         virtualHost: /
         #username: admin
         #password: 888888
-        exchange:
-            name: firstFanoutExchange
+        #exchange:
+            #name: first.fanout.exchange
         #queue:
-            #name: firstFanoutQueue
+            #name: consumer1.first.fanout.queue
 

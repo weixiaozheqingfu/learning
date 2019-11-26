@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.web.action;
 
+import com.glitter.spring.boot.mq.FanoutSender;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +18,7 @@ import java.util.Date;
 public class MqSenderAction {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private FanoutSender fanoutSender;
 
     @Value("${mq.rabbit.exchange.name}")
     String exchangeName;
@@ -25,12 +26,7 @@ public class MqSenderAction {
     @RequestMapping(value = "/send/{name}/{message}", method = RequestMethod.GET)
     public @ResponseBody
     String send(@PathVariable("name") final String name, @PathVariable("message") final String message) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String timeStr = simpleDateFormat.format(new Date());
-        String sendMessage = "hello, " + name + ", " + message  + ", " + timeStr;
-
-        rabbitTemplate.convertAndSend(exchangeName,"", sendMessage);
-
-        return "send message to [" +  name + "] success (" + timeStr + ")";
+        String result = fanoutSender.send(name, message);
+        return result;
     }
 }

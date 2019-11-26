@@ -46,6 +46,6 @@ mq:
         virtualHost: /
         #username: admin
         #password: 888888
-        exchange:
-            name: firstFanoutExchange
+        #exchange:
+            #name: first.fanout.exchange
 

@@ -22,7 +22,7 @@ public class Application {
 		因此，在此加一个延时，晚一点启动应用，等待docker将环境变量设置完毕
 		*/
         try{
-            Thread.sleep(6000);
+            Thread.sleep(12000);
         }catch(Exception e){
             e.printStackTrace();
         }

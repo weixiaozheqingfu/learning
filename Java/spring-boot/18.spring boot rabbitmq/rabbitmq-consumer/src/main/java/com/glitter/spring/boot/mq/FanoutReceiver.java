@@ -1,4 +1,4 @@
-package com.glitter.spring.boot.web.action;
+package com.glitter.spring.boot.mq;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @RabbitListener(queues = "${mq.rabbit.queue.name}")
-public class MqFanoutReceiverAction {
-    private static final Logger logger = LoggerFactory.getLogger(MqFanoutReceiverAction.class);
+public class FanoutReceiver {
+    private static final Logger logger = LoggerFactory.getLogger(FanoutReceiver.class);
 
     @RabbitHandler
     public void process(String message) {
