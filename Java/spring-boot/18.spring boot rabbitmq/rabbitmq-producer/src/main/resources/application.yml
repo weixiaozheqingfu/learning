@@ -47,5 +47,5 @@ mq:
         #username: admin
         #password: 888888
         #exchange:
-            #name: first.fanout.exchange
+            #name: producer.first.fanout.exchange
 
