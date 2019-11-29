@@ -46,6 +46,8 @@ mq:
         virtualHost: /
         #username: admin
         #password: 888888
+        #username: glitter
+        #password: glitter
         #exchange:
             #name: producer.first.fanout.exchange
 

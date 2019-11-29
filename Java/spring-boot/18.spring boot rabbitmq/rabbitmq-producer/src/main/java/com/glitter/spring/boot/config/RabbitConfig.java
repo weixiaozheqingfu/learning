@@ -56,7 +56,12 @@ public class RabbitConfig {
     // Fanout交换器
     @Bean
     FanoutExchange fanoutExchange() {
-        return new FanoutExchange(exchangeName);
+        FanoutExchange fanoutExchange = new FanoutExchange(exchangeName);
+        // 因为按照的我最优方案,普通用户glitter是不能声明创建队列和交换器的,只能读写,并且权限也是这么配置的,
+        // 所以这里设置不需要声明交换器,只要去连接能读写就可以了,如果不设置,默认是true,那么对于glitter普通用户来说,会保持,因为它会尝试去声明这个交换器,而它又没有这个权限。
+        // 如果你不想使用最优方案,那就别加这一行,使用默认值true,这样你的代码拥有随时可以声明创建或删除队列和交换器的权限和能力，只要你连接mq的用户有配置权限就可以。
+        fanoutExchange.setShouldDeclare(false);
+        return fanoutExchange;
     }
 
 }
