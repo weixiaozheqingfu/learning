@@ -42,7 +42,7 @@ mybatis:
         map-underscore-to-camel-case: true
 
 mq:
-    rabbitmq:
+    rabbit:
         roothost:
             #address: 192.168.119.155:5672,192.168.119.155:5673,192.168.119.155:5674
             address: 172.31.240.101:5672

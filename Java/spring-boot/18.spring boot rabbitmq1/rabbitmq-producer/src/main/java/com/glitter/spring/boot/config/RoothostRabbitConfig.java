@@ -4,29 +4,27 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.amqp.SimpleRabbitListenerContainerFactoryConfigurer;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
 
 @Configuration
-public class RabbitmqRoothostConfig {
+public class RoothostRabbitConfig {
 
-    @Value("${mq.rabbitmq.roothost.address}")
+    @Value("${mq.rabbit.roothost.address}")
     String address;
-    @Value("${mq.rabbitmq.roothost.virtualHost}")
+    @Value("${mq.rabbit.roothost.virtualHost}")
     String mqRabbitVirtualHost;
-    @Value("${mq.rabbitmq.roothost.username}")
+    @Value("${mq.rabbit.roothost.username}")
     String username;
-    @Value("${mq.rabbitmq.roothost.password}")
+    @Value("${mq.rabbit.roothost.password}")
     String password;
-
-    public static final String ROOTHOST_CONTAINER_FACTORY = "roothostContainerFactory";
 
     public static final String ROOTHOST_FIRST_FANOUT_EXCHANGE = "roothost.first.fanout.exchange";
     public static final String ROOTHOST_SECOND_FANOUT_EXCHANGE = "roothost.second.fanout.exchange";
@@ -51,32 +49,53 @@ public class RabbitmqRoothostConfig {
         return connectionFactory;
     }
 
-    @Bean(name="roothostContainerFactory")
-    public SimpleRabbitListenerContainerFactory roothostContainerFactory(SimpleRabbitListenerContainerFactoryConfigurer configurer,
-                                                                         @Qualifier("roothostConnectionFactory") ConnectionFactory connectionFactory) {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        configurer.configure(factory, connectionFactory);
-        return factory;
+    @Bean(name = "roothostRabbitTemplate")
+    // @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
+    @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    // 必须是prototype类型
+    public RabbitTemplate roothostRabbitTemplate() {
+        RabbitTemplate template = new RabbitTemplate(roothostConnectionFactory());
+        return template;
     }
 
-    // Fanout(可以省略,消费者是不关心交换器的,这里声明是为了说明如果mq没有提前创建好交换器,root用户有自动创建的能力)
+    // Fanout交换器
     @Bean
     FanoutExchange roothostFirstFanoutExchange() {
         FanoutExchange roothostFirstFanoutExchange = new FanoutExchange(ROOTHOST_FIRST_FANOUT_EXCHANGE);
         return roothostFirstFanoutExchange;
     }
 
-    // 队列roothost.first.fanout.queue
+    // Fanout交换器
+    @Bean
+    FanoutExchange roothostSecondFanoutExchange() {
+        FanoutExchange roothostSecondFanoutExchange = new FanoutExchange(ROOTHOST_SECOND_FANOUT_EXCHANGE);
+        return roothostSecondFanoutExchange;
+    }
+
+    // 队列roothost.first.fanout.queue(可以省略,生产者者是不关心队列的,这里声明是为了说明如果mq没有提前创建好队列,root用户有自动创建的能力)
     @Bean
     public Queue roothostFirstFanoutQueue() {
         Queue roothostFirstFanoutQueue =  new Queue(ROOTHOST_FIRST_FANOUT_QUEUE);
         return roothostFirstFanoutQueue;
     }
 
-    // 绑定对列到Fanout交换器(可以省略,消费者是不关心交换器的,这里声明是为了说明如果mq没有提前创建好交换器,root用户有自动创建的能力)
+    // 队列roothost.second.fanout.queue(可以省略,生产者者是不关心队列的,这里声明是为了说明如果mq没有提前创建好队列,root用户有自动创建的能力)
+    @Bean
+    public Queue roothostSecondFanoutQueue() {
+        Queue roothostSecondFanoutQueue =  new Queue(ROOTHOST_SECOND_FANOUT_QUEUE);
+        return roothostSecondFanoutQueue;
+    }
+
+    // 绑定对列到Fanout交换器(可以省略,生产者者是不关心队列的,这里声明是为了说明如果mq没有提前创建好队列,root用户有自动创建的能力)
     @Bean
     Binding bindingRoothostFirstFanoutExchange(Queue roothostFirstFanoutQueue, FanoutExchange roothostFirstFanoutExchange) {
         return BindingBuilder.bind(roothostFirstFanoutQueue).to(roothostFirstFanoutExchange);
+    }
+
+    // 绑定对列到Fanout交换器(可以省略,生产者者是不关心队列的,这里声明是为了说明如果mq没有提前创建好队列,root用户有自动创建的能力)
+    @Bean
+    Binding bindingRoothostSecondFanoutExchange(Queue roothostSecondFanoutQueue, FanoutExchange roothostSecondFanoutExchange) {
+        return BindingBuilder.bind(roothostSecondFanoutQueue).to(roothostSecondFanoutExchange);
     }
 
 }

@@ -12,14 +12,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
-public class GlitterhostFirstFanoutExchangeSender {
+public class GlitterhostSecondFanoutExchangeSender {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlitterhostFirstFanoutExchangeSender.class);
+    private static final Logger logger = LoggerFactory.getLogger(GlitterhostSecondFanoutExchangeSender.class);
 
     @Resource(name = "glitterhostRabbitTemplate")
     private RabbitTemplate rabbitTemplate;
 
-    @Value(GlitterhostRabbitConfig.GLITTERHOST_FIRST_FANOUT_EXCHANGE)
+    @Value(GlitterhostRabbitConfig.GLITTERHOST_SECOND_FANOUT_EXCHANGE)
     String exchange;
 
     public String send(String name, String message) {
@@ -28,9 +28,9 @@ public class GlitterhostFirstFanoutExchangeSender {
         String sendMessage = "hello, " + name + ", " + message  + ", " + timeStr;
 
         rabbitTemplate.convertAndSend(exchange,null, sendMessage);
-        logger.info("GlitterhostFirstFanoutExchangeSender rabbitTemplate:" + rabbitTemplate.toString());
+        logger.info("GlitterhostSecondFanoutExchangeSender rabbitTemplate:" + rabbitTemplate.toString());
 
-        return "GlitterhostFirstFanoutExchangeSender send message to [" +  name + "] success (" + timeStr + ")";
+        return "GlitterhostSecondFanoutExchangeSender send message to [" +  name + "] success (" + timeStr + ")";
     }
 
 }

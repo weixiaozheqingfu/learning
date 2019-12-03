@@ -1,6 +1,6 @@
 package com.glitter.spring.boot.mq;
 
-import com.glitter.spring.boot.config.GlitterhostRabbitConfig;
+import com.glitter.spring.boot.config.RoothostRabbitConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,14 +12,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Component
-public class GlitterhostFirstFanoutExchangeSender {
+public class RoothostSecondFanoutExchangeSender {
 
-    private static final Logger logger = LoggerFactory.getLogger(GlitterhostFirstFanoutExchangeSender.class);
+    private static final Logger logger = LoggerFactory.getLogger(RoothostSecondFanoutExchangeSender.class);
 
-    @Resource(name = "glitterhostRabbitTemplate")
+    @Resource(name = "roothostRabbitTemplate")
     private RabbitTemplate rabbitTemplate;
 
-    @Value(GlitterhostRabbitConfig.GLITTERHOST_FIRST_FANOUT_EXCHANGE)
+    @Value(RoothostRabbitConfig.ROOTHOST_SECOND_FANOUT_EXCHANGE)
     String exchange;
 
     public String send(String name, String message) {
@@ -27,10 +27,10 @@ public class GlitterhostFirstFanoutExchangeSender {
         String timeStr = simpleDateFormat.format(new Date());
         String sendMessage = "hello, " + name + ", " + message  + ", " + timeStr;
 
-        rabbitTemplate.convertAndSend(exchange,null, sendMessage);
-        logger.info("GlitterhostFirstFanoutExchangeSender rabbitTemplate:" + rabbitTemplate.toString());
+        rabbitTemplate.convertAndSend(exchange,"", sendMessage);
+        logger.info("RoothostSecondFanoutExchangeSender rabbitTemplate:" + rabbitTemplate.toString());
 
-        return "GlitterhostFirstFanoutExchangeSender send message to [" +  name + "] success (" + timeStr + ")";
+        return "RoothostSecondFanoutExchangeSender send message to [" +  name + "] success (" + timeStr + ")";
     }
 
 }

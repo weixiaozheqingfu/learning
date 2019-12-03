@@ -8,13 +8,13 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
-@RabbitListener(queues = GlitterhostRabbitConfig.GLITTERHOST_FIRST_FANOUT_QUEUE, containerFactory = GlitterhostRabbitConfig.GLITTERHOST_CONTAINER_FACTORY)
-public class GlitterhostFirstFanoutQueueReceiver {
-    private static final Logger logger = LoggerFactory.getLogger(GlitterhostFirstFanoutQueueReceiver.class);
+@RabbitListener(queues = GlitterhostRabbitConfig.GLITTERHOST_SECOND_FANOUT_QUEUE, containerFactory = GlitterhostRabbitConfig.GLITTERHOST_CONTAINER_FACTORY)
+public class GlitterhostSecondFanoutQueueReceiver {
+    private static final Logger logger = LoggerFactory.getLogger(GlitterhostSecondFanoutQueueReceiver.class);
 
     @RabbitHandler
     public void process(String message) {
-        logger.info("GlitterhostFirstFanoutQueueReceiver receive message : " + message);
+        logger.info("GlitterhostSecondFanoutQueueReceiver receive message : " + message);
     }
 
 }
