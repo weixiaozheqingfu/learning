@@ -55,6 +55,9 @@ public class ProxyInvocationHandler implements InvocationHandler {
                 Object[] afterReturningArgs = new Object[]{joinPoint,result};
                 afterReturningMethod.invoke(aspect, afterReturningArgs);
             }
+            
+            // 可能这个类中有的方法根本就没有匹配切入规则，那就直接调用方法本身。
+            result = method.invoke(target, args);
         } catch (Exception e) {
             e.printStackTrace();
             if(method.getName().contains(aspectInfo.getAfterThrowing())){

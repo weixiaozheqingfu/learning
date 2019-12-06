@@ -43,6 +43,7 @@ public class Main3 extends AliPayServiceImpl {
     // 遍历完毕后，就可以拿到最终的代理对象了。
     private static <T> T getProxyInstance(Object target) throws ClassNotFoundException {
         Boolean targetIsPublic = ClassUtilLimengjun.isPublicClass(target);
+        // 类中所有的共有方法都要去匹配,只要有任何一个方法匹配到监测到是需要切点的,那么对象就需要生成其代理对象。
         List<String> targetMethodNames = ClassUtilLimengjun.getPublicMethodNames(target);
 
         List<AspectInfo> aspectInfos = AspectInfoUtil.getAspectInfos();
@@ -60,6 +61,7 @@ public class Main3 extends AliPayServiceImpl {
 
 
     private static boolean isPointCut(List<String> targetMethodNames, AspectInfo aspectInfo) {
+        // 这里匹配Before注解对应的切入规则，这里的规则现在设置比较简单，就是方法名，与方法名直接对比。
         if (targetMethodNames.contains(aspectInfo.getBefore())) {
             return true;
         } else if(targetMethodNames.contains(aspectInfo.getAround())){
