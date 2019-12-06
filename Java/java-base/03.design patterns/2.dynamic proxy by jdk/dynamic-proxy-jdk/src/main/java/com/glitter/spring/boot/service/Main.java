@@ -39,7 +39,7 @@ public class Main extends AliPayServiceImpl {
         byte[] data = ProxyGenerator.generateProxyClass(proxyClassName, interfaces);
         FileOutputStream out = null;
         try {
-            String filePath = "E:\\workspaces-idea\\GITHUB\\learning\\Java\\java-base\\03.design patterns\\2.dynamic proxy by jdk\\dynamic-proxy-jdk\\src\\main\\java\\com\\glitter\\spring\\boot\\service\\impl\\" + proxyClassName + ".class";
+            String filePath = "/Users/limengjun/temp/" + proxyClassName + ".class";
             System.out.print(filePath);
             out = new FileOutputStream(filePath);
             out.write(data);

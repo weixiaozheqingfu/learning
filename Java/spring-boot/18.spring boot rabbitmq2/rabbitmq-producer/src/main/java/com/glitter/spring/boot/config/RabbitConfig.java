@@ -30,18 +30,20 @@ public class RabbitConfig {
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
 
+        connectionFactory.setAddresses(address);
         connectionFactory.setUsername(username);
         connectionFactory.setPassword(password);
         connectionFactory.setVirtualHost(mqRabbitVirtualHost);
         connectionFactory.setPublisherConfirms(true);
-        connectionFactory.setAddresses(address);
+        // 这个设置的作用是什么?
+        connectionFactory.setPublisherConfirms(true);
 
         return connectionFactory;
     }
 
     // rabbit模版
     @Bean(name = "rabbitTemplate")
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    //@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
         return template;
