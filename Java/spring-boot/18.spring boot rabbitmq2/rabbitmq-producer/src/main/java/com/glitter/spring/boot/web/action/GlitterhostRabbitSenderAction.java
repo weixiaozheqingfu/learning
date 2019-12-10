@@ -1,7 +1,9 @@
 package com.glitter.spring.boot.web.action;
 
-import com.glitter.spring.boot.mq.GlitterhostFirstFanoutExchangeSender;
-import com.glitter.spring.boot.mq.GlitterhostSecondFanoutExchangeSender;
+import com.glitter.spring.boot.mq.Glitterhost1FanoutExchangeSender;
+import com.glitter.spring.boot.mq.Glitterhost2FanoutExchangeSender;
+import com.glitter.spring.boot.mq.Glitterhost3FanoutExchangeSender;
+import com.glitter.spring.boot.mq.Glitterhost4FanoutExchangeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,21 +17,39 @@ import org.springframework.web.bind.annotation.*;
 public class GlitterhostRabbitSenderAction {
 
     @Autowired
-    private GlitterhostFirstFanoutExchangeSender glitterhostFirstFanoutExchangeSender;
+    private Glitterhost1FanoutExchangeSender glitterhost1FanoutExchangeSender;
     @Autowired
-    private GlitterhostSecondFanoutExchangeSender glitterhostSecondFanoutExchangeSender;
+    private Glitterhost2FanoutExchangeSender glitterhost2FanoutExchangeSender;
+    @Autowired
+    private Glitterhost3FanoutExchangeSender glitterhost3FanoutExchangeSender;
+    @Autowired
+    private Glitterhost4FanoutExchangeSender glitterhost4FanoutExchangeSender;
 
-    @RequestMapping(value = "/send/first/{name}/{message}", method = RequestMethod.GET)
+    @RequestMapping(value = "/send/first/{message}", method = RequestMethod.GET)
     public @ResponseBody
-    String sendFirst(@PathVariable("name") final String name, @PathVariable("message") final String message) {
-        String result = glitterhostFirstFanoutExchangeSender.send(name, message);
+    String sendFirst(@PathVariable("message") final String message) {
+        String result = glitterhost1FanoutExchangeSender.send(message);
         return result;
     }
 
-    @RequestMapping(value = "/send/second/{name}/{message}", method = RequestMethod.GET)
+    @RequestMapping(value = "/send/second/{message}", method = RequestMethod.GET)
     public @ResponseBody
-    String sendSecond(@PathVariable("name") final String name, @PathVariable("message") final String message) {
-        String result = glitterhostSecondFanoutExchangeSender.send(name, message);
+    String sendSecond(@PathVariable("message") final String message) {
+        String result = glitterhost2FanoutExchangeSender.send(message);
+        return result;
+    }
+
+    @RequestMapping(value = "/send/third/{message}", method = RequestMethod.GET)
+    public @ResponseBody
+    String sendThird(@PathVariable("message") final String message) {
+        String result = glitterhost3FanoutExchangeSender.send(message);
+        return result;
+    }
+
+    @RequestMapping(value = "/send/fourth/{message}", method = RequestMethod.GET)
+    public @ResponseBody
+    String sendFourth(@PathVariable("message") final String message) {
+        String result = glitterhost4FanoutExchangeSender.send(message);
         return result;
     }
 

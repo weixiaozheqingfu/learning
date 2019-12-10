@@ -12,7 +12,7 @@
         <Property name="LOG_LEVEL_ROOT">ERROR</Property>
         <Property name="LOG_LEVEL_SPRING">WARN</Property>
         <Property name="LOG_LEVEL_MYBATIS">DEBUG</Property>
-        <Property name="LOG_LEVEL_GLITTER">TRACE</Property>
+        <Property name="LOG_LEVEL_GLITTER">INFO</Property>
     </Properties>
 
     <appenders>

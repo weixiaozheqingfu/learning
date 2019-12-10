@@ -6,47 +6,58 @@ import com.rabbitmq.client.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.stereotype.Component;
 
 @Component
-@RabbitListener(queues = RabbitConfig.GLITTERHOST_SECOND_FANOUT_QUEUE, containerFactory = RabbitConfig.GLITTERHOST_CONTAINER_FACTORY)
 public class GlitterhostSecondFanoutQueueReceiver {
     private static final Logger logger = LoggerFactory.getLogger(GlitterhostSecondFanoutQueueReceiver.class);
 
-    @RabbitHandler
-    public void process(String message) {
-        logger.info("GlitterhostSecondFanoutQueueReceiver receive message : " + message);
+    @RabbitListener(queues = RabbitConfig.GLITTERHOST_SECOND_FANOUT_QUEUE, containerFactory = RabbitConfig.GLITTERHOST_CONTAINER_FACTORY)
+    public void process(Message message, Channel channel) throws Exception {
+        // 通过basic.qos方法设置prefetch_count=1,这样RabbitMQ就会使得每个Consumer在同一个时间点最多处理一个Message,
+        // 换句话说,在接收到该Consumer的ack前,它不会将新的Message分发给它
+        channel.basicQos(1);
+        long deliveryTag = (Long)message.getMessageProperties().getHeaders().get(AmqpHeaders.DELIVERY_TAG);
+        String correlationId = message.getMessageProperties().getHeaders().get("spring_returned_message_correlation").toString();
+        try {
+            byte[] body = message.getBody();
+            String messageStr = new String(body);
+
+            logger.info("GlitterhostSecondFanoutQueueReceiver receive message:{}, messageStr:{}", JSONObject.toJSONString(message), messageStr);
+            channel.basicAck(deliveryTag, false);
+            JSONObject jsonObject = JSONObject.parseObject(messageStr);
+
+            // 手工确认消费成功,单条确认,确认当前deliveryTag这一条消息
+            channel.basicAck(deliveryTag, false);
+
+            // 手工确认消费成功,批量确认,确认deliveryTag消息和其之前的所有消息
+            channel.basicAck(deliveryTag, true);
+        } catch (Exception e){
+            // 手工确认消费失败,单条确认,确认当前deliveryTag这一条消息,消息重新排队
+            channel.basicNack(deliveryTag, false, true);
+
+            // 手工确认消费失败,单条确认,确认当前deliveryTag这一条消息,消息丢弃或放入死信队列(前提是队列配置了死信交换器并做了相关设置)
+            channel.basicNack(deliveryTag, false, false);
+
+            // 手工确认消费失败,批量确认,确认deliveryTag消息和其之前的所有消息,消息重新排队
+            channel.basicNack(deliveryTag, true, true);
+
+            // 手工确认消费失败,批量确认,确认deliveryTag消息和其之前的所有消息,消息丢弃或放入死信队列(前提是队列配置了死信交换器并做了相关设置)
+            channel.basicNack(deliveryTag, true, true);
+
+            // 手工确认消费失败,单条确认,确认当前deliveryTag这一条消息,消息重新排队
+            channel.basicReject(deliveryTag, true);
+
+            // 手工确认消费失败,单条确认,确认当前deliveryTag这一条消息,消息丢弃或放入死信队列(前提是队列配置了死信交换器并做了相关设置)
+            channel.basicReject(deliveryTag, false);
+
+            // 手工确认消费失败,单条确认,确认当前deliveryTag这一条消息,消息丢弃或放入死信队列(前提是队列配置了死信交换器并做了相关设置)
+            channel.basicReject(deliveryTag, false);
+            logger.error("GlitterhostSecondFanoutQueueReceiver receive message exception" + JSONObject.toJSONString(e));
+        }
     }
-
-
-
-
-//    public void onMessage(Message message, Channel channel) throws Exception {
-//        byte[] body = message.getBody();
-//        logger.info("接收到消息:" + new String(body));
-//        JSONObject jsonObject = null;
-//        try {
-//            jsonObject = JSONObject.parseObject(new String(body));
-//            if ("消费成功".equals("消费成功")) {
-//                logger.info("消息消费成功");
-//
-//                //确认消息消费成功
-//                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-//            } else if ("可重试的失败处理".equals("可重试的失败处理")) {
-//                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
-//                //消费失败
-//            } else {
-//                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
-//            }
-//        } catch (Exception e){
-//                //消息丢弃
-//                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
-//                logger.error("This message:" + jsonObject + " conversion JSON error ");
-//        }
-//
-//    }
 
 
 

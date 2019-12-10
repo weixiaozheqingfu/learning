@@ -4,6 +4,7 @@ import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -34,18 +35,26 @@ public class RabbitConfig {
         connectionFactory.setUsername(username);
         connectionFactory.setPassword(password);
         connectionFactory.setVirtualHost(mqRabbitVirtualHost);
+
+        // 开启发送者消息确认
         connectionFactory.setPublisherConfirms(true);
-        // 这个设置的作用是什么?
-        connectionFactory.setPublisherConfirms(true);
+        connectionFactory.setPublisherReturns(true);
 
         return connectionFactory;
     }
 
-    // rabbit模版
+    // 需要设置为多例,
+    // 如果是单例,多个发送者线程引用同一个rabbitTemplate设置自己的回调ConfirmCallback时会报
+    // Only one ConfirmCallback is supported by each RabbitTemplate
     @Bean(name = "rabbitTemplate")
-    //@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(connectionFactory());
+        // 经过实践验证,此处是否设置mandatory对生产者消息确认没有什么作用
+        // 这在于spring的处理,如果使用原始mq的api,这个参数一定是有作用的。
+        // 对于spring来讲connectionFactory中的设置才是发挥作用的设置。
+        template.setMandatory(true);
+        template.setMessageConverter(new Jackson2JsonMessageConverter());
         return template;
     }
 
