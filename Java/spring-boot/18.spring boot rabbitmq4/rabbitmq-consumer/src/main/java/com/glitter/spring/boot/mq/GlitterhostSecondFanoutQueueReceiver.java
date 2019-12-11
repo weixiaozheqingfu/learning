@@ -18,7 +18,9 @@ public class GlitterhostSecondFanoutQueueReceiver {
     // 使用注解接收和使用Message接收方式没有优劣之分,就看你关心什么数据,如果你关心MessageProperties中的固有属性,使用Message接收后获取固有属性信息比较方便。
     // 如果你不关心MessageProperties中的固有属性,那么使用注解接收比较方便。
     // 但是如果使用注解接收,如果出现转换异常,比如生产者不知道什么原因发送了一条消息不是UserInfo类型的,那么spring在调用该方法之前就会报转换异常,那么消息就会一直阻塞。
+    // 而使用Message接收则不存在这个问题,一定会调用到这个监听方法,监听方法内部发现转换异常,可以有自己的nack策略。
     // 不过这个问题可以考虑使用消息的超时时间解决,但是一般情况下是不建议使用超时时间的,除非是特定业务或者是延时队列业务需要。普通业务一般不希望消息过期。
+    // 一般情况下,遇到这个问题就属于生产者系统bug了,因为两个系统直接接口对接,数据不能瞎发,那还了得,那什么问题都可能出现了,解决方案其实就是排查bug优化代码。所以不用太纠结这个问题。
     @RabbitListener(queues = RabbitConfig.GLITTERHOST_FIRST_FANOUT_QUEUE, containerFactory = RabbitConfig.GLITTERHOST_CONTAINER_FACTORY)
     public void process(Message message, Channel channel) throws Exception {
         logger.info("userInfo:{},headers:{}", JSONObject.toJSONString(message.getBody()), JSONObject.toJSONString(message.getMessageProperties()));
@@ -37,7 +39,6 @@ public class GlitterhostSecondFanoutQueueReceiver {
             byte[] body = message.getBody();
             String bodyStr = new String(body);
             UserInfo userInfo = JSONObject.parseObject(bodyStr, new TypeReference<UserInfo>(){});
-
 
             // TODO 业务处理
 
