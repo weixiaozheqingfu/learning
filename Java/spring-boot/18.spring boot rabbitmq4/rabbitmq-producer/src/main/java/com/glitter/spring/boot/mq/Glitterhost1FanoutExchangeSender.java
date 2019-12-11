@@ -54,7 +54,7 @@ public class Glitterhost1FanoutExchangeSender implements RabbitTemplate.ConfirmC
 
             logger.info("GlitterhostFirstFanoutExchangeSender rabbitTemplate:{},message:{},correlationData:{}", rabbitTemplate.toString(), JSONObject.toJSON(message), JSONObject.toJSON(correlationData));
 
-            rabbitTemplate.convertAndSend(exchange,null, message, correlationData);
+            rabbitTemplate.convertAndSend(exchange,null, "message", correlationData);
 
             return correlationData.toString();
         } catch (Exception e) {

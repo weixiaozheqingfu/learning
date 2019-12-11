@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.config;
 
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AcknowledgeMode;
@@ -7,10 +8,12 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.listener.RabbitListenerErrorHandler;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ErrorHandler;
 
 @Configuration
 public class RabbitConfig {
@@ -67,6 +70,9 @@ public class RabbitConfig {
         factory.setTxSize(1);
         //设置确认模式手工确认(如果没有手动做任何确认,则消息在当前客户端会一直处于待确认状态,在当前消费者端处于阻塞状态,其他消费端轮询消费消息不受影响,如果该端停止服务或宕机,消息会重新返回队列排队)
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+
+        factory.setReceiveTimeout(60L);
+
 
         return factory;
     }
