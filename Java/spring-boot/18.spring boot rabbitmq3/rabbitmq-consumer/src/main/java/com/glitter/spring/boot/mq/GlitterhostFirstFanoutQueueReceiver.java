@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class GlitterhostFirstFanoutQueueReceiver {
     private static final Logger logger = LoggerFactory.getLogger(GlitterhostFirstFanoutQueueReceiver.class);
 
-    @RabbitListener(queues = RabbitConfig.GLITTERHOST_FIRST_FANOUT_QUEUE, containerFactory = RabbitConfig.GLITTERHOST_CONTAINER_FACTORY)
+    @RabbitListener(queues = RabbitConfig.GLITTERHOST_FIRST_FANOUT_QUEUE, containerFactory = RabbitConfig.GLITTERHOST_CONTAINER_FACTORY, errorHandler = "rabbitListenerErrorHandler")
     public void process(Message message, Channel channel) throws Exception {
         long threadId = Thread.currentThread().getId();
         logger.info("threadId:{}",threadId);
@@ -28,15 +28,17 @@ public class GlitterhostFirstFanoutQueueReceiver {
 
             logger.info("GlitterhostSecondFanoutQueueReceiver receive message:{}, messageStr:{}", JSONObject.toJSONString(message), messageStr);
             JSONObject jsonObject = JSONObject.parseObject(messageStr);
-
-            channel.basicAck(deliveryTag, false);
+                int i = 1/0;
+//
+//            channel.basicAck(deliveryTag, false);
         } catch (Exception e){
-            if (redelivered) {
-                channel.basicReject(deliveryTag, false);
-            } else {
-                channel.basicReject(deliveryTag, true);
-            }
+//            if (redelivered) {
+//                channel.basicReject(deliveryTag, false);
+//            } else {
+//                channel.basicReject(deliveryTag, true);
+//            }
             logger.error("GlitterhostSecondFanoutQueueReceiver receive message exception" + JSONObject.toJSONString(e));
+            throw e;
         }
     }
 

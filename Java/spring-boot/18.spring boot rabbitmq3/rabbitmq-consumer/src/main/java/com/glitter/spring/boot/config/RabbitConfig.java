@@ -1,10 +1,14 @@
 package com.glitter.spring.boot.config;
 
+import com.alibaba.fastjson.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.listener.RabbitListenerErrorHandler;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +16,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitConfig {
+
+    private static final Logger logger = LoggerFactory.getLogger(RabbitConfig.class);
 
     @Value("${mq.rabbit.glitterhost.address}")
     String address;
@@ -61,15 +67,39 @@ public class RabbitConfig {
         factory.setChannelTransacted(false);
         //setTxSize：设置事务当中可以处理的消息数量。
         factory.setTxSize(1);
-        //设置当rabbitmq收到nack/reject确认信息时的处理方式，设为true，扔回queue头部，设为false，丢弃。
-        //factory.setDefaultRequeueRejected(true);
-        // 设置确认模式手工确认(如果没有手动做任何确认,则消息在当前客户端会一直处于待确认状态,在当前消费者端处于阻塞状态,其他消费端轮询消费消息不受影响,如果该端停止服务或宕机,消息会重新返回队列排队)
-        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        //当确认模式为AUTO时，当rabbitmq收到nack/reject异常时的处理方式，设为true，扔回queue头部，设为false，丢弃。
+        factory.setDefaultRequeueRejected(true);
+        //设置确认模式手工确认(如果没有手动做任何确认,则消息在当前客户端会一直处于待确认状态,在当前消费者端处于阻塞状态,其他消费端轮询消费消息不受影响,如果该端停止服务或宕机,消息会重新返回队列排队)
+        factory.setAcknowledgeMode(AcknowledgeMode.AUTO);
         //实现ErrorHandler接口设置进去，所有未catch的异常都会由ErrorHandler处理。
-        //factory.setErrorHandler();
-
+        factory.setErrorHandler(throwable -> {
+            logger.error("throwable:{}", JSONObject.toJSONString(throwable));
+        });
         return factory;
     }
+
+    @Bean
+    public RabbitListenerErrorHandler rabbitListenerErrorHandler(){
+        return (amqpMessage, message, exception) -> {
+            logger.error("amqpMessage:{}", JSONObject.toJSONString(amqpMessage));
+            logger.error("message:{}", JSONObject.toJSONString(message));
+            logger.error("exception:{}", JSONObject.toJSONString(exception));
+            throw exception;
+        };
+    }
+
+//    @Bean
+//    public RabbitListenerErrorHandler rabbitListenerErrorHandler(){
+//        return new RabbitListenerErrorHandler() {
+//            @Override
+//            public Object handleError(Message amqpMessage, org.springframework.messaging.Message<?> message, ListenerExecutionFailedException exception) throws Exception {
+//
+//                System.out.println("-------------------------------------"+message);
+//
+//                throw exception;
+//            }
+//        };
+//    }
 
     @Bean
     public Queue glitterhostFirstFanoutQueue() {
