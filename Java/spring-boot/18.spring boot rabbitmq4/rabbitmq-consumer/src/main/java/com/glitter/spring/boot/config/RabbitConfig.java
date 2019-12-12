@@ -71,9 +71,6 @@ public class RabbitConfig {
         //设置确认模式手工确认(如果没有手动做任何确认,则消息在当前客户端会一直处于待确认状态,在当前消费者端处于阻塞状态,其他消费端轮询消费消息不受影响,如果该端停止服务或宕机,消息会重新返回队列排队)
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
 
-        factory.setReceiveTimeout(60L);
-
-
         return factory;
     }
 
