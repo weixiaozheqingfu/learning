@@ -1,6 +1,5 @@
 package com.glitter.spring.boot.config;
 
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -25,8 +24,8 @@ public class RabbitConfig {
     @Value("${mq.rabbit.glitterhost.password}")
     String password;
 
-    public static final String GLITTERHOST_FIRST_FANOUT_EXCHANGE = "glitterhost.first.fanout.exchange";
-    public static final String GLITTERHOST_ORDER_EXPIRE_FANOUT_EXCHANGE = "order-expire-fanout-exchange";
+    public static final String GLITTERHOST_FIRST_FANOUT_EXCHANGE = "g.first.fanout.exchange";
+    public static final String GLITTERHOST_ORDER_EXPIRE_FANOUT_EXCHANGE = "g.order.expire.fanout.exchange";
 
     // 创建mq连接
     @Bean(name = "connectionFactory")

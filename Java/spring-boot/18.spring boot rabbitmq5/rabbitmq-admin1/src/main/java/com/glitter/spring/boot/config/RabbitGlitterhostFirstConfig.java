@@ -1,7 +1,6 @@
 package com.glitter.spring.boot.config;
 
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

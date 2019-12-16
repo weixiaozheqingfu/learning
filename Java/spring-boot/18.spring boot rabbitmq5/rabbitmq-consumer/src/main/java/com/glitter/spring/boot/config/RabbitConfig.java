@@ -28,10 +28,11 @@ public class RabbitConfig {
 
     public static final String GLITTERHOST_CONTAINER_FACTORY = "simpleRabbitListenerContainerFactory";
 
-    public static final String GLITTERHOST_FIRST_FANOUT_QUEUE = "glitterhost.first.fanout.queue";
-    public static final String GLITTERHOST_FIRST_DLX_DIRECT_QUEUE = "glitterhost.first.dlx.direct.queue";
 
-    public static final String GLITTERHOST_ORDER_EXPIRE_DLX_DIRECT_QUEUE = "order-expire-dlx-direct-queue";
+    public static final String GLITTERHOST_FIRST_FANOUT_QUEUE = "g.first.fanout.queue";
+    public static final String GLITTERHOST_FIRST_DLX_DIRECT_QUEUE = "g.first.dlx.direct.queue";
+
+    public static final String GLITTERHOST_ORDER_EXPIRE_DLX_DIRECT_QUEUE = "g.order.expire.dlx.direct.queue";
 
 
     // 创建mq连接
