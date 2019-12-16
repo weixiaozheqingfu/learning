@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +34,15 @@ public class RabbitConfig {
         connectionFactory.setAddresses(address);
 
         return connectionFactory;
+    }
+
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        rabbitAdmin.setAutoStartup(true);
+        // 声明所有交换器,队列,绑定关系
+        rabbitAdmin.initialize();
+        return rabbitAdmin;
     }
 
 }

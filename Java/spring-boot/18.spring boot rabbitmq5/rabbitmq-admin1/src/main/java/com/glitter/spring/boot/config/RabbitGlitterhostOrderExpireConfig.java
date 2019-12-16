@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,8 +37,8 @@ public class RabbitGlitterhostOrderExpireConfig {
         return queue;
     }
     @Bean
-    Binding bindingOrderExpireExchangeQueue(Queue gOrderExpireFanoutQueue, FanoutExchange gOrderExpireFanoutExchange) {
-        return BindingBuilder.bind(gOrderExpireFanoutQueue).to(gOrderExpireFanoutExchange);
+    Binding bindingOrderExpireExchangeQueue() {
+        return BindingBuilder.bind(gOrderExpireFanoutQueue()).to(gOrderExpireFanoutExchange());
     }
 
 

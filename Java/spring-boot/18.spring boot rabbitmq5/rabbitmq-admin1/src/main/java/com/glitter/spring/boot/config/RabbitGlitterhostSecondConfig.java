@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -51,7 +52,7 @@ public class RabbitGlitterhostSecondConfig {
         return queue;
     }
     @Bean
-    Binding bindingOrderExpireDlxExchangeQueue() {
+    Binding bindingSecondDlxExchangeQueue() {
         return BindingBuilder.bind(gSecondDlxDirectQueue()).to(gSecondDlxDirectExchange()).with(G_SECOND_DLX_BINDING_KEY);
     }
 
