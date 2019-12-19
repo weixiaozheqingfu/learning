@@ -1,3 +1,6 @@
+CREATE DATABASE `demo_client` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+use demo_client;
+
 /*
 Navicat MySQL Data Transfer
 
