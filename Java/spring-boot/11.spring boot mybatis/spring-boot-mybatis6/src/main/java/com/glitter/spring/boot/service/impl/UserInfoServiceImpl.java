@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.service.impl;
 
 
+import com.glitter.spring.boot.aop.datasource.annotation.ReadDatasource;
 import com.glitter.spring.boot.constant.CoreConstants;
 import com.glitter.spring.boot.exception.BusinessException;
 import com.glitter.spring.boot.service.IUserInfoService;
@@ -29,6 +30,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
      * @param userInfo
      */
     @Override
+    @ReadDatasource
     public void create(UserInfo userInfo) {
         if(null == userInfo){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS,"输入参数为空");

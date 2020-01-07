@@ -1,5 +1,6 @@
 package com.glitter.spring.boot.config;
 
+import com.glitter.spring.boot.context.DatasourceContext;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -28,21 +29,20 @@ import java.util.Map;
 @MapperScan(basePackages = "com.example.dxfl.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 public class DatasourceConfig {
 
-    @Value("${mysql.datasource.type-aliases-package}")
+    @Value("${mysql.type-aliases-package}")
     private String typeAliasesPackage;
 
-    @Value("${mysql.datasource.mapper-locations}")
+    @Value("${mysql.mapper-locations}")
     private String mapperLocation;
 
-    @Value("${mysql.datasource.config-location}")
+    @Value("${mysql.config-location}")
     private String configLocation;
 
-
     /**
-     * 写数据源
+     * 写数据源write
      *
-     * @Primary 标志这个 Bean 如果在多个同类 Bean 候选时，该 Bean 优先被考虑。
-     * 多数据源配置的时候注意，必须要有一个主数据源，用 @Primary 标志该 Bean
+     * @Primary 标志这个Bean如果在多个同类Bean候选时，该Bean优先被考虑。
+     * 多数据源配置的时候注意，必须要有一个主数据源，用@Primary标志该Bean
      */
     @Primary
     @Bean
@@ -51,38 +51,18 @@ public class DatasourceConfig {
         return new HikariDataSource();
     }
 
-    /**
-     * 读数据源
-     */
+    /** 读数据源read0 */
     @Bean
-    @ConfigurationProperties(prefix = "mysql.datasource.read")
-    public DataSource read1() {
+    @ConfigurationProperties(prefix = "mysql.datasource.read0")
+    public DataSource read0() {
         return new HikariDataSource();
     }
 
-
-    /**
-     * 多数据源需要自己设置sqlSessionFactory
-     */
+    /** 读数据源read1 */
     @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
-        bean.setDataSource(routingDataSource());
-        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        // 实体类对应的位置
-        bean.setTypeAliasesPackage(typeAliasesPackage);
-        // mybatis的XML的配置
-        bean.setMapperLocations(resolver.getResources(mapperLocation));
-        bean.setConfigLocation(resolver.getResource(configLocation));
-        return bean.getObject();
-    }
-
-    /**
-     * 设置事务，事务需要知道当前使用的是哪个数据源才能进行事务处理
-     */
-    @Bean
-    public DataSourceTransactionManager dataSourceTransactionManager() {
-        return new DataSourceTransactionManager(routingDataSource());
+    @ConfigurationProperties(prefix = "mysql.datasource.read1")
+    public DataSource read1() {
+        return new HikariDataSource();
     }
 
     /**
@@ -90,14 +70,46 @@ public class DatasourceConfig {
      */
     @Bean
     public AbstractRoutingDataSource routingDataSource() {
-        MyAbstractRoutingDataSource proxy = new MyAbstractRoutingDataSource();
-        Map<Object, Object> targetDataSources = new HashMap<>(2);
-        targetDataSources.put(DbContextHolder.WRITE, writeDataSource());
-        targetDataSources.put(DbContextHolder.READ+"1", read1());
-        proxy.setDefaultTargetDataSource(writeDataSource());
-        proxy.setTargetDataSources(targetDataSources);
-        return proxy;
+        RoutingDataSource routingDataSource = new RoutingDataSource();
+
+        Map<Object, Object> targetDataSources = new HashMap<>(3);
+        targetDataSources.put(DatasourceContext.WRITE, writeDataSource());
+        targetDataSources.put(DatasourceContext.READ+"0", read0());
+        targetDataSources.put(DatasourceContext.READ+"1", read1());
+
+        routingDataSource.setDefaultTargetDataSource(writeDataSource());
+        routingDataSource.setTargetDataSources(targetDataSources);
+
+        return routingDataSource;
     }
 
+    /**
+     * 多数据源需要自己设置sqlSessionFactory
+     */
+    @Bean
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        // 设置数据源
+        DataSource dataSource = routingDataSource();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+        // 实体类对应的位置
+        sqlSessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
+        // 设置mybatis的mapper配置文件
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources(mapperLocation));
+        // mybatis的config配置文件
+        sqlSessionFactoryBean.setConfigLocation(resolver.getResource(configLocation));
+
+        SqlSessionFactory  sqlSessionFactory = sqlSessionFactoryBean.getObject();
+        return sqlSessionFactory;
+    }
+
+    /** 设置事务，事务需要知道当前使用的是哪个数据源才能进行事务处理。事务是aop完成的，只与connection有关，即只与数据源有关 */
+    @Bean
+    public DataSourceTransactionManager dataSourceTransactionManager() {
+        DataSource dataSource = routingDataSource();
+        return new DataSourceTransactionManager(dataSource);
+    }
 
 }
