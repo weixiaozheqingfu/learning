@@ -5,9 +5,10 @@
 5.spring-boot-mybatis4 项目主要演示github的分页插件pagehelper的使用。
 6.spring-boot-mybatis5 项目主要演示手动实现dao接口,并通过SqlSessionTemplate对象模板来操作sql语句。
 
-// TODO list
+7.spring-boot-mybatis6 主要演示多数据源方式实现读写分离。事务只与数据源有关。
 
-7.spring-boot-mybatis6 项目主要演示事务管理，事务应该只与数据源有关。
+
+// TODO list
 
 8.spring-boot-mybatis7 项目主要演示各种场景的标准化sql语句在mapper.xml中的写法（包括自动映射mapper文件的情况下）。
 
