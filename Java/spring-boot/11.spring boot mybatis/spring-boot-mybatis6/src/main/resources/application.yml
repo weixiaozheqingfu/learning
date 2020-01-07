@@ -2,28 +2,29 @@ mysql:
     datasource:
         read-num: 2
         write:
-            url: jdbc:mysql://192.168.226.5:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true
+            # 这里配置哪些属性，要看具体使用什么数据源，不同的数据源属性可能不同，甚至属性命名也不一样。
+            jdbc-url: jdbc:mysql://172.31.240.101:33061/demo_client?useUnicode=true&characterEncoding=utf-8&useSSL=false
             username: root
-            password: 123456
+            password: 888888
             driver-class-name: com.mysql.jdbc.Driver
             maxLifetime: 1765000
             maximumPoolSize: 15
         read0:
-            url: jdbc:mysql://192.168.226.6:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true
+            jdbc-url: jdbc:mysql://172.31.240.101:33062/demo_client?useUnicode=true&characterEncoding=utf-8&useSSL=false
             username: root
-            password: 123456
+            password: 888888
             driver-class-name: com.mysql.jdbc.Driver
             maxLifetime: 1765000
             maximumPoolSize: 15
         read1:
-            url: jdbc:mysql://192.168.226.6:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true
+            jdbc-url: jdbc:mysql://172.31.240.101:33063/demo_client?useUnicode=true&characterEncoding=utf-8&useSSL=false
             username: root
-            password: 123456
+            password: 888888
             driver-class-name: com.mysql.jdbc.Driver
             maxLifetime: 1765000
             maximumPoolSize: 15
 mybatis:
-    type-aliases-package: com.example.dxfl.dao
+    type-aliases-package: com.glitter.spring.boot.persistence.dao
     mapper-locations: classpath:/mapper/*.xml
     config-location: classpath:/mybatis-config.xml
 

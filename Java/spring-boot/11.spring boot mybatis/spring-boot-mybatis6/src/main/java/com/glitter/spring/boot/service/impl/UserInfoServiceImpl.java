@@ -30,7 +30,6 @@ public class UserInfoServiceImpl implements IUserInfoService{
      * @param userInfo
      */
     @Override
-    @ReadDatasource
     public void create(UserInfo userInfo) {
         if(null == userInfo){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS,"输入参数为空");
@@ -78,6 +77,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
     }
 
     @Override
+    @ReadDatasource
     public PageInfo<UserInfo> getUserInfosPage(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<UserInfo> userInfos = userInfoDao.findAllList();
@@ -91,6 +91,7 @@ public class UserInfoServiceImpl implements IUserInfoService{
      * @return
      */
     @Override
+    @ReadDatasource
     public UserInfo getUserInfoById(Long id) {
         UserInfo result = null;
         if(null == id){

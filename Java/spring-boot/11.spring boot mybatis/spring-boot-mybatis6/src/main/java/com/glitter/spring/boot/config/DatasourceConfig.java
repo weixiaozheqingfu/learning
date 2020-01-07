@@ -29,13 +29,13 @@ import java.util.Map;
 @MapperScan(basePackages = "com.example.dxfl.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 public class DatasourceConfig {
 
-    @Value("${mysql.type-aliases-package}")
+    @Value("${mybatis.type-aliases-package}")
     private String typeAliasesPackage;
 
-    @Value("${mysql.mapper-locations}")
+    @Value("${mybatis.mapper-locations}")
     private String mapperLocation;
 
-    @Value("${mysql.config-location}")
+    @Value("${mybatis.config-location}")
     private String configLocation;
 
     /**
@@ -92,7 +92,7 @@ public class DatasourceConfig {
 
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         // 设置数据源
-        DataSource dataSource = routingDataSource();
+        DataSource dataSource = this.routingDataSource();
         sqlSessionFactoryBean.setDataSource(dataSource);
         // 实体类对应的位置
         sqlSessionFactoryBean.setTypeAliasesPackage(typeAliasesPackage);
@@ -108,7 +108,7 @@ public class DatasourceConfig {
     /** 设置事务，事务需要知道当前使用的是哪个数据源才能进行事务处理。事务是aop完成的，只与connection有关，即只与数据源有关 */
     @Bean
     public DataSourceTransactionManager dataSourceTransactionManager() {
-        DataSource dataSource = routingDataSource();
+        DataSource dataSource = this.routingDataSource();
         return new DataSourceTransactionManager(dataSource);
     }
 
