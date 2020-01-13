@@ -24,7 +24,6 @@ public class UserInfoAction{
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseResult create(@RequestBody UserInfo paramBean) {
-        // TODO 参数校验
         userInfoService.create(paramBean);
         return ResponseResult.success(null);
     }

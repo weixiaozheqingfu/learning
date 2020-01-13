@@ -1,30 +1,24 @@
 package com.glitter.spring.boot.config;
 
-import com.glitter.spring.boot.context.DatasourceContext;
-import com.zaxxer.hikari.HikariDataSource;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.core.io.support.ResourcePatternResolver;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
+        import com.glitter.spring.boot.context.DatasourceContext;
+        import com.zaxxer.hikari.HikariDataSource;
+        import org.apache.ibatis.session.SqlSessionFactory;
+        import org.mybatis.spring.SqlSessionFactoryBean;
+        import org.mybatis.spring.annotation.MapperScan;
+        import org.springframework.beans.factory.annotation.Value;
+        import org.springframework.boot.context.properties.ConfigurationProperties;
+        import org.springframework.context.annotation.Bean;
+        import org.springframework.context.annotation.Configuration;
+        import org.springframework.context.annotation.Primary;
+        import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+        import org.springframework.core.io.support.ResourcePatternResolver;
+        import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+        import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
-import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+        import javax.sql.DataSource;
+        import java.util.HashMap;
+        import java.util.Map;
 
-/**
- * Description
- *
- * @author fxb
- * @date 2018-09-03
- */
 @Configuration
 @MapperScan(basePackages = "com.example.dxfl.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 public class DatasourceConfig {

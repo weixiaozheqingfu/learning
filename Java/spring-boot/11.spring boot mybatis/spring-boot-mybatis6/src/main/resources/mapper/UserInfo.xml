@@ -23,6 +23,7 @@
     <sql id="baseColumns">
         id
         ,account
+        ,age
         ,phone
         ,email
         ,delete_flag

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -30,16 +31,26 @@ public class UserInfoServiceImpl implements IUserInfoService{
      * @param userInfo
      */
     @Override
+    @Transactional
     public void create(UserInfo userInfo) {
         if(null == userInfo){
             throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS,"输入参数为空");
         }
-        // TODO 参数校验
         Date now = new Date();
         userInfo.setCreateTime(now);
         userInfo.setUpdateTime(now);
         userInfo.setDeleteFlag(false);
         userInfoDao.insert(userInfo);
+
+        if (1==1) {
+            throw new BusinessException(CoreConstants.REQUEST_ERROR_PARAMS,"故意报错");
+        }
+
+        UserInfo userInfo1 = new UserInfo();
+        userInfo1.setId(2L);
+        userInfo1.setAge(102);
+        userInfoDao.updateById(userInfo1);
+
     }
 
     /**
@@ -92,12 +103,14 @@ public class UserInfoServiceImpl implements IUserInfoService{
      */
     @Override
     @ReadDatasource
+    @Transactional(readOnly = true)
     public UserInfo getUserInfoById(Long id) {
         UserInfo result = null;
         if(null == id){
             return result;
         }
         result = userInfoDao.getById(id);
+        result = userInfoDao.getById(2L);
         return result;
     }
 
