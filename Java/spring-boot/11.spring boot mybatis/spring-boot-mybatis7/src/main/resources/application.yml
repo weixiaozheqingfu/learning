@@ -1,0 +1,27 @@
+spring:
+    # 数据源连接池配置,spring开头的配置项都是spring boot框架直接读取使用的
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://172.31.240.101:8066/mycat_demo_client
+        username: root
+        password: 123123
+        hikari.maxLifetime: 1765000
+        hikari.maximumPoolSize: 15
+
+mybatis:
+    # mapper.xml文件位置
+    mapper-locations: classpath:mybatis/*.xml
+    # 别名配置,看个人习惯,也可以不配置
+    type-aliases-package: com.glitter.spring.boot.bean
+    # 这里的配置与mybatis-config.xml的settings属性配置时一一对应的,不同点是这里属性名要换成中划线
+    configuration:
+        cache-enabled: false
+        lazy-loading-enabled: false
+        aggressive-lazy-loading: false
+        multiple-result-sets-enabled: true
+        use-column-label: true
+        use-generated-keys: true
+        auto-mapping-behavior: FULL
+        default-statement-timeout: 25000
+        default-fetch-size: 100
+        map-underscore-to-camel-case: true
