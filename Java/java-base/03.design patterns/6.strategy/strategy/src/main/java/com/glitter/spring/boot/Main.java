@@ -65,6 +65,27 @@ public class Main {
         CouponService couponService = new CouponServiceImpl(memberStrategyService);
         List<String> coupons = couponService.getCoupons("1");
         System.out.println("优惠券是:" + coupons.toString());
+
+        maopao();
+    }
+
+    public static void maopao() {
+        Integer[] arrays = new Integer [] {3,1,5,3,9,7,8};
+
+        for (int i=0;i<arrays.length-1;i++) {
+            for (int j = 0; j < arrays.length-1 ; j++) {
+                if (arrays[j]>arrays[j+1]) {
+                    Integer temp = arrays[j];
+                    arrays[j] = arrays[j+1];
+                    arrays[j+1] = temp;
+                }
+            }
+        }
+
+        for (int k=0;k<arrays.length;k++) {
+            System.out.println(arrays[k]);
+        }
+
     }
 
 }

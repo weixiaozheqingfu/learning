@@ -1,0 +1,37 @@
+server:
+  port: 8762
+spring:
+  application:
+    # 指定注册到eureka server上的服务名称（这里直接使用集群模式）,集群模式下,需要两个注册中心互相注册,此时本地模拟时,一般在同一台机器上,
+    # 即通过ip地址相同,端口号不同的方式,来启动两台服务,但是eureka对端口号不敏感,只是端口号不同,在注册时会有一定的问题,所以需要在本地host中
+    # 设置本地ip地址和域名的映射,让127.0.0.1同时映射peer1和peer2两个域名,这时eureka是敏感的,认为是两个不同的服务,在相互注册。
+    # vim /etc/hosts
+    # 添加如下内容
+    # 127.0.0.1 peer1 peer2
+    name: microservice-register-center-ha
+
+    # 当配置了@EnableEurekaServer注解,即标明当前项目是注册中心,那此时下面配置的client也属于在server端之间的互相看都是client。
+    # 此client非eureka客户端的client
+eureka:
+  instance:
+    hostname: peer2
+    prefer-ip-address: false
+  client:
+    # 是否要注册到其他Eureka Server实例
+    register-with-eureka: true
+    # 是否要从其他Eureka Server实例获取数据
+    fetch-registry: true
+    service-url:
+    # 指定eureka server通信地址，注意/eureka/小尾巴不能少
+      defaultZone: http://peer1:8761/eureka/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 开放所有监控端点
+        include: '*'
+  endpoint:
+    health:
+      # 是否展示健康检查详情
+      show-details: always
