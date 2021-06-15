@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>CSDN登录授权</title>
+    <link type="text/css" rel="Stylesheet" href="/css/style.css"/>
+    <script src="/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <link href="/images/favicon.ico" rel="SHORTCUT ICON"/>
+</head>
+<body>
+<div class="main">
+    <div>
+        <a href="http://www.csdn.net/" target="_blank">
+            <img src="http://sso.glitter.com:8080/images/csdn_logo.png" alt="CSDN.NET"/>
+        </a>
+    </div>
+
+    <div class="logbox">
+        <p>授权<a href="http://sso.glitter.com:8081" target="_blank">Gitee</a>访问你的CSDN账号，将允许以下操作：</p>
+        <table style="width:100%; margin-top:20px;">
+            <tr>
+                <td style="width:55%;">
+                    <ol>
+                        <li>获取你的基本资料</li>
+                        <li>发表文章、评论等</li>
+                        <li>进行其它一些CSDN的基本服务</li>
+                    </ol>
+                </td>
+                <td>
+                    <img src="http://sso.glitter.com:8080/images/oauth_appbg.png" alt=""/>
+                </td>
+                <td style="width:35%;">
+                    <img style="max-height:100px; max-width:200px;" src="http://sso.glitter.com:8080/images/gitee.png" alt="Gitee"/>
+                </td>
+            </tr>
+        </table>
+        <div class="line"></div>
+        <table cellspacing="6" style="width:98%;">
+            <!--未登录状态-->
+            <tbody id="tb1">
+            <tr>
+                <td style="width:50px;">账号</td>
+                <td><input id="u" type="text" class="put" tabindex="1"/></td>
+                <td rowspan="2" style="width:200px;">
+                    <a class="btns shouquan" href="#" onclick="javascript:subform();return false;" tabindex="3"></a>
+                    <a class="btns quxiao" href="#" onclick="javascript:cancel();return false;" tabindex="4"></a>
+                </td>
+            </tr>
+            <tr>
+                <td>密码</td>
+                <td><input id="p" type="password" class="put" tabindex="2"/></td>
+            </tr>
+            </tbody>
+            <!--已登录状态-->
+            <tbody id="tb2" style="display:none;">
+            <tr>
+                <td>
+                    当前登录帐号：<b id="b_un"></b><span style="padding-left:10px;"><a href="#"
+                                                                                onclick="javascript:changeUN();return false;">用其它帐号登录</a></span>
+                </td>
+                <td style="width:200px;">
+                    <a class="btns shouquan" href="#" onclick="javascript:subform2();return false;" tabindex="3"></a>
+                    <a class="btns quxiao" href="#" onclick="javascript:cancel();return false;" tabindex="4"></a>
+                </td>
+            </tr>
+            </tbody>
+            <tr>
+                <td></td>
+                <td><span id="sp_err"></span></td>
+                <td></td>
+            </tr>
+        </table>
+    </div>
+    <p class="bnote">提示：为保障您的帐号安全，请确认本页面域名为 api.csdn.net</p>
+</div>
+<div class="cloud"></div>
+<input id="client_id" type="hidden" value="1100511"/>
+<input id="response_type" type="hidden" value="code"/>
+<input id="redirect_uri" type="hidden" value="https://gitee.com/auth/csdn/callback"/>
+<script type="text/javascript">
+    var un = '';
+    $(function () {
+        $('#u').focus();
+        $('#u,#p').keydown(function (ev) {
+            if (isEnter(ev)) subform();
+        });
+        if (un) {
+            $('#tb1').hide();
+            $('#tb2').show();
+            $('#b_un').html(un);
+        }
+    });
+    function changeUN() {
+        $('#tb2').hide();
+        $('#tb1').show();
+        $('#u').focus();
+    }
+    function subform() {
+        var data = {
+            u: $('#u').val(),
+            p: $('#p').val(),
+            client_id: $('#client_id').val(),
+            response_type: $('#response_type').val(),
+            redirect_uri: $('#redirect_uri').val(),
+            _r: (new Date()).getTime()
+        };
+        if (!data.u) {
+            showerr('请输入CSDN用户名或注册Email。');
+            return;
+        }
+        if (!data.p) {
+            showerr('请输入登录密码。');
+            return;
+        }
+        $.get("?log=1", data, function (data) {
+            if (data.substr(0, 4) == 'err:') {
+                showerr(data.substr(4));
+            } else {
+                location = data;
+            }
+        });
+    }
+    function subform2() {
+        var data = {
+            u: un,
+            client_id: $('#client_id').val(),
+            response_type: $('#response_type').val(),
+            redirect_uri: $('#redirect_uri').val(),
+            _r: (new Date()).getTime()
+        };
+        $.get("?log=2", data, function (data) {
+            if (data.substr(0, 4) == 'err:') {
+                showerr(data.substr(4));
+            } else {
+                location = data;
+            }
+        });
+    }
+    function cancel() {
+        location = $('#redirect_uri').val();
+    }
+    function showerr(msg) {
+        $('#sp_err').html('*' + msg);
+    }
+    function isEnter(ev) {
+        ev = ev || window.event;
+        var code = (ev.keyCode || ev.which);
+        return (code == 10 || code == 13);
+    }
+    ;
+</script>
+</body>
+</html>
