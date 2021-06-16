@@ -38,7 +38,7 @@ public class ServiceLogAspect {
     @Pointcut("execution(* cn.huimin100.erp..*.service..*(..))")
     public void pointcut2(){}
 
-    @Before("pointcut1() || pointcut1()")
+    @Before("pointcut1() || pointcut2()")
     public void before(JoinPoint joinPoint) {
         try{
             ServiceInputLogInfoContext.remove();
@@ -58,7 +58,7 @@ public class ServiceLogAspect {
         }
     }
 
-    @After("pointcut1() || pointcut1()")
+    @After("pointcut1() || pointcut2()")
     public void after(JoinPoint joinPoint){
         try{
             logger.info("service log after begin....................................................................");
@@ -74,7 +74,7 @@ public class ServiceLogAspect {
         }
     }
 
-    @AfterReturning( pointcut = "pointcut1() || pointcut1()", returning = "ret")
+    @AfterReturning( pointcut = "pointcut1() || pointcut2()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) {
         try{
             logger.info("service log afterReturning begin...........................................................");
@@ -95,7 +95,7 @@ public class ServiceLogAspect {
         }
     }
 
-    @AfterThrowing(pointcut = "pointcut1() || pointcut1()", throwing = "ex")
+    @AfterThrowing(pointcut = "pointcut1() || pointcut2()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Throwable ex) {
         try {
             logger.error("service log afterThrowing begin............................................................");
