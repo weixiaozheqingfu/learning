@@ -10,13 +10,13 @@
     </parent>
 
     <groupId>com.glitter.springboot</groupId>
-    <artifactId>spring-boot-threadpool</artifactId>
+    <artifactId>hm-log-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-boot-threadpool</name>
-    <description>spring-boot-threadpool示例</description>
-    <url>http://www.sso.glitter.com/spring-boot-threadpool</url>
+    <name>hm-log-plugin</name>
+    <description>hm-log-plugin示例</description>
+    <url>http://www.sso.glitter.com/hm-log-plugin</url>
 
     <properties>
         <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
@@ -54,29 +54,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-            <version>${spring-boot.version}</version>
-        </dependency>
-        <!-- mybatis -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.47</version>
-        </dependency>
-        <!-- 自己的分页插件 -->
-        <dependency>
-            <groupId>com.glitter.springboot</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <!-- redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
@@ -119,12 +96,40 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <!-- 打jar包时,可以自动生成MANIFEST.MF文件信息,比较方便 -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+            <!-- 打jar包时,可以自动生成MANIFEST.MF文件信息,比较方便,但打jar包必须有main方法 -->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
         </plugins>
     </build>
+
+    <repositories>
+        <!-- maven仓库配置：私服 -->
+        <repository>
+            <id>nexus-repos</id>
+            <name>Team Nexus Repository</name>
+            <url>http://nexus.beta.huimin100.cn/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Team Nexus Repository</name>
+            <url>http://nexus.beta.huimin100.cn/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>releases</id>
+            <name>Team Nexus Repository</name>
+            <url>http://nexus.beta.huimin100.cn/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

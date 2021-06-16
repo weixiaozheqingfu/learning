@@ -1,11 +1,11 @@
 package com.glitter.spring.boot.aop.log.aspect;
 
 import com.alibaba.fastjson.JSONObject;
+
 import com.glitter.spring.boot.aop.log.bean.RequestLogInfo;
 import com.glitter.spring.boot.aop.log.bean.ResponseLogInfo;
 import com.glitter.spring.boot.aop.log.context.RequestLogInfoContext;
 import com.glitter.spring.boot.aop.log.context.ResponseLogInfoContext;
-import com.glitter.spring.boot.exception.BusinessException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -39,7 +39,7 @@ public class WebLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("execution(public * com.glitter.spring.boot.web.action..*(..)) && @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public void webLogAspectPointcut(){}
 
     @Before("webLogAspectPointcut()")
@@ -58,12 +58,13 @@ public class WebLogAspect {
             logger.info("web log before end....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
+//          throw e;
         }
     }
 
     @After("webLogAspectPointcut()")
     public void after(JoinPoint joinPoint){
-        try {
+        try{
             logger.info("web log after begin....................................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             this.setResponseLogInfo(responseLogInfo);
@@ -73,6 +74,7 @@ public class WebLogAspect {
             logger.info("web log after end....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
+//          throw e;
         }
     }
 
@@ -89,37 +91,35 @@ public class WebLogAspect {
             logger.info("web log afterReturning end...........................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
-        } finally {
+//          throw e;
+        } finally{
             RequestLogInfoContext.remove();
             ResponseLogInfoContext.remove();
         }
     }
 
     @AfterThrowing(pointcut = "webLogAspectPointcut()", throwing = "ex")
-    public void afterThrowing(JoinPoint joinPoint, Throwable ex) {
+    public void afterThrowing(JoinPoint joinPoint, Throwable ex){
         try {
             logger.error("web log afterThrowing begin............................................................");
             ResponseLogInfo responseLogInfo = null == ResponseLogInfoContext.get() ? new ResponseLogInfo() : ResponseLogInfoContext.get();
             responseLogInfo.setEx(ex);
             responseLogInfo.setStatus(500);
-            if(null == ResponseLogInfoContext.get()){
+            if (null == ResponseLogInfoContext.get()) {
                 ResponseLogInfoContext.set(responseLogInfo);
             }
-            if(ex instanceof BusinessException){
-                logger.error("web log afterThrowing bussiness exception:{}", JSONObject.toJSONString(responseLogInfo));
-            } else {
-                logger.error("web log afterThrowing runtime exception:{}", JSONObject.toJSONString(responseLogInfo));
-            }
-            logger.error("web log afterThrowing end...........................................................");
+            logger.error("web log afterThrowing exception:{}", JSONObject.toJSONString(responseLogInfo));
+            logger.error("web log afterThrowing end............................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
-        } finally {
+//          throw e;
+        } finally{
             RequestLogInfoContext.remove();
             ResponseLogInfoContext.remove();
         }
     }
 
-    private void setRequestLogInfo(RequestLogInfo requestLogInfo, JoinPoint joinPoint) {
+    private void setRequestLogInfo(RequestLogInfo requestLogInfo, JoinPoint joinPoint){
         HttpServletRequest request = this.getRequest();
         logger.debug("sessionId:"+request.getSession().getId());
         requestLogInfo.setIp(null == request ? null : this.getIp(request));

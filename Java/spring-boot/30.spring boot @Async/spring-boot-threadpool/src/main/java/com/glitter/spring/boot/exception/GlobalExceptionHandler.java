@@ -9,6 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * ContextManager.removeAllContext();可以不写。
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -18,12 +21,24 @@ public class GlobalExceptionHandler {
     public ResponseResult handleBusinessException(BusinessException e) {
         try {
             // 如果有需要的话,这里也可以将参数打印出来RequestLogInfoContext.get()
-            logger.error("handleBusinessException捕获业务异常信息:{}", JSONObject.toJSONString(e));
+            logger.error("handleBusinessException捕获BusinessException异常信息:{}", JSONObject.toJSONString(e));
             ContextManager.removeAllContext();
             return new ResponseResult(e.getCode(), e.getMessage());
         } catch (Exception ex) {
             logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), ex));
             return new ResponseResult(e.getCode(), e.getMessage());
+        }
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseResult handleRuntimeException(RuntimeException e) {
+        try {
+            logger.error("handleException捕获RuntimeException异常信息:{}", JSONObject.toJSONString(e));
+            ContextManager.removeAllContext();
+            return new ResponseResult("-1", "系统异常");
+        } catch (Exception ex) {
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), ex));
+            return new ResponseResult("-1", "系统异常");
         }
     }
 
@@ -39,7 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseResult handleException(Exception e) {
         try {
-            logger.error("handleException捕获运行异常信息:{}", JSONObject.toJSONString(e));
+            logger.error("handleException捕获Exception异常信息:{}", JSONObject.toJSONString(e));
             ContextManager.removeAllContext();
             return new ResponseResult("-1", "系统异常");
         } catch (Exception ex) {
@@ -47,5 +62,19 @@ public class GlobalExceptionHandler {
             return new ResponseResult("-1", "系统异常");
         }
     }
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseResult handleThrowable(Throwable e) {
+        try {
+            logger.error("handleException捕获Throwable异常信息:{}", JSONObject.toJSONString(e));
+            ContextManager.removeAllContext();
+            return new ResponseResult("-1", "系统异常");
+        } catch (Exception ex) {
+            logger.error(TemplateUtil.getExceptionLogMsg(this.getClass().getName(), Thread.currentThread().getStackTrace()[1].getMethodName(), ex));
+            return new ResponseResult("-1", "系统异常");
+        }
+    }
+
+
 
 }

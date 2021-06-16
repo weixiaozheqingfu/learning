@@ -10,7 +10,7 @@ public interface IAsyncService {
 
     Future<String> execute2(String id);
 
-    String execute3(String id);
+    String execute3(String id) throws Throwable;
 
     void execute4(String id) throws InterruptedException;
 
