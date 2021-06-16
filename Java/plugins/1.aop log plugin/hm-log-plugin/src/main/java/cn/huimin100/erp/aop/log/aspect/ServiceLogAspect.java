@@ -1,10 +1,10 @@
-package com.glitter.spring.boot.aop.log.aspect;
+package cn.huimin100.erp.aop.log.aspect;
 
+import cn.huimin100.erp.aop.log.context.ServiceInputLogInfoContext;
+import cn.huimin100.erp.aop.log.context.ServiceOutputLogInfoContext;
 import com.alibaba.fastjson.JSONObject;
-import com.glitter.spring.boot.aop.log.bean.ServiceInputLogInfo;
-import com.glitter.spring.boot.aop.log.bean.ServiceOutputLogInfo;
-import com.glitter.spring.boot.aop.log.context.ServiceInputLogInfoContext;
-import com.glitter.spring.boot.aop.log.context.ServiceOutputLogInfoContext;
+import cn.huimin100.erp.aop.log.bean.ServiceInputLogInfo;
+import cn.huimin100.erp.aop.log.bean.ServiceOutputLogInfo;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -32,13 +32,13 @@ public class ServiceLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(ServiceLogAspect.class);
 
-    @Pointcut("execution(public * *(..))")
-    private void publicMethod(){}
+    @Pointcut("execution(* cn.huimin100.erp..*.domain..*(..))")
+    public void pointcut1(){}
 
-    @Pointcut("@within(org.springframework.stereotype.Service)")
-    public void serviceLogAspectPointcut(){}
+    @Pointcut("execution(* cn.huimin100.erp..*.service..*(..))")
+    public void pointcut2(){}
 
-    @Before("publicMethod() && serviceLogAspectPointcut()")
+    @Before("pointcut1() || pointcut1()")
     public void before(JoinPoint joinPoint) {
         try{
             ServiceInputLogInfoContext.remove();
@@ -58,7 +58,7 @@ public class ServiceLogAspect {
         }
     }
 
-    @After("serviceLogAspectPointcut()")
+    @After("pointcut1() || pointcut1()")
     public void after(JoinPoint joinPoint){
         try{
             logger.info("service log after begin....................................................................");
@@ -74,7 +74,7 @@ public class ServiceLogAspect {
         }
     }
 
-    @AfterReturning( pointcut = "serviceLogAspectPointcut()", returning = "ret")
+    @AfterReturning( pointcut = "pointcut1() || pointcut1()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) {
         try{
             logger.info("service log afterReturning begin...........................................................");
@@ -95,7 +95,7 @@ public class ServiceLogAspect {
         }
     }
 
-    @AfterThrowing(pointcut = "serviceLogAspectPointcut()", throwing = "ex")
+    @AfterThrowing(pointcut = "pointcut1() || pointcut1()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Throwable ex) {
         try {
             logger.error("service log afterThrowing begin............................................................");

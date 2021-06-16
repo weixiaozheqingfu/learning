@@ -1,4 +1,4 @@
-package com.glitter.spring.boot.aop.log.bean;
+package cn.huimin100.erp.aop.log.bean;
 
 import java.util.Map;
 

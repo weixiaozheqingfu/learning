@@ -1,7 +1,7 @@
-package com.glitter.spring.boot.aop.log.context;
+package cn.huimin100.erp.aop.log.context;
 
 
-import com.glitter.spring.boot.aop.log.bean.ResponseLogInfo;
+import cn.huimin100.erp.aop.log.bean.ResponseLogInfo;
 
 public class ResponseLogInfoContext {
 

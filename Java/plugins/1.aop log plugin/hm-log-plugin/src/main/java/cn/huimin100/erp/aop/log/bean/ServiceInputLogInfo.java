@@ -1,8 +1,8 @@
-package com.glitter.spring.boot.aop.log.bean;
+package cn.huimin100.erp.aop.log.bean;
 
 import java.util.Map;
 
-public class ServiceOutputLogInfo {
+public class ServiceInputLogInfo {
 
     private String className;
 
@@ -12,9 +12,6 @@ public class ServiceOutputLogInfo {
 
     private Map<String,Object> paramMap;
 
-    private Object returnObj;
-
-    private Object ex;
 
     public String getClassName() {
         return className;
@@ -46,22 +43,6 @@ public class ServiceOutputLogInfo {
 
     public void setParamMap(Map<String, Object> paramMap) {
         this.paramMap = paramMap;
-    }
-
-    public Object getReturnObj() {
-        return returnObj;
-    }
-
-    public void setReturnObj(Object returnObj) {
-        this.returnObj = returnObj;
-    }
-
-    public Object getEx() {
-        return ex;
-    }
-
-    public void setEx(Object ex) {
-        this.ex = ex;
     }
 
 }
