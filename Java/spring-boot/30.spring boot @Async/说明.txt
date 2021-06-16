@@ -1,1 +1,11 @@
 springboot下启动线程的几种模式，包括注解模式和手动模式，都写一下，然后再写一个纯传统模式。
+
+
+spring-boot-threadpool中的aop使用了threadlocal，这种方式在嵌套调用下是有问题的，比如domain层和service层都使用了serviceLogAspect。
+并且这种方式优化起来会比较麻烦，后续有时间可以考虑如何优化，比如是不是可以考虑在threadlocal中存入一个map，键就是请求方法的全路径，值就是对应那一层的入参或者出参。
+并且threadlocal不能在before中清理了，因为这样有嵌套，相当于保存的总是最里面那一层的信息了。
+threadlocal开始就清理的思想是一种思想，使用场景应该是这个线程只会执行一次开始的那个方法。最靠谱的还是搞清楚，线程结束的时候必须执行的方法，在那里进行remove。
+
+
+所以搞了一个spring-boot-threadpool，里面的aop日志就不再使用threadlocal来保存信息了，信息都是实时从joinpoint中提取。
+
