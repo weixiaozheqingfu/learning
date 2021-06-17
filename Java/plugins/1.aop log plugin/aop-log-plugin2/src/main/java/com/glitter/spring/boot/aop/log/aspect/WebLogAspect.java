@@ -37,14 +37,21 @@ public class WebLogAspect {
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
     @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
-    public void webLogAspectPointcut(){}
+    public void pointcut1(){}
 
-    @Before("webLogAspectPointcut()")
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.PostMapping)")
+    public void pointcut2(){}
+
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
+    public void pointcut3(){}
+
+
+    @Before("pointcut1() || pointcut2() || pointcut3()")
     public void before(JoinPoint joinPoint) {
         try {
             RequestLogInfo requestLogInfo = new RequestLogInfo();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
-            logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap()));
+            logger.info("[" + requestLogInfo.getUri() + "]-1-输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap()));
 //          logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap(), SerializerFeature.WriteMapNullValue));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
@@ -52,38 +59,38 @@ public class WebLogAspect {
         }
     }
 
-    @After("webLogAspectPointcut()")
-    public void after(JoinPoint joinPoint){
-        try {
-            ResponseLogInfo responseLogInfo = new ResponseLogInfo();
-            this.setResponseLogInfo(responseLogInfo, joinPoint);
-            logger.info("[" + responseLogInfo.getUri() + "]执行完毕....................................................................");
-        } catch (Throwable e) {
-            logger.error(JSONObject.toJSONString(e));
-//          throw e;
-        }
-    }
-
-    @AfterReturning( pointcut = "webLogAspectPointcut()", returning = "ret")
+    @AfterReturning( pointcut = "pointcut1() || pointcut2() || pointcut3()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) {
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
             this.setResponseLogInfo(responseLogInfo, joinPoint, ret);
-            logger.info("[" + responseLogInfo.getUri() + "]输出参数:{}", JSONObject.toJSONString(responseLogInfo.getReturnObj()));
+            logger.info("[" + responseLogInfo.getUri() + "]-3-输出参数:{}", JSONObject.toJSONString(responseLogInfo.getReturnObj()));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
 //          throw e;
         }
     }
 
-    @AfterThrowing(pointcut = "webLogAspectPointcut()", throwing = "ex")
+    @AfterThrowing(pointcut = "pointcut1() || pointcut2() || pointcut3()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Throwable ex) {
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
             this.setResponseLogInfo(responseLogInfo, joinPoint);
             responseLogInfo.setEx(ex);
             responseLogInfo.setStatus(500);
-            logger.info("[" + responseLogInfo.getUri() + "]异常信息:{}", JSONObject.toJSONString(responseLogInfo.getEx()));
+            logger.info("[" + responseLogInfo.getUri() + "]-4-异常信息:{}", JSONObject.toJSONString(responseLogInfo.getEx()));
+        } catch (Throwable e) {
+            logger.error(JSONObject.toJSONString(e));
+//          throw e;
+        }
+    }
+
+    @After("pointcut1() || pointcut2() || pointcut3()")
+    public void after(JoinPoint joinPoint){
+        try {
+            ResponseLogInfo responseLogInfo = new ResponseLogInfo();
+            this.setResponseLogInfo(responseLogInfo, joinPoint);
+            logger.info("[" + responseLogInfo.getUri() + "]-5-执行完毕....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
 //          throw e;

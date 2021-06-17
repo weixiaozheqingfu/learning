@@ -22,43 +22,29 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
- * @author limengjun
+ * 基于spring aop的jar包版本是5.2.11.RELEASE,对应的<artifactId>spring-boot-starter-parent</artifactId>的版本是<version>2.0.0.RELEASE</version>
  *
- *
- *
- * 不管目标方法返回值是void还是object
- * 正常情况: 1-->2-->3-->4
- *
- * 1.before异常:1-->3-->5
- * 2.target异常情况: 1-->2-->3-->5
- * 3.after异常情况: 1-->2-->3-->5
- * 4.afterReturning异常情况: 1-->2-->3-->4-->5
- * 5.afterThrowing异常情况: xx-->xx-->3--xx-->5
- *
- *
- * 正常一定会执行到4,
- * 异常一定会执行到5,
- * 不管是否有异常,一定会执行3。
- *
- *
- *
- * 当此处的5.afterThrowing执行了,异常继续往外抛,WebLogAspect等更外层的afterThrowing就不会执行了。异常会直接往外抛,可被全局异常捕获,如果没有配置全局异常捕获,则直接继续往最外层抛。
- *
+ * // 1.@Before
  * try {
- *     try{
- *         // 1.@Before
- *         // 2.目标方法
- *         method.invoke(..);
- *     } finally {
- *         // 3.一定会执行
- *         //@After
- *     }
- *     // 4.如果前面抛异常,就不会执行
- *     //@AfterReturning
+ *      // 2.目标方法
+ *      Object o = method.invoke(..);
+ *      // 3.如果前面抛异常,就不会执行
+ *      //@AfterReturning
  * } catch(){
- *     // 5.抛异常时会执行
+ *     // 4.抛异常时会执行
  *     //@AfterThrowing
+ * } finally {
+ *     // 5.一定会执行
+ *     //@After
  * }
+ *
+ * 正常情况: 1-->2-->3-->5
+ *
+ * 1.before异常:1-->往外抛异常-->如果外层还有aop拦截-->会走外层的afterThrowing-->如果外层没有-->直接往外抛--->这种逻辑的调整也比较好,把before等这些方法当成常规常见方法调用栈处理方式处理了,本来有异常了就直接往上层抛就好了。相当于源码不再做捕获后执行指定方法后再抛了,所有就是常规直接向上抛的效果了。简单直接挺好的。
+ * 2.target异常情况: 1-->2-->4-->5-->异常往外继续抛-->
+ * 3.after异常情况: 1-->2-->3-->5-->异常往外继续抛-->
+ * 4.afterReturning异常情况: 1-->2-->3-->4-->异常往外继续抛-->
+ * 5.afterThrowing异常情况: xx-->xx-->xx-->4-->5-->异常往外继续抛-->
  *
  */
 @Aspect
@@ -82,25 +68,8 @@ public class ServiceLogAspect {
         try {
             ServiceInputLogInfo serviceInputLogInfo = new ServiceInputLogInfo();
             this.setServiceInputLogInfo(serviceInputLogInfo, joinPoint);
-            logger.info("[" + serviceInputLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(serviceInputLogInfo.getParamMap()));
+            logger.info("[" + serviceInputLogInfo.getUri() + "]-1-输入参数:{}", JSONObject.toJSONString(serviceInputLogInfo.getParamMap()));
 //          logger.info("[" + serviceInputLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(serviceInputLogInfo.getParamMap(), SerializerFeature.WriteMapNullValue));
-        } catch (Throwable e) {
-            logger.error(JSONObject.toJSONString(e));
-//          throw e;
-        }
-//      int i = 3/0;
-    }
-
-    /**
-     * 同样,这里的代码块如果抛异常,也会“覆盖”目标方法的异常,是捕获这里的异常保证目标方法异常正常往外抛,还是将这里的异常往外抛“覆盖”目标方法的异常,取决于业务场景。
-     * @param joinPoint
-     */
-    @After("pointcut1() || pointcut2()")
-    public void after(JoinPoint joinPoint){
-        try {
-            ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
-            this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint);
-            logger.info("[" + serviceOutputLogInfo.getUri() + "]执行完毕....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
 //          throw e;
@@ -113,7 +82,7 @@ public class ServiceLogAspect {
         try {
             ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
             this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint, ret);
-            logger.info("[" + serviceOutputLogInfo.getUri() + "]输出参数:{}", JSONObject.toJSONString(serviceOutputLogInfo.getReturnObj()));
+            logger.info("[" + serviceOutputLogInfo.getUri() + "]-3-输出参数:{}", JSONObject.toJSONString(serviceOutputLogInfo.getReturnObj()));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
 //          throw e;
@@ -138,7 +107,24 @@ public class ServiceLogAspect {
             ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
             this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint);
             serviceOutputLogInfo.setEx(ex);
-            logger.info("[" + serviceOutputLogInfo.getUri() + "]异常信息:{}", JSONObject.toJSONString(serviceOutputLogInfo.getEx()));
+            logger.info("[" + serviceOutputLogInfo.getUri() + "]-4-异常信息:{}", JSONObject.toJSONString(serviceOutputLogInfo.getEx()));
+        } catch (Throwable e) {
+            logger.error(JSONObject.toJSONString(e));
+//          throw e;
+        }
+//      int i = 3/0;
+    }
+
+    /**
+     * 同样,这里的代码块如果抛异常,也会“覆盖”目标方法的异常,是捕获这里的异常保证目标方法异常正常往外抛,还是将这里的异常往外抛“覆盖”目标方法的异常,取决于业务场景。
+     * @param joinPoint
+     */
+    @After("pointcut1() || pointcut2()")
+    public void after(JoinPoint joinPoint){
+        try {
+            ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
+            this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint);
+            logger.info("[" + serviceOutputLogInfo.getUri() + "]-5-执行完毕....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
 //          throw e;

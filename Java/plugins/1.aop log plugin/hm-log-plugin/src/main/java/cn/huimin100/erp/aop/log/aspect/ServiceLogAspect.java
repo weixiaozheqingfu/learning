@@ -42,18 +42,7 @@ public class ServiceLogAspect {
         try {
             ServiceInputLogInfo serviceInputLogInfo = new ServiceInputLogInfo();
             this.setServiceInputLogInfo(serviceInputLogInfo, joinPoint);
-            logger.info("[" + serviceInputLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(serviceInputLogInfo.getParamMap()));
-        } catch (Throwable e) {
-            logger.error(JSONObject.toJSONString(e));
-        }
-    }
-
-    @After("pointcut1() || pointcut2()")
-    public void after(JoinPoint joinPoint){
-        try {
-            ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
-            this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint);
-            logger.info("[" + serviceOutputLogInfo.getUri() + "]执行完毕....................................................................");
+            logger.info("[" + serviceInputLogInfo.getUri() + "]-1-输入参数:{}", JSONObject.toJSONString(serviceInputLogInfo.getParamMap()));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
         }
@@ -64,7 +53,7 @@ public class ServiceLogAspect {
         try {
             ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
             this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint, ret);
-            logger.info("[" + serviceOutputLogInfo.getUri() + "]输出参数:{}", JSONObject.toJSONString(serviceOutputLogInfo.getReturnObj()));
+            logger.info("[" + serviceOutputLogInfo.getUri() + "]-3-输出参数:{}", JSONObject.toJSONString(serviceOutputLogInfo.getReturnObj()));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
         }
@@ -76,7 +65,18 @@ public class ServiceLogAspect {
             ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
             this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint);
             serviceOutputLogInfo.setEx(ex);
-            logger.info("[" + serviceOutputLogInfo.getUri() + "]异常信息:{}", JSONObject.toJSONString(serviceOutputLogInfo.getEx()));
+            logger.info("[" + serviceOutputLogInfo.getUri() + "]-4-异常信息:{}", JSONObject.toJSONString(serviceOutputLogInfo.getEx()));
+        } catch (Throwable e) {
+            logger.error(JSONObject.toJSONString(e));
+        }
+    }
+
+    @After("pointcut1() || pointcut2()")
+    public void after(JoinPoint joinPoint){
+        try {
+            ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
+            this.setServiceOutputLogInfo(serviceOutputLogInfo, joinPoint);
+            logger.info("[" + serviceOutputLogInfo.getUri() + "]-5-执行完毕....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
         }

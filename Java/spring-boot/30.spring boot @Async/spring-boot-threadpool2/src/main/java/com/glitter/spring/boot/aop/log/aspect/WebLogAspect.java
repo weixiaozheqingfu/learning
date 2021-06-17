@@ -45,19 +45,8 @@ public class WebLogAspect {
         try {
             RequestLogInfo requestLogInfo = new RequestLogInfo();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
-            logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap()));
+            logger.info("[" + requestLogInfo.getUri() + "]-1-输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap()));
 //          logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap(), SerializerFeature.WriteMapNullValue));
-        } catch (Throwable e) {
-            logger.error(JSONObject.toJSONString(e));
-        }
-    }
-
-    @After("webLogAspectPointcut()")
-    public void after(JoinPoint joinPoint){
-        try {
-            ResponseLogInfo responseLogInfo = new ResponseLogInfo();
-            this.setResponseLogInfo(responseLogInfo, joinPoint);
-            logger.info("[" + responseLogInfo.getUri() + "]执行完毕....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
         }
@@ -68,7 +57,7 @@ public class WebLogAspect {
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
             this.setResponseLogInfo(responseLogInfo, joinPoint, ret);
-            logger.info("[" + responseLogInfo.getUri() + "]输出参数:{}", JSONObject.toJSONString(responseLogInfo.getReturnObj()));
+            logger.info("[" + responseLogInfo.getUri() + "]-3-输出参数:{}", JSONObject.toJSONString(responseLogInfo.getReturnObj()));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
         }
@@ -81,7 +70,18 @@ public class WebLogAspect {
             this.setResponseLogInfo(responseLogInfo, joinPoint);
             responseLogInfo.setEx(ex);
             responseLogInfo.setStatus(500);
-            logger.info("[" + responseLogInfo.getUri() + "]异常信息:{}", JSONObject.toJSONString(responseLogInfo.getEx()));
+            logger.info("[" + responseLogInfo.getUri() + "]-4-异常信息:{}", JSONObject.toJSONString(responseLogInfo.getEx()));
+        } catch (Throwable e) {
+            logger.error(JSONObject.toJSONString(e));
+        }
+    }
+
+    @After("webLogAspectPointcut()")
+    public void after(JoinPoint joinPoint){
+        try {
+            ResponseLogInfo responseLogInfo = new ResponseLogInfo();
+            this.setResponseLogInfo(responseLogInfo, joinPoint);
+            logger.info("[" + responseLogInfo.getUri() + "]-5-执行完毕....................................................................");
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
         }

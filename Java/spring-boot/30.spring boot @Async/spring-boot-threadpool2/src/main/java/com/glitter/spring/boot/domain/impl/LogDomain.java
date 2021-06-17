@@ -29,8 +29,11 @@ public class LogDomain implements ILogDomain {
 
     @Override
     public UserInfo getUserInfo(String id) {
+        log.info("[LogDomain.getUserInfo]我是------2-------");
         log.info("目标方法LogDomain.getFutureUserInfo开始执行........................");
-        return logService.getUserInfo(id);
+        UserInfo userInfo = logService.getUserInfo(id);
+//      int i = 3/0;
+        return userInfo;
     }
 
     @Override

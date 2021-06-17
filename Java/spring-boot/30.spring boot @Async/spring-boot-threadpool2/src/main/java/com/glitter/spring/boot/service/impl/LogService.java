@@ -35,7 +35,9 @@ public class LogService implements ILogDomain {
 
     @Override
     public UserInfo getUserInfo(String id) {
+        log.info("[LogService.getUserInfo]我是------2-------");
         log.info("目标方法LogService.getUserInfo开始执行........................");
+        int i = 3/0;
         UserInfo userInfo = new UserInfo();
         userInfo.setAccount("gaogaogaogao");
         userInfo.setFullName("高高高高");
