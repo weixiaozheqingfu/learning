@@ -1,6 +1,7 @@
 package com.glitter.spring.boot.aop.log.aspect;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.glitter.spring.boot.aop.log.bean.RequestLogInfo;
 import com.glitter.spring.boot.aop.log.bean.ResponseLogInfo;
 import org.aspectj.lang.JoinPoint;
@@ -45,6 +46,7 @@ public class WebLogAspect {
             RequestLogInfo requestLogInfo = new RequestLogInfo();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
             logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap()));
+//          logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap(), SerializerFeature.WriteMapNullValue));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
         }

@@ -20,7 +20,9 @@ public class TraceInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
         // "traceId"
+        logger.info("TraceInterceptor.preHandle begin............................................");
         MDC.put(TraceConstants.LOG_TRACE_ID, TraceLogUtils.getTraceId());
+        logger.info("TraceInterceptor.preHandle end............................................");
         return true;
     }
 
@@ -31,7 +33,9 @@ public class TraceInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+        logger.info("TraceInterceptor.afterCompletion begin............................................");
         MDC.clear();
+        logger.info("TraceInterceptor.afterCompletion end............................................");
     }
 
 }

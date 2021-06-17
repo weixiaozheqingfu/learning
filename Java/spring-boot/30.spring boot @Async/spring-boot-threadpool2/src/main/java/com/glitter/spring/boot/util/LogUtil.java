@@ -1,6 +1,8 @@
 package com.glitter.spring.boot.util;
 
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.glitter.spring.boot.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,45 +19,49 @@ public class LogUtil {
     /**
      * new HashMap<String, Object>(){{put(param1, param1);put(param1, param2);}};
      */
-
-
-    public static String getParamLogMsg(Map<String, Object> map) {
-        return getLogMsg("输入参数", map);
+    public static String getParamMsg(Object... params) {
+        return getLogMsg("输入参数", params);
     }
 
-    public static String getMiddleLogMsg(Map<String, Object> map) {
-        return getLogMsg("中间值", map);
+    public static String getMiddleMsg(Object... params) {
+        return getLogMsg("中间值", params);
     }
 
-    public static String getResultLogMsg(Map<String, Object> map) {
-        return getLogMsg("输出参数", map);
+    public static String getResultMsg(Object... params) {
+        return getLogMsg("输出参数", params);
     }
 
-    private static String getLogMsg(String position,Map<String, Object> map) {
+    private static String getLogMsg(String position, Object... params) {
+        Map<String, Object> map = null == params ? null : new HashMap<>();
+        int halfFlag = params.length % 2;
+        if (halfFlag != 0) {
+            throw new BusinessException("-1", "日志参数格式异常");
+        }
+        int halfSize = params.length / 2;
+        for (int i=0; i < halfSize; i++) {
+            map.put(String.valueOf(params[i]),params[i+halfSize]);
+        }
         String result = "";
         try {
-            String formatStr = "[{0}.{1}]方法,{2}:{3}";
+            String formatStr = "[{0}.{1}]{2}:{3}";
             String[] jsonObj = new String[4];
-            jsonObj[0] = getClassName();
-            jsonObj[1] = getMethodName();
+            jsonObj[0] = Thread.currentThread().getStackTrace()[3].getClassName().substring(Thread.currentThread().getStackTrace()[3].getClassName().lastIndexOf(".") + 1);
+            jsonObj[1] = Thread.currentThread().getStackTrace()[3].getMethodName();
             jsonObj[2] = position;
             jsonObj[3] = JSONObject.toJSONString(map);
             result = MessageFormat.format(formatStr, jsonObj);
         } catch (Exception ex) {
-            result = "系统异常日志:TemplateUtil类getExceptionLogMsg方法执行异常,异常信息:" + JSONObject.toJSONString(ex);
+            logger.error(JSONObject.toJSONString(ex));
+            throw new BusinessException("-1", "日志参数处理异常");
         }
         return result;
     }
 
-    private static String getClassName(){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        return stackTraceElements[2].getClass().getSimpleName();
-    };
-
-    private static String getMethodName(){
-        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-        return stackTraceElements[2].getMethodName();
-    };
+    public static void main(String[] args) {
+        Exception e = new NullPointerException("空指针异常");
+        String result2 = LogUtil.getParamMsg("某类", "某方法", "参数一", "参数二");
+        System.out.print(result2);
+    }
 
 
 //    public static void main(String[] args) {

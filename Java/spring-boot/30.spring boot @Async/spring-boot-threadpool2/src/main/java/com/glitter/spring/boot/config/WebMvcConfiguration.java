@@ -36,13 +36,14 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        List<String> requestInterceptorAddPathPatterns = new ArrayList<>();
-        requestInterceptorAddPathPatterns.add("/**");
-        registry.addInterceptor(requestInterceptor()).addPathPatterns(requestInterceptorAddPathPatterns);
-
+        // traceInterceptor先执行后退出,保证MDC中traceid及时获取值和最后释放值
         List<String> traceInterceptorAddPathPatterns = new ArrayList<>();
         traceInterceptorAddPathPatterns.add("/**");
         registry.addInterceptor(traceInterceptor()).addPathPatterns(traceInterceptorAddPathPatterns);
+
+        List<String> requestInterceptorAddPathPatterns = new ArrayList<>();
+        requestInterceptorAddPathPatterns.add("/**");
+        registry.addInterceptor(requestInterceptor()).addPathPatterns(requestInterceptorAddPathPatterns);
     }
 
 }

@@ -16,9 +16,11 @@ public class RequestInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler) throws Exception {
+        logger.info("RequestInterceptor.preHandle begin............................................");
         ContextManager.removeAllContext();
         ResponseContext.set(httpServletResponse);
         RequestContext.set(httpServletRequest);
+        logger.info("RequestInterceptor.preHandle end............................................");
         return true;
     }
 
