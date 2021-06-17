@@ -1,8 +1,8 @@
-package cn.huimin100.erp.aop.log.aspect;
+package com.glitter.spring.boot.aop.log.aspect;
 
-import cn.huimin100.erp.aop.log.bean.RequestLogInfo;
-import cn.huimin100.erp.aop.log.bean.ResponseLogInfo;
 import com.alibaba.fastjson.JSONObject;
+import com.glitter.spring.boot.aop.log.bean.RequestLogInfo;
+import com.glitter.spring.boot.aop.log.bean.ResponseLogInfo;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -21,6 +21,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -44,8 +45,10 @@ public class WebLogAspect {
             RequestLogInfo requestLogInfo = new RequestLogInfo();
             this.setRequestLogInfo(requestLogInfo, joinPoint);
             logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap()));
+//          logger.info("[" + requestLogInfo.getUri() + "]输入参数:{}", JSONObject.toJSONString(requestLogInfo.getParamMap(), SerializerFeature.WriteMapNullValue));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
+//          throw e;
         }
     }
 
@@ -69,6 +72,7 @@ public class WebLogAspect {
             logger.info("[" + responseLogInfo.getUri() + "]输出参数:{}", JSONObject.toJSONString(responseLogInfo.getReturnObj()));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
+//          throw e;
         }
     }
 
@@ -82,16 +86,21 @@ public class WebLogAspect {
             logger.info("[" + responseLogInfo.getUri() + "]异常信息:{}", JSONObject.toJSONString(responseLogInfo.getEx()));
         } catch (Throwable e) {
             logger.error(JSONObject.toJSONString(e));
+//          throw e;
         }
     }
 
     private void setRequestLogInfo(RequestLogInfo requestLogInfo, JoinPoint joinPoint) {
         HttpServletRequest request = this.getRequest();
         logger.debug("sessionId:"+request.getSession().getId());
+        requestLogInfo.setIp(null == request ? null : this.getIp(request));
+        requestLogInfo.setHost(null == request ? null : request.getRemoteHost());
+        requestLogInfo.setPort(null == request ? null : request.getRemotePort());
         requestLogInfo.setUrl(null == request ? null : request.getRequestURL().toString());
         requestLogInfo.setUri(null == request ? null : request.getRequestURI());
         requestLogInfo.setClassName(this.getClassName(joinPoint));
         requestLogInfo.setMethodName(this.getMethodName(joinPoint));
+        requestLogInfo.setRequestHeaderMap(this.getRequestHeaderMap());
         requestLogInfo.setParamMap(this.getParamMap(joinPoint));
     }
 
@@ -102,10 +111,16 @@ public class WebLogAspect {
     private void setResponseLogInfo(ResponseLogInfo responseLogInfo, JoinPoint joinPoint, Object ret){
         HttpServletRequest request = this.getRequest();
         HttpServletResponse response = this.getResponse();
+        responseLogInfo.setIp(null == request ? null : this.getIp(request));
+        responseLogInfo.setHost(null == request ? null : request.getRemoteHost());
+        responseLogInfo.setPort(null == request ? null : request.getRemotePort());
         responseLogInfo.setUrl(null == request ? null : request.getRequestURL().toString());
         responseLogInfo.setUri(null == request ? null : request.getRequestURI());
         responseLogInfo.setClassName(this.getClassName(joinPoint));
         responseLogInfo.setMethodName(this.getMethodName(joinPoint));
+        responseLogInfo.setRequestHeaderMap(this.getRequestHeaderMap());
+        responseLogInfo.setParamMap(this.getParamMap(joinPoint));
+        responseLogInfo.setResponseHeaderMap(this.getResponseHeaderMap());
         responseLogInfo.setStatus(response.getStatus());
         responseLogInfo.setContentType(response.getContentType());
         responseLogInfo.setReturnObj(ret);
@@ -125,6 +140,7 @@ public class WebLogAspect {
     }
 
     private String getClassName(JoinPoint joinPoint){
+//      String className = joinPoint.getTarget().getClass().getName();
         String className = joinPoint.getTarget().getClass().getSimpleName();
         return className;
     }
@@ -151,6 +167,21 @@ public class WebLogAspect {
         while (headerNames.hasMoreElements()) {
             String key = headerNames.nextElement();
             String value = request.getHeader(key);
+            headerMap.put(key, value);
+        }
+        return headerMap;
+    }
+
+    private Map<String, String> getResponseHeaderMap() {
+        HttpServletResponse response = this.getResponse();
+        Map<String, String> headerMap = new LinkedHashMap<>();
+        Collection<String> headerNames = response.getHeaderNames();
+        if (null == headerNames || headerNames.size() <=0) {
+            return headerMap;
+        }
+        for (String headerName:headerNames) {
+            String key = headerName;
+            String value = response.getHeader(key);
             headerMap.put(key, value);
         }
         return headerMap;

@@ -1,6 +1,14 @@
-package cn.huimin100.erp.aop.log.bean;
+package com.glitter.spring.boot.aop.log.bean;
+
+import java.util.Map;
 
 public class ResponseLogInfo {
+
+    private String ip;
+
+    private String host;
+
+    private Integer port;
 
     private String url;
 
@@ -10,6 +18,12 @@ public class ResponseLogInfo {
 
     private String methodName;
 
+    private Map<String,Object> paramMap;
+
+    private Map<String,String> requestHeaderMap;
+
+    private Map<String,String> responseHeaderMap;
+
     private Integer status;
 
     private String contentType;
@@ -18,6 +32,30 @@ public class ResponseLogInfo {
 
     private Object ex;
 
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
 
     public String getUrl() {
         return url;
@@ -49,6 +87,30 @@ public class ResponseLogInfo {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
+    }
+
+    public Map<String, Object> getParamMap() {
+        return paramMap;
+    }
+
+    public void setParamMap(Map<String, Object> paramMap) {
+        this.paramMap = paramMap;
+    }
+
+    public Map<String, String> getRequestHeaderMap() {
+        return requestHeaderMap;
+    }
+
+    public void setRequestHeaderMap(Map<String, String> requestHeaderMap) {
+        this.requestHeaderMap = requestHeaderMap;
+    }
+
+    public Map<String, String> getResponseHeaderMap() {
+        return responseHeaderMap;
+    }
+
+    public void setResponseHeaderMap(Map<String, String> responseHeaderMap) {
+        this.responseHeaderMap = responseHeaderMap;
     }
 
     public Integer getStatus() {

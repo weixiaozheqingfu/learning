@@ -1,39 +1,20 @@
-package cn.huimin100.erp.aop.log.bean;
+package com.glitter.spring.boot.aop.log.bean;
 
-public class ResponseLogInfo {
+import java.util.Map;
 
-    private String url;
-
-    private String uri;
+public class ServiceOutputLogInfo {
 
     private String className;
 
     private String methodName;
 
-    private Integer status;
+    private String uri;
 
-    private String contentType;
+    private Map<String,Object> paramMap;
 
     private Object returnObj;
 
     private Object ex;
-
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public void setUri(String uri) {
-        this.uri = uri;
-    }
 
     public String getClassName() {
         return className;
@@ -51,20 +32,20 @@ public class ResponseLogInfo {
         this.methodName = methodName;
     }
 
-    public Integer getStatus() {
-        return status;
+    public String getUri() {
+        return uri;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
-    public String getContentType() {
-        return contentType;
+    public Map<String, Object> getParamMap() {
+        return paramMap;
     }
 
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public void setParamMap(Map<String, Object> paramMap) {
+        this.paramMap = paramMap;
     }
 
     public Object getReturnObj() {
