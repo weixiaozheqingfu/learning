@@ -44,7 +44,10 @@ public class WebLogAspect {
     @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
     public void pointcut3(){}
 
-    @Before("pointcut1() || pointcut2() || pointcut3()")
+    @Pointcut("execution(* cn.huimin100.erp..*.controller..*(..))")
+    public void pointcut4(){}
+
+    @Before("(pointcut1() || pointcut2() || pointcut3()) && pointcut4()")
     public void before(JoinPoint joinPoint) {
         try {
             RequestLogInfo requestLogInfo = new RequestLogInfo();
@@ -55,7 +58,7 @@ public class WebLogAspect {
         }
     }
 
-    @AfterReturning( pointcut = "pointcut1() || pointcut2() || pointcut3()", returning = "ret")
+    @AfterReturning(pointcut = "(pointcut1() || pointcut2() || pointcut3()) && pointcut4()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) {
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
@@ -66,7 +69,7 @@ public class WebLogAspect {
         }
     }
 
-    @AfterThrowing(pointcut = "pointcut1() || pointcut2() || pointcut3()", throwing = "ex")
+    @AfterThrowing(pointcut = "(pointcut1() || pointcut2() || pointcut3()) && pointcut4()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Throwable ex) {
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
@@ -79,7 +82,7 @@ public class WebLogAspect {
         }
     }
 
-    @After("pointcut1() || pointcut2() || pointcut3()")
+    @After("(pointcut1() || pointcut2() || pointcut3()) && pointcut4()")
     public void after(JoinPoint joinPoint){
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
@@ -130,7 +133,7 @@ public class WebLogAspect {
     }
 
     private String getClassName(JoinPoint joinPoint){
-        String className = joinPoint.getTarget().getClass().getSimpleName();
+        String className = joinPoint.getSignature().getDeclaringTypeName().substring(joinPoint.getSignature().getDeclaringTypeName().lastIndexOf(".") + 1);
         return className;
     }
 
@@ -168,12 +171,28 @@ public class WebLogAspect {
         if(null == paramNames && null == paramValues){
             return result;
         }
+        if (null == paramNames && null != paramValues) {
+            result = new LinkedHashMap<>();
+            result.put("paramNames", paramNames);
+            result.put("paramValues", paramValues);
+            result.put("-1", "WebLogAspect拦截输入参数异常,paramNames与paramValues个数不匹配");
+            return result;
+        }
+        if (null != paramNames && null == paramValues) {
+            result = new LinkedHashMap<>();
+            result.put("paramNames", paramNames);
+            result.put("paramValues", paramValues);
+            result.put("-2", "WebLogAspect拦截输入参数异常,paramNames与paramValues个数不匹配");
+            return result;
+        }
         if(0 == paramNames.length && 0 == paramValues.length){
             return result;
         }
         if(paramNames.length != paramValues.length){
             result = new LinkedHashMap<>();
-            result.put("-1","输入参数异常");
+            result.put("paramNames", paramNames);
+            result.put("paramValues", paramValues);
+            result.put("-3", "WebLogAspect拦截输入参数异常,paramNames与paramValues个数不匹配");
             return result;
         }
         result = new LinkedHashMap<>();

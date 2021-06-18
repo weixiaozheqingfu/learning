@@ -132,7 +132,13 @@ public class ServiceLogAspect {
     @Pointcut("execution(* com.glitter..*.service..*(..))")
     public void pointcut2(){}
 
-    @Before("pointcut1() || pointcut2()")
+    @Pointcut("execution(* com.glitter..*.repository..*(..))")
+    public void pointcut3() {}
+
+//    @Pointcut("@within(org.springframework.cloud.openfeign.FeignClient)")
+//    public void pointcut4() {}
+
+    @Before("pointcut1() || pointcut2() || pointcut3()")
     public void before(JoinPoint joinPoint) {
         try {
             ServiceInputLogInfo serviceInputLogInfo = new ServiceInputLogInfo();
@@ -146,7 +152,7 @@ public class ServiceLogAspect {
 //      int i = 3/0;
     }
 
-    @AfterReturning( pointcut = "pointcut1() || pointcut2()", returning = "ret")
+    @AfterReturning( pointcut = "pointcut1() || pointcut2() || pointcut3()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) {
         try {
             ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
@@ -170,7 +176,7 @@ public class ServiceLogAspect {
      * @param joinPoint
      * @param ex
      */
-    @AfterThrowing(pointcut = "pointcut1() || pointcut2()", throwing = "ex")
+    @AfterThrowing(pointcut = "pointcut1() || pointcut2() || pointcut3()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Throwable ex){
         try {
             ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
@@ -188,7 +194,7 @@ public class ServiceLogAspect {
      * 同样,这里的代码块如果抛异常,也会“覆盖”目标方法的异常,是捕获这里的异常保证目标方法异常正常往外抛,还是将这里的异常往外抛“覆盖”目标方法的异常,取决于业务场景。
      * @param joinPoint
      */
-    @After("pointcut1() || pointcut2()")
+    @After("pointcut1() || pointcut2() || pointcut3()")
     public void after(JoinPoint joinPoint){
         try {
             ServiceOutputLogInfo serviceOutputLogInfo = new ServiceOutputLogInfo();
@@ -238,7 +244,13 @@ public class ServiceLogAspect {
 
     private String getClassName(JoinPoint joinPoint){
 //      String className = joinPoint.getTarget().getClass().getName();
-        String className = joinPoint.getTarget().getClass().getSimpleName();
+//      String className = joinPoint.getTarget().getClass().getSimpleName();
+//      logger.info("joinPoint1:{}", JSONObject.toJSONString(joinPoint.getSignature().getDeclaringTypeName()));
+//      logger.info("joinPoint2:{}", JSONObject.toJSONString(joinPoint.getTarget().getClass().getTypeName()));
+//      logger.info("joinPoint3:{}", JSONObject.toJSONString(joinPoint.getTarget().getClass().getInterfaces()));
+//      logger.info("joinPoint4:{}", JSONObject.toJSONString(joinPoint.getSignature().getName()));
+//      logger.info("joinPoint5:{}", JSONObject.toJSONString(joinPoint.getTarget().getClass().getSimpleName()));
+        String className = joinPoint.getSignature().getDeclaringTypeName().substring(joinPoint.getSignature().getDeclaringTypeName().lastIndexOf(".") + 1);
         return className;
     }
 
@@ -249,12 +261,28 @@ public class ServiceLogAspect {
         if(null == paramNames && null == paramValues){
             return result;
         }
+        if (null == paramNames && null != paramValues) {
+            result = new LinkedHashMap<>();
+            result.put("paramNames", paramNames);
+            result.put("paramValues", paramValues);
+            result.put("-1", "ServiceLogAspect拦截输入参数异常,paramNames与paramValues个数不匹配");
+            return result;
+        }
+        if (null != paramNames && null == paramValues) {
+            result = new LinkedHashMap<>();
+            result.put("paramNames", paramNames);
+            result.put("paramValues", paramValues);
+            result.put("-2", "ServiceLogAspect拦截输入参数异常,paramNames与paramValues个数不匹配");
+            return result;
+        }
         if(0 == paramNames.length && 0 == paramValues.length){
             return result;
         }
         if(paramNames.length != paramValues.length){
             result = new LinkedHashMap<>();
-            result.put("-1","输入参数异常");
+            result.put("paramNames", paramNames);
+            result.put("paramValues", paramValues);
+            result.put("-3", "ServiceLogAspect拦截输入参数异常,paramNames与paramValues个数不匹配");
             return result;
         }
         result = new LinkedHashMap<>();
