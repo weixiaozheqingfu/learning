@@ -35,19 +35,31 @@ public class WebLogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(WebLogAspect.class);
 
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
+//    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
+//    public void pointcut1(){}
+//
+//    @Pointcut("@annotation(org.springframework.web.bind.annotation.PostMapping)")
+//    public void pointcut2(){}
+//
+//    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
+//    public void pointcut3(){}
+//
+//    @Pointcut("execution(* cn.huimin100.erp..*.controller..*(..))")
+//    public void pointcut4(){}
+//
+//    @Pointcut("execution(* cn.huimin100.erp..*.feign.api..*(..))")
+//    public void pointcut5(){}
+//
+//    @Before("(pointcut1() || pointcut2() || pointcut3()) && (pointcut4() || pointcut5())")
+
+
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
     public void pointcut1(){}
 
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.PostMapping)")
+    @Pointcut("execution(* cn.huimin100.erp..*.controller..*(..))")
     public void pointcut2(){}
 
-    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
-    public void pointcut3(){}
-
-    @Pointcut("execution(* cn.huimin100.erp..*.controller..*(..))")
-    public void pointcut4(){}
-
-    @Before("(pointcut1() || pointcut2() || pointcut3()) && pointcut4()")
+    @Before("pointcut1() && pointcut2()")
     public void before(JoinPoint joinPoint) {
         try {
             RequestLogInfo requestLogInfo = new RequestLogInfo();
@@ -58,7 +70,7 @@ public class WebLogAspect {
         }
     }
 
-    @AfterReturning(pointcut = "(pointcut1() || pointcut2() || pointcut3()) && pointcut4()", returning = "ret")
+    @AfterReturning(pointcut = "pointcut1() && pointcut2()", returning = "ret")
     public void afterReturning(JoinPoint joinPoint, Object ret) {
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
@@ -69,7 +81,7 @@ public class WebLogAspect {
         }
     }
 
-    @AfterThrowing(pointcut = "(pointcut1() || pointcut2() || pointcut3()) && pointcut4()", throwing = "ex")
+    @AfterThrowing(pointcut = "pointcut1() && pointcut2()", throwing = "ex")
     public void afterThrowing(JoinPoint joinPoint, Throwable ex) {
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();
@@ -82,7 +94,7 @@ public class WebLogAspect {
         }
     }
 
-    @After("(pointcut1() || pointcut2() || pointcut3()) && pointcut4()")
+    @After("pointcut1() && pointcut2()")
     public void after(JoinPoint joinPoint){
         try {
             ResponseLogInfo responseLogInfo = new ResponseLogInfo();

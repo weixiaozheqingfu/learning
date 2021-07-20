@@ -1,4 +1,4 @@
-package cn.huimin100.erp.aop.log.util;
+package com.glitter.util;
 
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
@@ -8,6 +8,12 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 日志工具
+ *
+ * @author limengjun
+ * @date 2021/6/13 10:51
+ **/
 public class LogUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(LogUtil.class);
@@ -93,7 +99,7 @@ public class LogUtil {
             }
             result = MessageFormat.format(formatStr, jsonObj);
         } catch (Exception ex) {
-            logger.error("[LogUtil.getLogMsg]输入参数:pattern:{},params:{},异常信息:{}", pattern, JSONObject.toJSONString(params), JSONObject.toJSONString(ex));
+            logger.error("[LogUtil.getPatternMsg]输入参数:pattern:{},params:{},异常信息:{}", pattern, JSONObject.toJSONString(params), JSONObject.toJSONString(ex));
             throw new RuntimeException("日志参数处理异常");
         }
         return result;

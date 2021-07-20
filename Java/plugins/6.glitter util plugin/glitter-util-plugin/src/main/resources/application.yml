@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  mail:
+    host: smtp.exmail.qq.com
+    password: Kf999200
+    port: 465
+    properties:
+        mail:
+            debug: true
+            smtp:
+                auth: true
+                socketFactory:
+                    class: javax.net.ssl.SSLSocketFactory
+                starttls:
+                    enable: true
+                    required: true
+    username: oc-service@huimin100.cn
+    personal: 测试邮件

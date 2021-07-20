@@ -37,20 +37,27 @@ public class PageInfo<T> implements Serializable {
 	private boolean hasNextPage;
 
 	public PageInfo(List<T> data){
-		Page page = PageContext.getPage();
-		if(null != page){
-			this.pageNum = page.getPageNum();
-			this.pageSize = page.getPageSize();
-			this.totalRecords = page.getTotalRecords();
-			this.totalPages = page.getTotalPages();
-			this.firstPageNum = page.getFirstPageNum();
-			this.lastPageNum = page.getLastPageNum();
-			this.prePageNum = page.getPrePageNum();
-			this.nextPageNum = page.getNextPageNum();
-			this.hasPrePage = page.hasPrePage();
-			this.hasNextPage = page.hasNextPage();
+		try {
+			Page page = PageContext.getPage();
+			if(null != page){
+				this.pageNum = page.getPageNum();
+				this.pageSize = page.getPageSize();
+				this.totalRecords = page.getTotalRecords();
+				this.totalPages = page.getTotalPages();
+				this.firstPageNum = page.getFirstPageNum();
+				this.lastPageNum = page.getLastPageNum();
+				this.prePageNum = page.getPrePageNum();
+				this.nextPageNum = page.getNextPageNum();
+				this.hasPrePage = page.hasPrePage();
+				this.hasNextPage = page.hasNextPage();
+			}
+			this.data = data;
+		} catch (Exception e) {
+			// TODO 记录日志,同时抛出异常
+			throw new RuntimeException("分页异常");
+		} finally {
+			PageHelper.clearPage();
 		}
-		this.data = data;
 	}
 
 
